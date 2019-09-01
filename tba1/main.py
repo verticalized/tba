@@ -2421,10 +2421,9 @@ while game_start == 1:
     func_check_level()
 
     print("")
-    # input_message = ("________________|| input: ||________________\n \n")
-    # player_input = input(input_message)
 
-    player_input = "make"
+    input_message = ("________________|| input: ||________________\n \n")
+    player_input = input(input_message)
 
     if player_input == "" or player_input == " " or player_input == "  ":
         pass
