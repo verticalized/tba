@@ -18,7 +18,7 @@ from enemy_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "1.8.2"
+version = "1.8.2.1"
 
 dev_mode = 0
 check_for_combat = True
