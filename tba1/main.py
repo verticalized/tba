@@ -97,15 +97,6 @@ colour_misc_name = (Fore.BLACK + Style.BRIGHT) # misc. text colour
 
 colour_attribute = (Fore.BLACK + Style.BRIGHT) # misc. text colour
 
-###########################------CLASSES------#########################
-
-# to do list:
-
-# add quest class and make bandit quest
-# more enemies
-# more spells
-# make more locations, dungeons, undeground areas
-
 ##################################--PLAYER--############################################
 
 class player_stats:
