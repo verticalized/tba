@@ -169,6 +169,9 @@ dismurth_tower_1f.npc_list.append(npc_wizard_traenus)
 dismurth_tower_gf.npc_list.append(npc_wizard_marbles)
 dismurth_smith.npc_list.append(npc_dismurth_smith)
 
+forest_cabin.npc_list.append(npc_wizard_jim)
+forest_cabin.npc_list.append(npc_wizard_tilly)
+
 ################################
 
 # give npc dialouge options
@@ -200,6 +203,14 @@ npc_dismurth_smith.dialouge_options_list.append(dialouge_buy_weapon)
 npc_dismurth_smith.dialouge_options_list.append(dialouge_buy_armor)
 npc_dismurth_smith.dialouge_options_list.append(dialouge_buy_helmet)
 npc_dismurth_smith.dialouge_options_list.append(dialouge_buy_shield)
+
+npc_wizard_jim.dialouge_options_list.append(dialouge_talk)
+npc_wizard_jim.dialouge_options_list.append(dialouge_buy_spell)
+
+npc_wizard_tilly.dialouge_options_list.append(dialouge_talk)
+npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_weapon)
+npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_helmet)
+npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_shield)
 
 #######################--SHOP INVENTORIES--############################
 
@@ -242,15 +253,37 @@ npc_jane_doe.npc_inventory.append(super_hp_potion)
 npc_jane_doe.npc_inventory.append(cup_of_tea)
 npc_jane_doe.npc_inventory.append(tea_bag)
 
+npc_wizard_jim.npc_spell_inventory.append(fire_arrow)
+npc_wizard_jim.npc_spell_inventory.append(fireball)
+npc_wizard_jim.npc_spell_inventory.append(hydro_barrage)
+npc_wizard_jim.npc_spell_inventory.append(holy_surge)
+npc_wizard_jim.npc_spell_inventory.append(necro_surge)
+npc_wizard_jim.npc_spell_inventory.append(life_drain)
 
+npc_wizard_jim.npc_inventory.append(hp_potion)
+npc_wizard_jim.npc_inventory.append(super_hp_potion)
+
+npc_wizard_tilly.npc_weapon_inventory.append(adamantite_axe)
+npc_wizard_tilly.npc_weapon_inventory.append(adamantite_sword)
+npc_wizard_tilly.npc_weapon_inventory.append(gladius)
+
+npc_wizard_tilly.npc_helmet_inventory.append(mage_hood)
+
+npc_wizard_tilly.npc_shield_inventory.append(mage_book)
 ######################------ENEMY_SPELLBOOKS------########################
 
+hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(snare)
 hobgoblin.spellbook.append(earthblast)
 hobgoblin.spellbook.append(hydroblast)
 hobgoblin.spellbook.append(poison)
 hobgoblin.spellbook.append(snare)
 hobgoblin.spellbook.append(super_heal)
 
+hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(snare)
 goblin.spellbook.append(prayer)
 goblin.spellbook.append(burn)
 
@@ -262,6 +295,9 @@ giant_spider.spellbook.append(poison)
 
 giant_snail.spellbook.append(slime)
 
+hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(snare)
 bandit.spellbook.append(prayer)
 
 bandit_warlock.spellbook.append(snare)
@@ -618,6 +654,9 @@ else:
     equiped_armor.append(rags)
 
     equiped_spells.append(prayer)
+    equiped_spells.append(snare)
+    equiped_spells.append(poison)
+    equiped_spells.append(burn)
 
 ##############################--SHOP INVENTORY FUNCTIONS--##############################
 
@@ -950,9 +989,9 @@ def func_enemy_dead(enemy_stats):
             func_check_level()
 
 def func_get_target():
+    target = "0"
     if len(current_enemies) > 1:
         print("")
-        target = "0"
         for enemy_stats in current_enemies:
             print("|| " + str((current_enemies.index(enemy_stats)+1)) + " || LVL: " + str(enemy_stats.level) + " || " + enemy_stats.name + " || ATR: " + enemy_stats.print_attribute)
         target_input = input("\nWho will you attack? \n")
@@ -1041,7 +1080,7 @@ def func_player_spell():
                 for enemy_stats in current_enemies:
                     if enemy_stats.name == target:
                         print("you cast " + spell.print_name)
-                        enemy_stats.status_effect = 2
+                        enemy_stats.status_effect_list.append(frozen)
                         print("you freeze the " + enemy_stats.name)
                         sleep(sleep_time)
             if spell.effect == 3:
@@ -1089,8 +1128,75 @@ def func_player_status_check_spell():
     func_player_spell()
 
 def func_enemy_status_check():
+
     for enemy_stats in current_enemies:
-        func_enemy_attack(enemy_stats)
+        status_str_bonus = 0
+        status_atk_bonus = 0
+        status_mgk_bonus = 0
+        status_def_bonus = 0
+        enemy_can_attack = False
+        if len(enemy_stats.status_effect_list) == 0:
+            enemy_can_attack = True
+        else:
+            for status_condition in enemy_stats.status_effect_list:
+                if status_condition.is_freeze == True:
+                    freeze_chance = 0
+                    freeze_chance = random.randint(0,5)
+                    if freeze_chance == 1:
+                        print(enemy_stats.name + " is frozen and cannot attack!\n")
+                        enemy_can_attack = False
+                    else:
+                        print(enemy_stats.name + " broke free from the ice!\n")
+                        enemy_stats.status_effect_list.remove(status_condition)
+                        enemy_can_attack = True
+
+                if status_condition.is_poisoned == True:
+                    poison_chance = 0
+                    poison_chance = random.randint(0,2)
+                    if poison_chance == 1:
+                        enemy_poison_damage = (enemy_stats.hp // 100) + (status_condition.scalar * 10)
+                        enemy_stats.hp -= enemy_poison_damage
+                        print(enemy_stats.name + " takes" + str(enemy_poison_damage) + " poison damage!\n")
+                        func_check_enemy_dead()
+                        enemy_can_attack = True
+                    else:
+                        print(enemy_stats.name + " is no longer poisoned\n")
+                        enemy_stats.status_effect_list.remove(status_condition)
+                        enemy_can_attack = True
+
+                if status_condition.is_burning == True:
+                    burn_chance = 0
+                    burn_chance = random.randint(0,10)
+                    if burn_chance == 1:
+                        enemy_burn_damage = (enemy_stats.hp // 100) + (status_condition.scalar * 10)
+                        enemy_stats.hp -= enemy_burn_damage
+                        print(enemy_stats.name + " is on fire and takes " + str(enemy_burn_damage)+ " damage!\n")
+                        func_check_enemy_dead()
+                        enemy_can_attack = True
+                    else:
+                        print(enemy_stats.name + " is no longer burning\n")
+                        enemy_stats.status_effect_list.remove(status_condition)
+                        enemy_can_attack = True
+
+                if status_condition.is_str_up == True:
+                    status_str_bonus = (enemy_stats.strength // 4) + (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+                if status_condition.is_atk_up == True:
+                    status_atk_bonus = (enemy_stats.attack // 4) + (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+                if status_condition.is_mgk_up == True:
+                    status_mgk_bonus = (enemy_stats.magic // 4) + (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+                if status_condition.is_def_up == True:
+                    status_def_bonus = (enemy_stats.defence // 4) + (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+        if enemy_can_attack == True:
+            func_enemy_attack(enemy_stats,status_str_bonus,status_atk_bonus,status_mgk_bonus,status_def_bonus)
+
 
 def func_check_enemy_dead():
     global in_fight
@@ -1108,7 +1214,7 @@ def func_check_enemy_dead():
                     scene_type.npc_list.remove(npc)
                     npc_fight = False
 
-def func_enemy_attack(enemy_stats):
+def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
     if (not enemy_stats.spellbook):
         func_enemy_melee(enemy_stats)
     else:
@@ -1151,7 +1257,7 @@ def func_enemy_attack(enemy_stats):
                     enemy_stats.hp = enemy_stats.hp + enemy_healing
                     if enemy_stats.hp > enemy_stats.maxhp:
                         enemy_stats.hp = enemy_stats.maxhp
-                    print("\n" + enemy_stats.name + " heals for:" + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+                    print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
                     sleep(sleep_time)
                     break
                 if spell.effect == 2:
@@ -1159,7 +1265,7 @@ def func_enemy_attack(enemy_stats):
                     print(spell.print_name)
                     sleep(sleep_time)
                     for player_stats in players:
-                        player_stats.status_effect = 2
+                        player_stats.status_effect_list.append(frozen)
                     print("you were frozen by the " + enemy_stats.name)
                     sleep(sleep_time)
                     break
@@ -1904,8 +2010,11 @@ def func_HUD():
     status_list = []
     for status_condition in player1.status_effect_list:
         status_list.append(status_condition.name)
-
-    print("\nHP:" + Fore.RED + str(player1.hp) + Style.RESET_ALL + "/" + Fore.RED + str(player1.maxhp) + Style.RESET_ALL)
+    print("\nName: " + player1.name)
+    print("\nLVL: " + str(player1.level))
+    for armor in equiped_armor:
+        print("ATT.: " + armor.print_attribute)
+    print("HP:" + Fore.RED + str(player1.hp) + Style.RESET_ALL + "/" + Fore.RED + str(player1.maxhp) + Style.RESET_ALL)
     print("MP:" + Fore.BLUE + Style.BRIGHT + str(player1.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT  + str(player1.maxmp) + Style.RESET_ALL)
     if len(player1.status_effect_list) != 0:
         print("Status: " + str(status_list) + " \n")
@@ -2362,18 +2471,23 @@ while game_start == 1:
                 print("\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
                 while in_fight == True:
                     func_check_level()
-
+                    print("\nEnemy stats:")
                     for enemy_stats in current_enemies:
-                        print("\nEnemy stats:")
+                        status_list = []
+                        for status_condition in enemy_stats.status_effect_list:
+                            status_list.append(status_condition.name)
                         print("Name: " + enemy_stats.name)
-                        print("Level: ", enemy_stats.level)
-                        print("hp:", enemy_stats.hp, "/", enemy_stats.maxhp)
+                        print("LVL: " + str(enemy_stats.level))
+                        print("ATT.: " + enemy_stats.print_attribute)
+                        print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
+                        print("MP:" + Fore.BLUE + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + str(enemy_stats.maxmp) + "\n")
+                        if len(enemy_stats.status_effect_list) != 0:
+                            print("Status: " + str(status_list) + " \n")
+                        else:
+                            print("Status: ['N0NE'] ")
+                    func_HUD()
 
-                    for player1 in players:
-                        print("\nMy stats")
-                        print("hp:", player1.hp, "/", player1.maxhp)
-
-                    print("turns left: " + str(player_turns))
+                    # print("turns left: " + str(player_turns))
 
                     combat_input = input("combat input: \n")
 
