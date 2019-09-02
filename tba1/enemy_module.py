@@ -52,7 +52,10 @@ class enemy_stats:
 
 goblin = enemy_stats("goblin",2,5,1000,1000,100,100,1,5,2,100,"earth","fire",[],[],[],[],[],[],0)
 hobgoblin = enemy_stats("hobgoblin",3,12,5000,5000,100,100,1,4,5,300,"earth","fire",[],[],[],[],[],[],0)
+hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",6,22,5000,5000,100,100,1,4,5,300,"earth","fire",[],[],[],[],[],[],0)
 bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,5,2,100,"fire","earth",[],[],[],[],[],[],0)
+bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0)
+bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,4,230,"fire","earth",[],[],[],[],[],[],0)
 
 legion_soldier = enemy_stats("legion soldier",28,500,10000,10000,100,100,10,14,20,1000,"air","earth",[],[],[],[],[],[],0)
 legion_spearman = enemy_stats("legion spearman",25,500,10500,10500,100,100,10,16,10,1050,"air","earth",[],[],[],[],[],[],0)

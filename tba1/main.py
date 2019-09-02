@@ -25,8 +25,8 @@ check_for_combat = True
 restock_shops = True
 restock_ticks = 0
 
-steps_x = 111
-steps_y = 111
+steps_x = 0
+steps_y = 0
 steps_z = 0
 
 ###########################################
@@ -262,8 +262,18 @@ giant_spider.spellbook.append(poison)
 
 giant_snail.spellbook.append(slime)
 
-bandit.spellbook.append(snare)
 bandit.spellbook.append(prayer)
+
+bandit_warlock.spellbook.append(snare)
+bandit_warlock.spellbook.append(prayer)
+bandit_warlock.spellbook.append(earthblast)
+bandit_warlock.spellbook.append(earthblast)
+bandit_warlock.spellbook.append(necroblast)
+
+bandit_henchman.spellbook.append(burn)
+bandit_henchman.spellbook.append(fireblast)
+bandit_henchman.spellbook.append(prayer)
+
 
 legion_soldier.spellbook.append(prayer)
 
@@ -662,11 +672,11 @@ def func_choose_enemy():
 
                     if combat_mod >= 25 and combat_mod < 50:
                         if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(fire_elemental)
+                            current_enemies.append(bandit_warlock)
                         if combat_rating >= 25 and combat_rating < 50:
                             current_enemies.append(bandit)
                         if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit)
+                            current_enemies.append(bandit_warlock)
                             current_enemies.append(hobgoblin)
                             current_enemies.append(goblin)
                         if combat_rating >= 75 and combat_rating <= 100:
@@ -688,18 +698,17 @@ def func_choose_enemy():
 
                     if combat_mod >= 75 and combat_mod < 90:
                         if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(goblin)
-                            current_enemies.append(goblin)
+                            current_enemies.append(bandit_henchman)
                         if combat_rating >= 25 and combat_rating < 50:
                             current_enemies.append(goblin)
                             current_enemies.append(hobgoblin)
-                            current_enemies.append(hobgoblin)
+                            current_enemies.append(air_elemental)
                         if combat_rating >= 50 and combat_rating < 75:
                             current_enemies.append(bandit)
-                            current_enemies.append(bandit)
-                            current_enemies.append(bandit)
+                            current_enemies.append(bandit_warlock)
+                            current_enemies.append(bandit_henchman)
                         if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(goblin)
+                            current_enemies.append(rock_golem)
 
                     if combat_mod >= 90 and combat_mod <= 100:
                         if combat_rating >= 0 and combat_rating < 25:
@@ -715,7 +724,7 @@ def func_choose_enemy():
                         if combat_rating >= 75 and combat_rating <= 100:
                             current_enemies.append(bird_warrior)
 
-                if scene_type.difficulty >= 1:
+                if scene_type.difficulty != 0:
                     if combat_mod < 25:
                         if combat_rating >= 0 and combat_rating < 25:
                             current_enemies.append(goblin)
@@ -726,7 +735,7 @@ def func_choose_enemy():
                             current_enemies.append(bandit)
                         if combat_rating >= 75 and combat_rating <= 100:
                             current_enemies.append(bandit)
-                            current_enemies.append(goblin)
+                            current_enemies.append(bandit_henchman)
 
                     if combat_mod >= 25 and combat_mod < 50:
                         if combat_rating >= 0 and combat_rating < 25:
@@ -747,12 +756,10 @@ def func_choose_enemy():
                         if combat_rating >= 25 and combat_rating < 50:
                             current_enemies.append(water_elemental)
                         if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(water_elemental)
+                            current_enemies.append(bandit_warlock)
                             current_enemies.append(fire_elemental)
                         if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(fire_elemental)
-                            current_enemies.append(water_elemental)
+                            current_enemies.append(rock_golem)
 
                     if combat_mod >= 75 and combat_mod < 90:
                         if combat_rating >= 0 and combat_rating < 25:
@@ -760,15 +767,16 @@ def func_choose_enemy():
                         if combat_rating >= 25 and combat_rating < 50:
                             current_enemies.append(legion_spearman)
                         if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(legion_spearman)
+                            current_enemies.append(legion_battle_mage)
                             current_enemies.append(legion_soldier)
                         if combat_rating >= 75 and combat_rating <= 100:
                             current_enemies.append(mushroom_man)
 
+
                     if combat_mod >= 90 and combat_mod <= 100:
                         if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(fire_elemental)
-                            current_enemies.append(water_elemental)
+                            current_enemies.append(legion_archer)
+                            current_enemies.append(legion_spearman)
                             current_enemies.append(earth_elemental)
                         if combat_rating >= 25 and combat_rating < 50:
                             current_enemies.append(legion_spearman)
@@ -944,6 +952,7 @@ def func_enemy_dead(enemy_stats):
 def func_get_target():
     if len(current_enemies) > 1:
         print("")
+        target = "0"
         for enemy_stats in current_enemies:
             print("|| " + str((current_enemies.index(enemy_stats)+1)) + " || LVL: " + str(enemy_stats.level) + " || " + enemy_stats.name + " || ATR: " + enemy_stats.print_attribute)
         target_input = input("\nWho will you attack? \n")
@@ -978,6 +987,7 @@ def func_player_melee():
             sleep(sleep_time)
             player1.attack_xp += (player1.attack * (player_damage))
             player1.strength_xp += (player1.strength * (player_damage + player1.strength))
+            break
 
 def func_player_spell():
 
@@ -1667,6 +1677,8 @@ def func_create_item(ing1_name,ing2_name,ingreq_1,ingreq_2,skill_lvl_req,made_it
 
 def func_equip(gear,player_gear_inv,current_gear):
     target_gear = "0"
+    has_level = False
+    has_space = False
     for gear in player_gear_inv:
         if gear in all_game_weapons:
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + gear.type + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
@@ -1697,11 +1709,8 @@ def func_equip(gear,player_gear_inv,current_gear):
         if target_gear == gear.name:
             has_gear = True #player has the selected gear in their inv
 
-            has_level = False
-            has_space = False
-
             if player1.level < gear.level:
-                print("\nYou are not high enough level to equip this!\n")
+                print("\nYou are not high enough level to equip " + gear.print_name + "\n")
                 has_level = False
             else:
                 has_level = True
@@ -1723,17 +1732,23 @@ def func_equip(gear,player_gear_inv,current_gear):
                 if gear in all_game_spells:
                     spell_inventory.remove(gear)
 
-                del equiped_weapon[:]
+                if gear in all_game_weapons:
+                    del equiped_weapon[:]
+                if gear in all_game_armor:
+                    del equiped_armor[:]
+                if gear in all_game_helmets:
+                    del equiped_helmet[:]
+                if gear in all_game_shields:
+                    del equiped_shield[:]
 
                 if gear in all_game_weapons:
                     equiped_weapon.append(gear)
                 if gear in all_game_armor:
                     equiped_armor.append(gear)
                 if gear in all_game_helmets:
-                    equiped_helmets.append(gear)
+                    equiped_helmet.append(gear)
                 if gear in all_game_shields:
-                    equiped_shields.append(gear)
-
+                    equiped_shield.append(gear)
                 if gear in all_game_spells:
                     equiped_spells.append(gear)
 
