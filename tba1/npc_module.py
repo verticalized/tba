@@ -5,6 +5,38 @@ from colorama import Fore, Back, Style
 
 init(autoreset=True)
 
+class dialouge_option:
+    def __init__(self, text, is_quit, is_buy_item, is_buy_weapon, is_buy_armor, is_buy_helmet, is_buy_shield, is_buy_spell, is_sell, is_talk, is_assault, is_give, is_quest):
+        self.text = text #text displayed for dialouge option
+        self.is_quit = is_quit #option to allow user to leave dialouge
+        self.is_buy_item = is_buy_item #interprets dialouge option as player wanting to make a purchase
+        self.is_buy_weapon = is_buy_weapon #interprets dialouge option as player wanting to make a purchase
+        self.is_buy_armor = is_buy_armor #interprets dialouge option as player wanting to make a purchase
+        self.is_buy_helmet = is_buy_helmet #interprets dialouge option as player wanting to make a purchase
+        self.is_buy_shield = is_buy_shield #interprets dialouge option as player wanting to make a purchase
+        self.is_buy_spell = is_buy_spell #interprets dialouge option as player wanting to make a purchase
+        self.is_sell = is_sell #interprets dialouge option as player wanting to sell something
+        self.is_talk = is_talk #interprets dialouge option as player wanting to talk
+        self.is_assault = is_assault #interprets dialouge option as player wanting to attack the npc
+        self.is_give = is_give #interprets dialouge option as a trigger to give the player an item
+        self.is_quest = is_quest #interprets dialouge option as player wanting to give the npc an item
+
+
+dialouge_buy_item = dialouge_option("can I buy something?",False,True,False,False,False,False,False,False,False,False,False,False)
+dialouge_buy_weapon = dialouge_option("can I buy some weapons?",False,False,True,False,False,False,False,False,False,False,False,False)
+dialouge_buy_armor = dialouge_option("can I buy some armor?",False,False,False,True,False,False,False,False,False,False,False,False)
+dialouge_buy_helmet = dialouge_option("may I browse your helmet selection?",False,False,False,False,True,False,False,False,False,False,False,False)
+dialouge_buy_shield = dialouge_option("i would like to buy a shield, please",False,False,False,False,False,True,False,False,False,False,False,False)
+dialouge_buy_spell = dialouge_option("do you have any spells for sale?",False,False,False,False,False,False,True,False,False,False,False,False)
+
+dialouge_sell = dialouge_option("can I sell something?",False,False,False,False,False,False,False,True,False,False,False,False)
+dialouge_talk = dialouge_option("have you heard any interesting news?",False,False,False,False,False,False,False,False,True,False,False,False)
+dialouge_gf = dialouge_option("get fucked mate!",False,False,False,False,False,False,False,False,False,True,False,False)
+dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,False,True,False)
+dialouge_quest = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True)
+
+dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,False,False,False,False,False,False)
+
 all_npcs = []
 
 class npc:
@@ -22,6 +54,7 @@ class npc:
         self.assault_dialouge = assault_dialouge
 
         self.dialouge_options_list = []
+        self.dialouge_options_list.append(dialouge_quit)
         self.combat_enemy_list = []
         self.quest_list = []
 
@@ -32,6 +65,7 @@ class npc:
         self.npc_helmet_inventory = []
         self.npc_shield_inventory = []
         self.is_dead = False
+
         all_npcs.append(self)
 
 
@@ -49,34 +83,3 @@ npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...
 
 npc_merchant_ollie = npc("Ollie","Zedex","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof")
 npc_merchant_dech = npc("Dechen","Pavoni","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof")
-
-
-
-class dialouge_option:
-    def __init__(self, text, is_buy_item, is_buy_weapon, is_buy_armor, is_buy_helmet, is_buy_shield, is_buy_spell, is_sell, is_talk, is_assault, is_give, is_quest):
-        self.text = text #text displayed for dialouge option
-        self.is_buy_item = is_buy_item #interprets dialouge option as player wanting to make a purchase
-        self.is_buy_weapon = is_buy_weapon #interprets dialouge option as player wanting to make a purchase
-        self.is_buy_armor = is_buy_armor #interprets dialouge option as player wanting to make a purchase
-        self.is_buy_helmet = is_buy_helmet #interprets dialouge option as player wanting to make a purchase
-        self.is_buy_shield = is_buy_shield #interprets dialouge option as player wanting to make a purchase
-        self.is_buy_spell = is_buy_spell #interprets dialouge option as player wanting to make a purchase
-        self.is_sell = is_sell #interprets dialouge option as player wanting to sell something
-        self.is_talk = is_talk #interprets dialouge option as player wanting to talk
-        self.is_assault = is_assault #interprets dialouge option as player wanting to attack the npc
-        self.is_give = is_give #interprets dialouge option as a trigger to give the player an item
-        self.is_quest = is_quest #interprets dialouge option as player wanting to give the npc an item
-
-
-dialouge_buy_item = dialouge_option("can I buy something?",True,False,False,False,False,False,False,False,False,False,False)
-dialouge_buy_weapon = dialouge_option("can I buy some weapons?",False,True,False,False,False,False,False,False,False,False,False)
-dialouge_buy_armor = dialouge_option("can I buy some armor?",False,False,True,False,False,False,False,False,False,False,False)
-dialouge_buy_helmet = dialouge_option("may I browse your helmet selection?",False,False,False,True,False,False,False,False,False,False,False)
-dialouge_buy_shield = dialouge_option("i would like to buy a shield, please",False,False,False,False,True,False,False,False,False,False,False)
-dialouge_buy_spell = dialouge_option("do you have any spells for sale?",False,False,False,False,False,True,False,False,False,False,False)
-
-dialouge_sell = dialouge_option("can I sell something?",False,False,False,False,False,False,True,False,False,False,False)
-dialouge_talk = dialouge_option("have you heard any interesting news?",False,False,False,False,False,False,False,True,False,False,False)
-dialouge_gf = dialouge_option("get fucked mate!",False,False,False,False,False,False,False,False,True,False,False)
-dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,True,False)
-dialouge_quest = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,True)

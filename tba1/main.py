@@ -18,9 +18,9 @@ from enemy_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "1.8.2.1"
+version = "1.8.2.2"
 
-dev_mode = 0
+dev_mode = 1
 check_for_combat = True
 restock_shops = True
 restock_ticks = 0
@@ -48,6 +48,7 @@ val_dialouge = 999 #selection value
 val_shop = 999 #selection value
 val_drop = 999 #selection value
 val_sell = 999 #selection value
+val_combat_input = 999 #selection value
 
 recipe_found = False
 
@@ -144,6 +145,13 @@ class player_skills:
 
 player1_skills = player_skills(1,0,1,0,1,0,1,0)
 
+class combat_option:
+    def __init__(self, name):
+        self.name = name
+
+combat_option_hit = combat_option("Hit")
+combat_option_spell = combat_option("Spell")
+combat_option_run = combat_option("Run")
 ############################################--NPCS/DIALOUGE/QUESTS--#########################################
 
 class quest:
@@ -590,7 +598,11 @@ location_down = []
 location_up = []
 
 current_enemies = []
+combat_option_list = []
 
+combat_option_list.append(combat_option_hit)
+combat_option_list.append(combat_option_spell)
+combat_option_list.append(combat_option_run)
 ##############
 
 inventory = []
@@ -608,6 +620,7 @@ inventory.append(magic_mushroom)
 inventory.append(cup)
 inventory.append(cup)
 inventory.append(tea_bag)
+
 # inventory.append(tent)
 # inventory.append(rope)
 # inventory.append(torch)
@@ -683,6 +696,32 @@ def func_shop_restock():
                         print(item.name + " appended to " + npc.first_name + npc.last_name)
 
 #############################----COMBAT FUNCTIONS----#########################
+def func_choose_combat_option():
+    target_combat_option = "0"
+    selected_combat_option = "0"
+    for combat_option in combat_option_list:
+        print("|| " + str((combat_option_list.index(combat_option)+1)) + " || " + combat_option.name )
+
+    combat_option_input = input("\nwhat do you want to do?\n")
+    has_option = False
+    if combat_option_input.isdigit():
+        val_combat_option_input = int(combat_option_input)
+        val_combat_input = val_combat_option_input - 1
+        for combat_option in combat_option_list:
+            if val_combat_input == combat_option_list.index(combat_option):
+                target_combat_option = combat_option.name
+    else:
+        for combat_option in combat_option_list:
+            if combat_option.name == combat_option_input:
+                target_combat_option = combat_option.name
+
+    for combat_option in combat_option_list:
+        if target_combat_option == combat_option.name:
+            has_option = True
+            print("you selected " + combat_option.name + "\n")
+            selected_combat_option = target_combat_option
+            break
+    return selected_combat_option
 
 def func_choose_enemy():
 
@@ -1011,14 +1050,14 @@ def func_get_target():
 
     return target
 
-def func_player_melee():
+def func_player_melee(status_str,status_atk):
     target = func_get_target()
     for enemy_stats in current_enemies:
         if enemy_stats.name == target:
             player_weapon_level = 0
             for weapon in equiped_weapon:
                 player_weapon_level = weapon.level
-            player_damage = (player1.attack + player1.attack_bonus + player_weapon_level) * (player1.strength + player1.strength_bonus + player_weapon_level)
+            player_damage = (player1.attack + player1.attack_bonus + status_atk + player_weapon_level) * (player1.strength + status_str + player1.strength_bonus + player_weapon_level)
             if player_damage > (enemy_stats.hp):
                 player_damage = (enemy_stats.hp)
             enemy_stats.hp = enemy_stats.hp - player_damage
@@ -1028,7 +1067,7 @@ def func_player_melee():
             player1.strength_xp += (player1.strength * (player_damage + player1.strength))
             break
 
-def func_player_spell():
+def func_player_spell(status_mgk):
 
     spell_damage = 0
     for spell in equiped_spells:
@@ -1041,34 +1080,43 @@ def func_player_spell():
             spell_found = True
 
         if spell_found == True:
-            if spell.effect == 0:
+            if spell.effect == 0 or spell.effect == 1:
                 target = func_get_target()
                 for enemy_stats in current_enemies:
                     if enemy_stats.name == target:
                         spell_damage = spell.damage
                         print("\nyou cast " + spell.print_name)
                         sleep(sleep_time)
-                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus)
-                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
-                            if spell.attribute == enemy_stats.weakness:
-                                print("it's super effective")
+                        for enemy_stats in current_enemies:
+                            if enemy_stats.name == target:
+                                player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                    if spell.attribute == enemy_stats.weakness:
+                                        print("it's super effective")
+                                        sleep(sleep_time)
+                                        player_damage = player_damage * 2
+                                    if spell.attribute == enemy_stats.attribute:
+                                        print("it's not very effective")
+                                        sleep(sleep_time)
+                                        player_damage = player_damage // 2
+                                if player_damage > (enemy_stats.hp):
+                                    player_damage = (enemy_stats.hp)
+                                enemy_stats.hp = enemy_stats.hp - player_damage
+                                print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                if spell.effect == 1:
+                                    player_healing = player_spell_damage // 2
+                                    player_stats.hp = player_stats.hp + player_healing
+                                    if player_stats.hp > player_stats.maxhp:
+                                        player_stats.hp = player_stats.maxhp
+                                    print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
                                 sleep(sleep_time)
-                                player_damage = player_damage * 2
-                            if spell.attribute == enemy_stats.attribute:
-                                print("it's not very effective")
-                                sleep(sleep_time)
-                                player_damage = player_damage // 2
-                        if player_damage > (enemy_stats.hp):
-                            player_damage = (enemy_stats.hp)
-                        enemy_stats.hp = enemy_stats.hp - player_damage
-                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
-                        sleep(sleep_time)
-                        player1.magic_xp += (player1.magic + spell.xp + spell.damage)
-            if spell.effect == 1:
+                                player1.magic_xp += (player1.magic + spell.xp + spell.damage + (player_damage // 100))
+            if spell.effect == 100:
                 spell_healing = spell.damage
                 print("you cast " + spell.print_name)
+                player1.magic_xp += (player1.magic + spell.xp + spell.damage)
                 sleep(sleep_time)
-                player_healing = (player1.level + spell_healing) * (player1.magic + player1.magic_bonus)
+                player_healing = (player1.level + spell_healing) * (player1.magic + player1.magic_bonus + status_mgk)
                 player_stats.hp = player_stats.hp + player_healing
                 if player_stats.hp > player_stats.maxhp:
                     player_stats.hp = player_stats.maxhp
@@ -1080,24 +1128,103 @@ def func_player_spell():
                 for enemy_stats in current_enemies:
                     if enemy_stats.name == target:
                         print("you cast " + spell.print_name)
-                        enemy_stats.status_effect_list.append(frozen)
-                        print("you freeze the " + enemy_stats.name)
+                        if frozen not in enemy_stats.status_effect_list:
+                            enemy_stats.status_effect_list.append(frozen)
+                            print("you freeze the " + enemy_stats.name)
+                        if spell.utility == False:
+                            for enemy_stats in current_enemies:
+                                if enemy_stats.name == target:
+                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                        if spell.attribute == enemy_stats.weakness:
+                                            print("it's super effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage * 2
+                                        if spell.attribute == enemy_stats.attribute:
+                                            print("it's not very effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage // 2
+                                    if player_damage > (enemy_stats.hp):
+                                        player_damage = (enemy_stats.hp)
+                                    enemy_stats.hp = enemy_stats.hp - player_damage
+                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                    if spell.effect == 1:
+                                        player_healing = player_spell_damage // 2
+                                        player_stats.hp = player_stats.hp + player_healing
+                                        if player_stats.hp > player_stats.maxhp:
+                                            player_stats.hp = player_stats.maxhp
+                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
+                                    sleep(sleep_time)
+
                         sleep(sleep_time)
             if spell.effect == 3:
                 target = func_get_target()
                 for enemy_stats in current_enemies:
                     if enemy_stats.name == target:
                         print("you cast " + spell.print_name)
-                        enemy_stats.status_effect = 3
-                        print("you poison the " + enemy_stats.name)
+                        player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                        if poisoned not in enemy_stats.status_effect_list:
+                            enemy_stats.status_effect_list.append(poisoned)
+                            print("you poison the " + enemy_stats.name)
+                        if spell.utility == False:
+                            for enemy_stats in current_enemies:
+                                if enemy_stats.name == target:
+                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                        if spell.attribute == enemy_stats.weakness:
+                                            print("it's super effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage * 2
+                                        if spell.attribute == enemy_stats.attribute:
+                                            print("it's not very effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage // 2
+                                    if player_damage > (enemy_stats.hp):
+                                        player_damage = (enemy_stats.hp)
+                                    enemy_stats.hp = enemy_stats.hp - player_damage
+                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                    if spell.effect == 1:
+                                        player_healing = player_spell_damage // 2
+                                        player_stats.hp = player_stats.hp + player_healing
+                                        if player_stats.hp > player_stats.maxhp:
+                                            player_stats.hp = player_stats.maxhp
+                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
+                                    sleep(sleep_time)
                         sleep(sleep_time)
             if spell.effect == 4:
                 target = func_get_target()
                 for enemy_stats in current_enemies:
                     if enemy_stats.name == target:
                         print("you cast " + spell.print_name)
-                        enemy_stats.status_effect = 4
-                        print("you burn the " + enemy_stats.name)
+                        player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                        if burning not in enemy_stats.status_effect_list:
+                            enemy_stats.status_effect_list.append(burning)
+                            print("you burn the " + enemy_stats.name)
+                        if spell.utility == False:
+                            for enemy_stats in current_enemies:
+                                if enemy_stats.name == target:
+                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                        if spell.attribute == enemy_stats.weakness:
+                                            print("it's super effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage * 2
+                                        if spell.attribute == enemy_stats.attribute:
+                                            print("it's not very effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage // 2
+                                    if player_damage > (enemy_stats.hp):
+                                        player_damage = (enemy_stats.hp)
+                                    enemy_stats.hp = enemy_stats.hp - player_damage
+                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                    if spell.effect == 1:
+                                        player_healing = player_spell_damage // 2
+                                        player_stats.hp = player_stats.hp + player_healing
+                                        if player_stats.hp > player_stats.maxhp:
+                                            player_stats.hp = player_stats.maxhp
+                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
+                                    sleep(sleep_time)
+
                         sleep(sleep_time)
     func_check_level()
 
@@ -1108,7 +1235,7 @@ def func_player_spell_non_combat():
 
                 print("\nyou are not in combat...")
 
-            if spell.effect == 1:
+            if spell.effect == 100:
                 spell_healing = spell.damage
                 print("you cast " + spell.print_name)
                 player_healing = (player1.level + spell_healing) * (player1.magic + player1.magic_bonus)
@@ -1121,19 +1248,96 @@ def func_player_spell_non_combat():
                 print(player_healing)
                 player1.magic_xp += (player_healing)
 
-def func_player_status_check_melee():
-    func_player_melee()
+def func_player_status_check(is_attack_type_hit):
 
-def func_player_status_check_spell():
-    func_player_spell()
+    for player_stats in players:
+        status_str_bonus = 1
+        status_atk_bonus = 1
+        status_mgk_bonus = 1
+        status_def_bonus = 1
+        player_can_attack = False
+        if len(player_stats.status_effect_list) == 0:
+            player_can_attack = True
+        else:
+            for status_condition in player_stats.status_effect_list:
+                if status_condition.is_freeze == True:
+                    freeze_chance = 0
+                    freeze_chance = random.randint(1,6)
+                    if freeze_chance != 1:
+                        print("\n" + player_stats.name + " is frozen and cannot attack!")
+                        player_can_attack = False
+                    else:
+                        print("\n" + player_stats.name + " broke free from the ice!")
+                        player_stats.status_effect_list.remove(status_condition)
+                        player_can_attack = True
+
+                if status_condition.is_poisoned == True:
+                    poison_chance = 0
+                    poison_chance = random.randint(1,5)
+                    if poison_chance != 1:
+                        player_poison_damage = (player_stats.hp // 100) + (status_condition.scalar * 10)
+                        player_stats.hp -= player_poison_damage
+                        print("\n" + player_stats.name + " takes" + str(player_poison_damage) + " poison damage!")
+                        func_check_player_dead()
+                        player_can_attack = True
+                    else:
+                        print("\n" + player_stats.name + " is no longer poisoned")
+                        player_stats.status_effect_list.remove(status_condition)
+                        player_can_attack = True
+
+                if status_condition.is_burning == True:
+                    burn_chance = 0
+                    burn_chance = random.randint(1,11)
+                    if burn_chance != 1:
+                        player_burn_damage = (player_stats.hp // 100) + (status_condition.scalar * 10)
+                        player_stats.hp -= player_burn_damage
+                        print("\n" + player_stats.name + " is on fire and takes " + str(player_burn_damage)+ " damage!")
+                        func_check_player_dead()
+                        player_can_attack = True
+                    else:
+                        print("\n" +player_stats.name + " is no longer burning")
+                        player_stats.status_effect_list.remove(status_condition)
+                        player_can_attack = True
+
+                if status_condition.is_str_up == True:
+                    status_str_bonus = (player_stats.strength // 4) + (2 * status_condition.scalar)
+                    player_can_attack = True
+
+                if status_condition.is_atk_up == True:
+                    status_atk_bonus = (player_stats.attack // 4) + (2 * status_condition.scalar)
+                    player_can_attack = True
+
+                if status_condition.is_mgk_up == True:
+                    status_mgk_bonus = (player_stats.magic // 4) + (2 * status_condition.scalar)
+                    player_can_attack = True
+
+                if status_condition.is_def_up == True:
+                    status_def_bonus = (player_stats.defence // 4) + (2 * status_condition.scalar)
+                    player_can_attack = True
+
+        if player_can_attack == True:
+            if is_attack_type_hit == False:
+                func_player_spell(status_mgk_bonus)
+            if is_attack_type_hit == True:
+                func_player_melee(status_str_bonus,status_atk_bonus)
+
+def func_check_player_dead():
+    if player1.hp <= 0:
+        in_fight = False
+        del current_enemies[:]
+        game_start = 0
+        dead_timer = 100
+        while deadtimer > 0:
+            dead_timer -= 1
+            print("\nYOU ARE DEAD! \n")
 
 def func_enemy_status_check():
 
     for enemy_stats in current_enemies:
-        status_str_bonus = 0
-        status_atk_bonus = 0
-        status_mgk_bonus = 0
-        status_def_bonus = 0
+        status_str_bonus = 1
+        status_atk_bonus = 1
+        status_mgk_bonus = 1
+        status_def_bonus = 1
         enemy_can_attack = False
         if len(enemy_stats.status_effect_list) == 0:
             enemy_can_attack = True
@@ -1141,8 +1345,8 @@ def func_enemy_status_check():
             for status_condition in enemy_stats.status_effect_list:
                 if status_condition.is_freeze == True:
                     freeze_chance = 0
-                    freeze_chance = random.randint(0,5)
-                    if freeze_chance == 1:
+                    freeze_chance = random.randint(1,6)
+                    if freeze_chance != 1:
                         print(enemy_stats.name + " is frozen and cannot attack!\n")
                         enemy_can_attack = False
                     else:
@@ -1152,8 +1356,8 @@ def func_enemy_status_check():
 
                 if status_condition.is_poisoned == True:
                     poison_chance = 0
-                    poison_chance = random.randint(0,2)
-                    if poison_chance == 1:
+                    poison_chance = random.randint(1,5)
+                    if poison_chance != 1:
                         enemy_poison_damage = (enemy_stats.hp // 100) + (status_condition.scalar * 10)
                         enemy_stats.hp -= enemy_poison_damage
                         print(enemy_stats.name + " takes" + str(enemy_poison_damage) + " poison damage!\n")
@@ -1166,8 +1370,8 @@ def func_enemy_status_check():
 
                 if status_condition.is_burning == True:
                     burn_chance = 0
-                    burn_chance = random.randint(0,10)
-                    if burn_chance == 1:
+                    burn_chance = random.randint(1,11)
+                    if burn_chance != 1:
                         enemy_burn_damage = (enemy_stats.hp // 100) + (status_condition.scalar * 10)
                         enemy_stats.hp -= enemy_burn_damage
                         print(enemy_stats.name + " is on fire and takes " + str(enemy_burn_damage)+ " damage!\n")
@@ -1196,7 +1400,6 @@ def func_enemy_status_check():
 
         if enemy_can_attack == True:
             func_enemy_attack(enemy_stats,status_str_bonus,status_atk_bonus,status_mgk_bonus,status_def_bonus)
-
 
 def func_check_enemy_dead():
     global in_fight
@@ -1230,17 +1433,21 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
             if spell.effect >= 2 and spell.effect == player1.status_effect:
                 spellchance = 0
             if spellchance == 1:
-                if spell.effect == 0 or spell.effect == -1:
+                if spell.effect == 0 or spell.effect == 1:
                     print("\n" + enemy_stats.name + " casts:")
                     print(spell.print_name)
                     sleep(sleep_time)
                     spell_damage = spell.damage
-                    enemy_spell_damage = (enemy_stats.level + spell_damage) * enemy_stats.magic
+                    enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
                     enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
                     player1.hp = player1.hp - (enemy_spell_damage)
                     print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
-                    if spell.effect == -1:
-                        print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_spell_damage))
+                    if spell.effect == 1:
+                        enemy_healing = enemy_spell_damage // 2
+                        enemy_stats.hp = enemy_stats.hp + enemy_healing
+                        if enemy_stats.hp > enemy_stats.maxhp:
+                            enemy_stats.hp = enemy_stats.maxhp
+                        print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
                     sleep(sleep_time)
                     if player1.hp <= 0:
                         print("\nYOU ARE DEAD! \n")
@@ -1248,7 +1455,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                         del current_enemies[:]
                         game_start = 0
                     break
-                if spell.effect == 1:
+                if spell.effect == 100:
                     spell_healing = spell.damage
                     print("\n" + enemy_stats.name + " casts :")
                     print(spell.print_name)
@@ -1265,8 +1472,9 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                     print(spell.print_name)
                     sleep(sleep_time)
                     for player_stats in players:
-                        player_stats.status_effect_list.append(frozen)
-                    print("you were frozen by the " + enemy_stats.name)
+                        if frozen not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(frozen)
+                            print("you were frozen by the " + enemy_stats.name)
                     sleep(sleep_time)
                     break
                 if spell.effect == 3:
@@ -1274,8 +1482,9 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                     print(spell.print_name)
                     sleep(sleep_time)
                     for player_stats in players:
-                        player_stats.status_effect = 3
-                    print("you were poisoned by the " + enemy_stats.name)
+                        if poisoned not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(poisoned)
+                            print("you were poisoned by the " + enemy_stats.name)
                     sleep(sleep_time)
                     break
                 if spell.effect == 4:
@@ -1283,8 +1492,9 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                     print(spell.print_name)
                     sleep(sleep_time)
                     for player_stats in players:
-                        player_stats.status_effect = 4
-                    print("you were burnt by the " + enemy_stats.name)
+                        if burning not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(burning)
+                            print("you were burnt by the " + enemy_stats.name)
                     sleep(sleep_time)
                     break
                 break
@@ -2010,8 +2220,8 @@ def func_HUD():
     status_list = []
     for status_condition in player1.status_effect_list:
         status_list.append(status_condition.name)
-    print("\nName: " + player1.name)
-    print("\nLVL: " + str(player1.level))
+    print("\nName: " + Fore.YELLOW + Style.BRIGHT + player1.name)
+    print("LVL: " + Fore.YELLOW + str(player1.level))
     for armor in equiped_armor:
         print("ATT.: " + armor.print_attribute)
     print("HP:" + Fore.RED + str(player1.hp) + Style.RESET_ALL + "/" + Fore.RED + str(player1.maxhp) + Style.RESET_ALL)
@@ -2019,7 +2229,7 @@ def func_HUD():
     if len(player1.status_effect_list) != 0:
         print("Status: " + str(status_list) + " \n")
     else:
-        print("Status: ['N0NE'] ")
+        print("Status: ['N0NE'] \n")
 
 def player_keys_check():
     if len(inventory) == 0: #locks all doors if inventory is empty, tile which are passable by default would be unlocked if the player never picks up an item
@@ -2471,6 +2681,7 @@ while game_start == 1:
                 print("\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
                 while in_fight == True:
                     func_check_level()
+                    print("\nLocation: " + scene_type.name)
                     print("\nEnemy stats:")
                     for enemy_stats in current_enemies:
                         status_list = []
@@ -2480,28 +2691,28 @@ while game_start == 1:
                         print("LVL: " + str(enemy_stats.level))
                         print("ATT.: " + enemy_stats.print_attribute)
                         print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
-                        print("MP:" + Fore.BLUE + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + str(enemy_stats.maxmp) + "\n")
+                        print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
                         if len(enemy_stats.status_effect_list) != 0:
                             print("Status: " + str(status_list) + " \n")
                         else:
-                            print("Status: ['N0NE'] ")
+                            print("Status: ['N0NE'] \n")
                     func_HUD()
 
                     # print("turns left: " + str(player_turns))
 
-                    combat_input = input("combat input: \n")
+                    combat_input = func_choose_combat_option()
 
-                    if combat_input == "run" or combat_input == "r":
+                    if combat_input == "Run":
                         in_fight = False
                         print("you ran away! \n")
                         del current_enemies[:]
                         location_desc()
-                    elif combat_input == "hit" or combat_input == "h":
+                    elif combat_input == "Hit":
                         player_turns -= 1
                         func_enemy_status_check()
-                        func_player_status_check_melee()
+                        func_player_status_check(True)
                         func_check_enemy_dead()
-                    elif combat_input == "spell" or combat_input == "s":
+                    elif combat_input == "Spell":
                         print("\nYour equipped spells: \n")
                         for spell in equiped_spells:
                             print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
@@ -2517,7 +2728,7 @@ while game_start == 1:
                             if len(equiped_spells) >= val:
                                 has_spell = 1
                                 func_enemy_status_check()
-                                func_player_status_check_spell()
+                                func_player_status_check(False)
                                 func_check_enemy_dead()
 
                         else:
@@ -3124,63 +3335,69 @@ while game_start == 1:
                                 print(npc.greeting + ", I am " + npc.first_name + " " + npc.last_name + ", the " + npc.title + "\n")
 
                         print(npc.npc_desc)
+                        is_talking = True
+                        while is_talking == True:
+                            target_dialouge = func_get_target_dialouge()
+                            for dialouge_option in npc.dialouge_options_list:
+                                if dialouge_option.text == target_dialouge:
 
-                        target_dialouge = func_get_target_dialouge()
-                        for dialouge_option in npc.dialouge_options_list:
-                            if dialouge_option.text == target_dialouge:
+                                    if dialouge_option.is_quit == True:
+                                        print("Goodbye!")
+                                        is_talking = False
 
-                                if dialouge_option.is_buy_weapon == True:
-                                    func_shop(weapon,npc.npc_weapon_inventory)
-                                if dialouge_option.is_buy_armor == True:
-                                    func_shop(armor,npc.npc_armor_inventory)
-                                if dialouge_option.is_buy_helmet == True:
-                                    func_shop(helmet,npc.npc_helmet_inventory)
-                                if dialouge_option.is_buy_shield == True:
-                                    func_shop(armor,npc.npc_shield_inventory)
+                                    if dialouge_option.is_buy_weapon == True:
+                                        func_shop(weapon,npc.npc_weapon_inventory)
+                                    if dialouge_option.is_buy_armor == True:
+                                        func_shop(armor,npc.npc_armor_inventory)
+                                    if dialouge_option.is_buy_helmet == True:
+                                        func_shop(helmet,npc.npc_helmet_inventory)
+                                    if dialouge_option.is_buy_shield == True:
+                                        func_shop(armor,npc.npc_shield_inventory)
 
-                                if dialouge_option.is_buy_item == True:
-                                    func_shop(item,npc.npc_inventory)
-                                if dialouge_option.is_buy_spell == True:
-                                    func_shop(spell,npc.npc_spell_inventory)
+                                    if dialouge_option.is_buy_item == True:
+                                        func_shop(item,npc.npc_inventory)
+                                    if dialouge_option.is_buy_spell == True:
+                                        func_shop(spell,npc.npc_spell_inventory)
 
-                                if dialouge_option.is_talk == True:
-                                    print("you have a conversation")
+                                    if dialouge_option.is_talk == True:
+                                        print("you have a conversation")
 
-                                if dialouge_option.is_sell == True:
-                                    print("")
-                                    print("|| 1 || Items")
-                                    print("|| 2 || Weapons")
-                                    print("|| 3 || Armor")
-                                    print("|| 4 || Helmets")
-                                    print("|| 5 || Shields")
-                                    print("|| 6 || Spells")
-                                    sell_gear = input("\nwhich bag to sell from?\n")
-                                    if sell_gear == "1":
-                                        func_sell(item,inventory)
-                                    if sell_gear == "2":
-                                        func_sell(weapon,weapon_inventory)
-                                    if sell_gear == "3":
-                                        func_sell(armor,armor_inventory)
-                                    if sell_gear == "4":
-                                        func_sell(helmet,helmet_inventory)
-                                    if sell_gear == "5":
-                                        func_sell(shield,shield_inventory)
-                                    if sell_gear == "6":
-                                        func_sell(spell,spell_inventory)
+                                    if dialouge_option.is_sell == True:
+                                        print("")
+                                        print("|| 1 || Items")
+                                        print("|| 2 || Weapons")
+                                        print("|| 3 || Armor")
+                                        print("|| 4 || Helmets")
+                                        print("|| 5 || Shields")
+                                        print("|| 6 || Spells")
+                                        sell_gear = input("\nwhich bag to sell from?\n")
+                                        if sell_gear == "1":
+                                            func_sell(item,inventory)
+                                        if sell_gear == "2":
+                                            func_sell(weapon,weapon_inventory)
+                                        if sell_gear == "3":
+                                            func_sell(armor,armor_inventory)
+                                        if sell_gear == "4":
+                                            func_sell(helmet,helmet_inventory)
+                                        if sell_gear == "5":
+                                            func_sell(shield,shield_inventory)
+                                        if sell_gear == "6":
+                                            func_sell(spell,spell_inventory)
 
-                                if dialouge_option.is_assault == True:
-                                    print(npc.assault_dialouge)
-                                    current_enemies.extend(npc.combat_enemy_list)
-                                    npc_enemy_fname = npc.first_name
-                                    npc_enemy_lname = npc.last_name
-                                    in_fight = True
-                                    npc_fight = True
+                                    if dialouge_option.is_assault == True:
+                                        print(npc.assault_dialouge)
+                                        current_enemies.extend(npc.combat_enemy_list)
+                                        npc_enemy_fname = npc.first_name
+                                        npc_enemy_lname = npc.last_name
+                                        in_fight = True
+                                        npc_fight = True
+                                        is_talking = False
 
-                                if dialouge_option.is_give == True:
-                                    print("execute func_give_item")
+                                    if dialouge_option.is_give == True:
+                                        print("execute func_give_item")
 
-                                if dialouge_option.is_quest == True:
-                                    print("execute func_quest")
+                                    if dialouge_option.is_quest == True:
+                                        print("execute func_quest")
 
             else:
                 print("there is nobody to talk to\n")

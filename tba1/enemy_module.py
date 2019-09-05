@@ -35,7 +35,7 @@ class enemy_stats:
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
         if self.attribute == "water":
-            self.print_attribute = (Fore.BLUE + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.print_attribute = (Fore.BLUE + Style.BRIGHT + attribute + Style.RESET_ALL)
         if self.attribute == "earth":
             self.print_attribute = (Fore.GREEN + Style.NORMAL + attribute + Style.RESET_ALL)
         if self.attribute == "air":
@@ -47,7 +47,7 @@ class enemy_stats:
         if self.attribute == "slime":
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
         if self.attribute == "ice":
-            self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.print_attribute = (Fore.CYAN + Style.BRIGHT + attribute + Style.RESET_ALL)
 
 
 goblin = enemy_stats("goblin",2,5,1000,1000,100,100,1,5,2,100,"earth","fire",[],[],[],[],[],[],0)

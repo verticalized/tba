@@ -25,7 +25,7 @@ class spell:
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
         if self.attribute == "water":
-            self.print_attribute = (Fore.BLUE + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.print_attribute = (Fore.BLUE + Style.BRIGHT + attribute + Style.RESET_ALL)
         if self.attribute == "earth":
             self.print_attribute = (Fore.GREEN + Style.NORMAL + attribute + Style.RESET_ALL)
         if self.attribute == "air":
@@ -37,13 +37,13 @@ class spell:
         if self.attribute == "slime":
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
         if self.attribute == "ice":
-            self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.print_attribute = (Fore.CYAN + Style.BRIGHT + attribute + Style.RESET_ALL)
 
         all_game_spells.append(self)
 
 ############--COMBAT SPELLS--#############
 
-# status 0 spells DAMAGE - combat spells, also used for turns where enemy does nothing by doing 0 damage.
+#### status 0 spells DAMAGE - combat spells, also used for turns where enemy does nothing by doing 0 damage.
 slime = spell("slime",5,5,True,0,"slime",0,0,"slurms mackenzie")
 
 # arrow spells
@@ -64,32 +64,39 @@ earthblast = spell("earthblast",8,500,False,60,"earth",100,0,"light earth damage
 necroblast = spell("necroblast",8,500,False,60,"undead",100,0,"light undead damage")
 holyblast = spell("holyblast",8,500,False,60,"holy",100,0,"light holy damage")
 
-###########--HEALING SPELLS--##########
 
-# status -1 spells HEAL AND DAMAGE
+#### status -1 spells HEAL AND DAMAGE
+life_drain = spell("life drain",5,5,True,100,"undead",50,1,"a life draining spell which heals the user")
 
-life_drain = spell("life drain",5,5,True,100,"undead",50,-1,"a life draining spell which heals the user")
+##################--STATUS EFFECT/DEBUFF SPELLS--##############################
 
-# status 1 spells HEAL
+#### status 2 spells FREEZE
+snare = spell("snare",5,500,True,5,"ice",70,2,"snares the enemy in ice")
+blizzard = spell("blizzard",5,500,False,150,"ice",150,2,"freezes the enemy and does lots of damage")
+cone_of_cold = spell("cone of cold",5,500,False,50,"ice",50,2,"freezes the enemy and does damage")
+#### status 3 spells POISON
+poison = spell("poison",5,50,True,5,"earth",70,3,"poisons the enemy")
 
-mega_heal = spell("mega heal",15,1000,True,250,"holy",50,1,"a mega healing spell")
+#### status 4 spells BURN
+burn = spell("burn",5,50,True,5,"fire",70,4,"burns the enemy")
+mega_burn = spell("burn",30,5000,False,500,"fire",70,4,"MFB")
 
-super_heal = spell("super heal",5,500,True,100,"holy",50,1,"a super healing spell")
+#### status 5 spells SLEEP
+hypnosis = spell("hypnosis",50,50,True,5,"water",70,5,"puts the enemy to sleep")
 
-prayer = spell("prayer",1,50,True,50,"holy",50,1,"a light healing spell")
+#### status 6 spells BADLY POISON
+toxic = spell("toxic",22,500,True,5,"earth",70,6,"badly poisons the enemy")
 
-##################--STATUS EFFECT SPELLS--##############################
+##################--BUFF/HEALING SPELLS--##############################
 
-#status 2 spells FREEZE
-snare = spell("snare",5,5,True,5,"ice",70,2,"snares the enemy")
+#### status 100 spells HEAL
+mega_heal = spell("mega heal",15,1000,True,250,"holy",50,100,"a mega healing spell")
 
-#status 3 spells POISON
-poison = spell("poison",5,5,True,5,"earth",70,3,"poisons the enemy")
+super_heal = spell("super heal",5,500,True,100,"holy",50,100,"a super healing spell")
 
-#status 4 spells BURN
-burn = spell("burn",5,5,True,5,"fire",70,4,"burns the enemy")
+prayer = spell("prayer",1,50,True,50,"holy",50,100,"a light healing spell")
 
-##################--BUFFS/DEBUFFS--##############################
+
 
 class status_condition:
     def __init__(self, name, scalar, is_freeze, is_asleep, is_poisoned, is_poisoned_bad, is_burning, is_str_up, is_atk_up, is_mgk_up, is_def_up, is_str_down, is_atk_down, is_mgk_down, is_def_down):
