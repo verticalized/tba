@@ -31,8 +31,8 @@ check_for_combat = True
 restock_shops = False
 restock_ticks = 0
 
-steps_x = 1
-steps_y = 5
+steps_x = 6
+steps_y = 1
 steps_z = 0
 
 ###########################################
@@ -81,6 +81,9 @@ years = 1567
 default_drop_table_items = []
 default_drop_table_weapons = []
 default_drop_table_armor = []
+
+combat_option_list = []
+input_option_list = []
 
 ###########################------COLOUR_VARIABLES-------#############################
 
@@ -151,6 +154,53 @@ class player_skills:
         self.cooking_xp = cooking_xp
 
 player1_skills = player_skills(1,0,1,0,1,0,1,0)
+
+class input_option:
+    def __init__(self, name, hotkey, is_default_option, print_in_main):
+        self.name = name
+        self.hotkey = hotkey
+        self.is_default_option = is_default_option
+        self.print_in_main = print_in_main
+        if is_default_option == True:
+            input_option_list.append(self)
+
+#       commands:  north (w)  south (s)  east (d)  west (a)
+#        down (f)  up (r)  search (j)  equip (e)  stats (q)  skills (Q)
+#        drop (l)  pickup (p)  pickupall (P)  consume (k)  inv (i)  spellbook (b)  cast (c)  wait (W)  camp (u)  quit ")
+
+
+
+input_option_equip = input_option("talk","t",True,True)
+input_option_equip = input_option("equip","e",True,True)
+input_option_gear = input_option("gear","w",True,True)
+input_option_stats = input_option("stats","q",True,True)
+input_option_skills = input_option("skills","Q",True,True)
+input_option_search = input_option("search","j",True,True)
+input_option_drop = input_option("drop","l",True,True)
+input_option_pickup = input_option("pickup","p",True,True)
+input_option_pickupall = input_option("pickupall","P",True,True)
+input_option_consume = input_option("consume","k",True,True)
+input_option_inv = input_option("inv","i",True,True)
+input_option_spellbook = input_option("spellbook","b",True,True)
+input_option_cast = input_option("cast","c",True,True)
+input_option_wait = input_option("wait","W",True,True)
+
+input_option_help = input_option("help","H",True,True)
+input_option_quit = input_option("quit","Z",True,True)
+input_option_camp = input_option("camp","u",False,True)
+
+input_option_north = input_option("north","w",True,False)
+input_option_south = input_option("south","s",True,False)
+input_option_east = input_option("east","d",True,False)
+input_option_west = input_option("west","a",True,False)
+input_option_up = input_option("up","r",True,False)
+input_option_down = input_option("down","f",True,False)
+
+input_option_dev = input_option("dev","dv",True,False)
+input_option_dev_xp = input_option("/xp","/xp",True,False)
+input_option_dev_tp = input_option("/tp","/tp",True,False)
+input_option_dev_gp = input_option("/gp","/gp",True,False)
+
 
 class combat_option:
     def __init__(self, name):
@@ -544,7 +594,7 @@ location_down = []
 location_up = []
 
 current_enemies = []
-combat_option_list = []
+
 
 combat_option_list.append(combat_option_hit)
 combat_option_list.append(combat_option_spell)
@@ -615,6 +665,24 @@ else:
     equiped_spells.append(snare)
     equiped_spells.append(poison)
     equiped_spells.append(burn)
+
+
+##########--PYGAME--############
+
+win_map = pygame.display.set_mode((512,512))
+
+pygame.display.set_caption("Map Screen")
+
+x = 128
+y = 128
+
+tile_width = 16
+tile_height = 16
+
+char_width = 8
+char_height = 8
+
+vel = 16
 
 ##############################--SHOP INVENTORY FUNCTIONS--##############################
 
@@ -694,7 +762,6 @@ def func_choose_enemy():
         enemy_stats.drop_table_armor.extend(armor_drop_table)
         enemy_stats.drop_table_helmets.extend(helmets_drop_table)
         enemy_stats.drop_table_shields.extend(shields_drop_table)
-
 
 def func_enemy_dead(enemy_stats):
 
@@ -1399,6 +1466,7 @@ def func_shop(gear,npc_gear_inv):
                         if gear.name == bought_item:
                             target_gear = gear.name
             has_item = False
+            has_item_multiple = False
             for gear in npc_gear_inv:
                 if target_gear == gear.name:
                     has_item = True
@@ -1413,7 +1481,14 @@ def func_shop(gear,npc_gear_inv):
                         if gear in all_game_shields:
                             shield_inventory.append(gear)
                         if gear in all_game_items:
-                            inventory.append(gear)
+                            for item in inventory:
+                                if item.name == target_gear:
+                                    has_item_multiple = True
+                                    item.item_amount += 1
+                            if has_item_multiple == False:
+                                for item in all_game_items:
+                                    if item.name == target_gear:
+                                        inventory.append(item)
                         if gear in all_game_spells:
                             spell_inventory.append(gear)
                         print("\nthanks, enjoy your " + gear.name + "\n")
@@ -1496,6 +1571,8 @@ def func_drop(gear,player_gear_inv):
 
     dropped_item = input("\nwhat do you want to drop\n")
     has_item = False
+    has_item_multiple = False
+    ground_has_item_multiple = False
     if dropped_item.isdigit():
         val_dropped_item = int(dropped_item)
         val_drop = val_dropped_item - 1
@@ -1510,14 +1587,36 @@ def func_drop(gear,player_gear_inv):
     for gear in player_gear_inv:
         if target_gear == gear.name:
             has_item = True
-            print("you drop " + gear.print_name + "\n")
-            player_gear_inv.remove(gear)
+
+            if gear in all_game_items:
+                print("you drop " + gear.print_name + " x 1" + "\n")
+                for item in inventory:
+                    if item.name == target_gear and item.item_amount > 0:
+                        has_item_multiple = True
+                        item.item_amount -= 1
+                if has_item_multiple == False:
+                    for item in all_game_items:
+                        if item.name == target_gear:
+                            inventory.remove(item)
+            else:
+                print("you drop " + gear.print_name + "\n")
+                player_gear_inv.remove(gear)
             break
     if has_item == True:
-        for ground_item in all_ground_game_items:
-            if ground_item.name == target_gear:
-                scene_type.scene_inventory.append(ground_item)
-                break
+        for scene_type in location:
+            if gear in all_game_items:
+                for ground_item in scene_type.scene_inventory:
+                    if ground_item.name == target_gear and ground_item.item_amount > 0:
+                        ground_has_item_multiple = True
+                        ground_item.item_amount += 1
+
+                if ground_has_item_multiple == False:
+                    for ground_item in all_ground_game_items:
+                        if ground_item.name == target_gear:
+                            scene_type.scene_inventory.append(ground_item)
+                            break
+            else:
+                pass # WEAPONS AND ARMOR WILLBE REMOVED FORM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
 
 def func_search_treasure():
             scene_difficulty = 0
@@ -1723,6 +1822,7 @@ def func_check_light():
 def func_cook():
     target_gear = "0"
     ingredient = "0"
+
     for item in inventory:
         print("|| " + str((inventory.index(item)+1)) + " || " + item.print_name + " || " + str(item.value) + " gp. ")
 
@@ -2056,6 +2156,33 @@ def player_keys_check():
                 else:
                     dismurth_bridge.passable = False
 
+def func_choose_input_option():
+    target_input_option = "0"
+    selected_input_option = "0"
+    for input_option in input_option_list:
+        if input_option.print_in_main == True:
+            print("|| " + str((input_option_list.index(input_option)+1)) + " || " + input_option.name )
+
+    input_option_input = input("\nwhat do you want to do?\n")
+    has_option = False
+    if input_option_input.isdigit():
+        val_input_option_input = int(input_option_input)
+        val_input_input = val_input_option_input - 1
+        for input_option in input_option_list:
+            if val_input_input == input_option_list.index(input_option):
+                target_input_option = input_option.name
+    else:
+        for input_option in input_option_list:
+            if input_option.name == input_option_input or input_option.hotkey == input_option_input:
+                target_input_option = input_option.name
+
+    for input_option in input_option_list:
+        if target_input_option == input_option.name:
+            has_option = True
+            print("you selected " + input_option.name + "\n")
+            selected_input_option = target_input_option
+            break
+    return selected_input_option
 #######################---PLAYER LOCATION---#######################
 
 def player_position_check():
@@ -2371,7 +2498,7 @@ def location_desc():
             sleep(sleep_time_fast)
 
         for ground_item in scene_type.scene_inventory:
-            print(ground_item.print_name)
+            print(ground_item.print_name + " x " + str(ground_item.item_amount))
             sleep(sleep_time_fast)
         for ground_weapon in scene_type.scene_weapon_inventory:
             print(ground_weapon.print_name)
@@ -2411,9 +2538,48 @@ def location_desc():
         print("above you is " + scene_type.name + "")
         sleep(sleep_time_fast)
 
+def func_refresh_pygame(battle_intro):
+
+    if dev_mode >= 2:
+        print("\nrefreshing pygame window//\n")
+
+    if steps_z >= 0:
+        win_map.fill((0,14,214))
+    else:
+        win_map.fill((100,100,100))
+
+    for scene_type in all_scene_types:
+        if scene_type.zpos == steps_z:
+            pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( ((scene_type.xpos)*16), (scene_type.ypos)*16, tile_width, tile_height))
+    pygame.draw.rect(win_map, (255,0,0), (((steps_x)*16)+4, ((steps_y)*16)+4, char_width, char_height))
+
+    if battle_intro == True:
+        battle_intro_ticks = 0
+    while battle_intro == True:
+        while battle_intro_ticks <= 32:
+            for scene_type in all_scene_types:
+                if scene_type.zpos == steps_z:
+                    pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( (((scene_type.xpos)*16)), ((scene_type.ypos)*16)+(battle_intro_ticks*16), tile_width, tile_height))
+            battle_intro_ticks += 1
+            pygame.display.update()
+            print("/")
+            sleep(0.1)
+
+        if battle_intro_ticks == 33:
+            battle_intro = False
+            break
+
+    if in_fight == True:
+
+        win_map.fill((100,100,100))
+
+        pygame.draw.rect(win_map, (0,0,0), (((steps_x)*16)-34, ((steps_y)*16)-34, char_width+64, char_height+64))
+        pygame.draw.rect(win_map, (247,255,0), (((steps_x)*16)-33, ((steps_y)*16)-33, char_width+62, char_height+62))
+
+
+    pygame.display.update()
+
 ##########--pre game stat calcutions--#########
-
-
 
 for player_stats in players:
     player_stats.level = 1
@@ -2432,22 +2598,8 @@ player_keys_check()
 player1.hp = player1.maxhp # has to be last as max hp is calculated from all other stats
 player1.mp = player1.maxmp
 
-##########--PYGAME--############
-
-win_map = pygame.display.set_mode((512,512))
-
-pygame.display.set_caption("Map Screen")
-
-x = 128
-y = 128
-
-tile_width = 16
-tile_height = 16
-
-char_width = 8
-char_height = 8
-
-vel = 16
+if dev_mode >= 1:
+    player1.gp = 10923
 
 ########## GAME START #########
 game_start = 1
@@ -2473,17 +2625,8 @@ while game_start == 1:
     func_check_level()
     player_position_check()
 
+    func_refresh_pygame(False)
 
-    if steps_z >= 0:
-        win_map.fill((0,14,214))
-    else:
-        win_map.fill((10,10,10))
-    for scene_type in all_scene_types:
-        if scene_type.zpos == steps_z:
-            pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( ((scene_type.xpos)*16), (scene_type.ypos)*16, tile_width, tile_height))
-
-    pygame.draw.rect(win_map, (255,0,0), (((steps_x)*16)+4, ((steps_y)*16)+4, char_width, char_height))
-    pygame.display.update()
     if in_fight == False:
         location_desc()
         func_HUD()
@@ -2510,9 +2653,11 @@ while game_start == 1:
                     enemy_stats.hp = (0 + enemy_stats.maxhp)
                     enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
                 player_turns = 10
+                func_refresh_pygame(True)
                 print("\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
                 while in_fight == True:
                     func_check_level()
+                    func_refresh_pygame(False)
                     print("\nLocation: " + scene_type.name)
                     print("\nEnemy stats:")
                     for enemy_stats in current_enemies:
@@ -2591,11 +2736,13 @@ while game_start == 1:
 
     func_check_stat_bonus()
     func_check_level()
-
+    func_refresh_pygame(False)
     print("")
 
-    input_message = ("________________|| input: ||________________\n \n")
-    player_input = input(input_message)
+    # input_message = ("________________|| input: ||________________\n \n")
+    # player_input = input(input_message)
+
+    player_input = func_choose_input_option()
 
     if player_input == "" or player_input == " " or player_input == "  ":
         pass
@@ -2888,18 +3035,26 @@ while game_start == 1:
     elif player_input == "pickup" or player_input == "p":
         pickedup_item = input("Which item do you want to pickup? \n")
         has_item = False
+        has_item_multiple = False
         if has_item == False:
             for scene_type in location:
                 for ground_item in scene_type.scene_inventory:
                     if ground_item.name == pickedup_item:
                         has_item = True
-                        print("you pickup " + ground_item.print_name + "\n")
+                        print("you pickup " + ground_item.print_name + " x " + str(ground_item.item_amount) + "\n")
                         sleep(sleep_time_fast)
-                        scene_type.scene_inventory.remove(ground_item)
-                        for item in all_game_items:
+
+                        for item in inventory:
                             if item.name == pickedup_item:
-                                inventory.append(item)
-                                break
+                                has_item_multiple = True
+                                item.item_amount += ground_item.item_amount
+                        if has_item_multiple == False:
+                            for item in all_game_items:
+                                if item.name == pickedup_item:
+                                    inventory.append(item)
+                                    break
+                        scene_type.scene_inventory.remove(ground_item)
+
                         break
 
                 for ground_weapon in scene_type.scene_weapon_inventory:
@@ -2958,19 +3113,25 @@ while game_start == 1:
     elif player_input == "pickupall" or player_input == "P":
         while len(scene_type.scene_inventory) != 0 or len(scene_type.scene_weapon_inventory) != 0 or len(scene_type.scene_armor_inventory) != 0 or len(scene_type.scene_helmet_inventory) != 0 or len(scene_type.scene_shield_inventory) != 0:
             has_item = False
+            has_item_multiple = False
             while has_item == False:
                 for scene_type in location:
                     for ground_item in scene_type.scene_inventory:
                         pickedup_item = "0"
                         pickedup_item = ground_item.name
                         has_item = True
-                        print("you pickup " + ground_item.print_name + "\n")
+                        print("you pickup " + ground_item.print_name + " x " + ground_item.item_amount + "\n")
                         sleep(sleep_time_fast)
-                        scene_type.scene_inventory.remove(ground_item)
-                        for item in all_game_items:
+                        for item in inventory:
                             if item.name == pickedup_item:
-                                inventory.append(item)
-                                break
+                                has_item_multiple = True
+                                item.item_amount += ground_item.item_amount
+                        if has_item_multiple == False:
+                            for item in all_game_items:
+                                if item.name == pickedup_item:
+                                    inventory.append(item)
+                                    break
+                        scene_type.scene_inventory.remove(ground_item)
                         break
 
                     for ground_weapon in scene_type.scene_weapon_inventory:
@@ -3072,7 +3233,7 @@ while game_start == 1:
             if len(inventory) != 0:
                 for item in inventory:
 
-                    print("|| " + item.print_name)
+                    print("|| " + item.print_name + " x " + str(item.item_amount))
 
             if len(spell_inventory) != 0:
                 for spell in spell_inventory:

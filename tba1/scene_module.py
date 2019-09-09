@@ -197,11 +197,11 @@ turnip_field = scene_type(8,3,0,"a turnip field","hot","sunny",True,False,False,
 highlands_a = scene_type(7,4,0,"highlands","humid","sunny",False,False,False,False,False,True,True,1,"grassy",False,False,"","grass and low stone walls form paddocks around you",[],[],[],[],[])
 highlands_b = scene_type(8,4,0,"highlands","humid","sunny",False,False,False,False,False,True,True,1,"grassy",False,False,"","",[],[],[],[],[])
 
-fortress_gate = scene_type(8,5,0,"the bandit fortress gates","humid","sunny",False,False,False,False,False,True,False,100,"forest",False,False,"","",[],[],[],[],[])
-fortress = scene_type(9,5,0,"the bandit fortress","humid","sunny",False,False,False,False,False,True,True,100,"forest",False,False,""," surrounded by a palisade wall",[],[],[],[],[])
-fort_wall_a = scene_type(9,4,0,"fortress wall","temp_string","light_string",False,False,False,False,False,False,False,0,"forest",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[])
-fort_wall_b = scene_type(10,5,0,"fortress wall","temp_string","light_string",False,False,False,False,False,False,False,0,"forest",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[])
-fort_wall_c = scene_type(9,6,0,"fortress wall","temp_string","light_string",False,False,False,False,False,False,False,0,"forest",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[])
+fortress_gate = scene_type(8,5,0,"the bandit fortress gates","humid","sunny",False,False,False,False,False,True,False,100,"town",False,False,"","",[],[],[],[],[])
+fortress = scene_type(9,5,0,"the bandit fortress","humid","sunny",False,False,False,False,False,True,True,100,"town",False,False,""," surrounded by a palisade wall",[],[],[],[],[])
+fort_wall_a = scene_type(9,4,0,"fortress wall","temp_string","light_string",False,False,False,False,False,False,False,0,"town",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[])
+fort_wall_b = scene_type(10,5,0,"fortress wall","temp_string","light_string",False,False,False,False,False,False,False,0,"town",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[])
+fort_wall_c = scene_type(9,6,0,"fortress wall","temp_string","light_string",False,False,False,False,False,False,False,0,"town",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[])
 
 highlands_c = scene_type(10,10,0,"highlands","humid","sunny",False,False,False,False,False,True,False,0,"forest",False,False,"","",[],[],[],[],[])
 
@@ -221,6 +221,8 @@ plains_l = scene_type(8,8,0,"plains","humid","sunny",False,False,False,False,Fal
 plains_m = scene_type(8,9,0,"plains","humid","sunny",False,False,False,False,False,True,False,0,"grassy",False,False,"","sandy plains",[],[],[],[],[])
 plains_n = scene_type(8,10,0,"plains","humid","sunny",False,False,False,False,False,True,False,0,"grassy",False,False,"","sandy plains",[],[],[],[],[])
 plains_o = scene_type(8,11,0,"plains","humid","sunny",False,False,False,False,False,True,False,0,"grassy",False,False,"","sandy plains",[],[],[],[],[])
+plains_p = scene_type(6,10,0,"plains","humid","sunny",False,False,False,False,False,True,False,0,"grassy",False,False,"","sandy plains",[],[],[],[],[])
+plains_q = scene_type(6,11,0,"plains","humid","sunny",False,False,False,False,False,True,False,0,"grassy",False,False,"","sandy plains",[],[],[],[],[])
 
 woods_a = scene_type(9,8,0,"woods","humid","sunny",False,False,False,False,False,True,False,0,"forest",False,False,"","some nice woods",[],[],[],[],[])
 woods_b = scene_type(9,9,0,"woods","humid","sunny",False,False,False,False,False,True,False,0,"forest",False,False,"","interesting woods",[],[],[],[],[])
@@ -317,16 +319,6 @@ cavern_j = scene_type(2,5,-9,"a misty cavern","temperate","cloudy",False,False,F
 cavern_k = scene_type(2,4,-9,"a misty cavern","temperate","cloudy",False,False,False,False,False,True,True,1,"cave",False,False,"", "",[],[],[],[],[])
 cavern_l = scene_type(1,5,-9,"a misty cavern","temperate","cloudy",False,False,False,False,False,True,True,1,"cave",False,False,"", "",[],[],[],[],[])
 cavern_m = scene_type(2,6,-9,"a misty cavern","temperate","cloudy",False,False,False,False,False,True,True,1,"cave",False,False,"", "",[],[],[],[],[])
-
-
-
-
-
-
-
-
-
-
 
 
 ###--  UNIQUE IMPASSABLE TERRAIN  --###

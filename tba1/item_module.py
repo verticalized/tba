@@ -19,6 +19,9 @@ class item:
         self.hp = hp
         self.item_desc = item_desc
 
+        self.item_amount = 1
+        self.item_weight = 1 * self.item_amount
+
         all_game_items.append(self)
 
 #ITEM IDS SERVE NO PURPOSE!
@@ -77,6 +80,8 @@ class ground_item:
     def __init__(self, name):
         self.name = name
         self.print_name = (Fore.BLACK + Style.BRIGHT + self.name + Style.RESET_ALL)
+        self.item_amount = 1
+        self.item_weight = 1
         all_ground_game_items.append(self)
 
 ground_apple = ground_item("apple")
