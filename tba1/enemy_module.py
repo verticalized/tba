@@ -5,6 +5,8 @@ from colorama import Fore, Back, Style
 
 init(autoreset=True)
 
+all_game_enemies = []
+
 class enemy_stats:
     def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect):
         self.name =  name
@@ -49,11 +51,15 @@ class enemy_stats:
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.BRIGHT + attribute + Style.RESET_ALL)
 
+        all_game_enemies.append(self)
 
-goblin = enemy_stats("goblin",2,5,1000,1000,100,100,1,5,2,100,"earth","fire",[],[],[],[],[],[],0)
-hobgoblin = enemy_stats("hobgoblin",3,12,5000,5000,100,100,1,4,5,300,"earth","fire",[],[],[],[],[],[],0)
-hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",6,22,5000,5000,100,100,1,4,5,300,"earth","fire",[],[],[],[],[],[],0)
-bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,5,2,100,"fire","earth",[],[],[],[],[],[],0)
+# Attributes: name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness,
+# LIsts: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
+# Status: status_effect
+goblin = enemy_stats("goblin",2,5,1000,1000,100,100,1,8,4,100,"earth","fire",[],[],[],[],[],[],0)
+hobgoblin = enemy_stats("hobgoblin",3,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0)
+hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",6,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0)
+bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0)
 bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0)
 bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,4,230,"fire","earth",[],[],[],[],[],[],0)
 
@@ -65,7 +71,7 @@ legion_battle_mage = enemy_stats("legion battle mage",29,500,12400,12400,100,100
 rock_golem = enemy_stats("rock golem",62,800,10230,10230,100,100,0,55,18,20230,"earth","water",[],[],[],[],[],[],0)
 mushroom_man = enemy_stats("mushroom man",67,800,10230,10230,100,100,0,50,20,10230,"earth","fire",[],[],[],[],[],[],0)
 
-bird_warrior = enemy_stats("bird warrior",191,100000,240807,240807,100,100,100,300,220,100,"air","water",[],[],[],[],[],[],0)#leg
+bird_warrior = enemy_stats("bird warrior",191,100000,2408070,2408070,1000000,1000000,100,300,220,1000,"air","water",[],[],[],[],[],[],0)#leg
 
 fire_elemental = enemy_stats("fire elemental",8,200,3200,3200,1000,1000,8,5,2,100,"fire","water",[],[],[],[],[],[],0)
 water_elemental = enemy_stats("water elemental",8,200,3800,3800,1000,1000,8,5,2,100,"water","earth",[],[],[],[],[],[],0)
@@ -80,3 +86,5 @@ big_slug = enemy_stats("big slug",1,500,103000,103000,100,100,0,0,0,0,"slime","s
 
 skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,22,100,"undead","holy",[],[],[],[],[],[],0)
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0)
+
+## npc enemies

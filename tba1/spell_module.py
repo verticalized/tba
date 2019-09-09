@@ -9,9 +9,10 @@ all_game_spells = []
 all_game_status_conditions = []
 
 class spell:
-    def __init__(self, name, level, value, utility, damage, attribute, xp, effect, spell_desc):
+    def __init__(self, name, level, mp_cost, value, utility, damage, attribute, xp, effect, spell_desc):
         self.name = name
         self.level = level
+        self.mp_cost = mp_cost
         self.value = value
         self.utility = utility
         self.damage = damage
@@ -44,57 +45,57 @@ class spell:
 ############--COMBAT SPELLS--#############
 
 #### status 0 spells DAMAGE - combat spells, also used for turns where enemy does nothing by doing 0 damage.
-slime = spell("slime",5,5,True,0,"slime",0,0,"slurms mackenzie")
+slime = spell("slime",5,5,5,True,0,"slime",0,0,"slurms mackenzie")
 
 # arrow spells
-fire_arrow = spell("fire arrow",18,5,False,80,"fire",100,0,"fire damage")
-ice_arrow = spell("ice arrow",18,5,False,80,"ice",100,0,"ice damage")
+fire_arrow = spell("fire arrow",18,5,5,False,80,"fire",100,0,"fire damage")
+ice_arrow = spell("ice arrow",18,5,5,False,80,"ice",100,0,"ice damage")
 
 # tier 1 damage spells
-fireball = spell("fireball",30,5,False,1000,"fire",200,0,"heavy fire damage")
-hydro_barrage = spell("hydro barrage",1000,5,False,100,"water",200,0,"heavy water damage")
-holy_surge = spell("holy surge",30,1000,False,100,"holy",200,0,"heavy holy damage")
-necro_surge = spell("necro surge",30,1000,False,100,"undead",200,0,"heavy undead damage")
+fireball = spell("fireball",30,5,5,False,1000,"fire",200,0,"heavy fire damage")
+hydro_barrage = spell("hydro barrage",1000,5,5,False,100,"water",200,0,"heavy water damage")
+holy_surge = spell("holy surge",30,5,1000,False,100,"holy",200,0,"heavy holy damage")
+necro_surge = spell("necro surge",30,5,1000,False,100,"undead",200,0,"heavy undead damage")
 
 # tier 2 damage spells
-hydroblast = spell("hydroblast",8,500,False,60,"water",100,0,"light water damage")
-fireblast = spell("fireblast",8,500,False,60,"fire",100,0,"light fire damage")
-windblast = spell("windblast",8,500,False,60,"air",100,0,"light air damage")
-earthblast = spell("earthblast",8,500,False,60,"earth",100,0,"light earth damage")
-necroblast = spell("necroblast",8,500,False,60,"undead",100,0,"light undead damage")
-holyblast = spell("holyblast",8,500,False,60,"holy",100,0,"light holy damage")
+hydroblast = spell("hydroblast",8,5,500,False,60,"water",100,0,"light water damage")
+fireblast = spell("fireblast",8,5,500,False,60,"fire",100,0,"light fire damage")
+windblast = spell("windblast",8,5,500,False,60,"air",100,0,"light air damage")
+earthblast = spell("earthblast",8,5,500,False,60,"earth",100,0,"light earth damage")
+necroblast = spell("necroblast",8,5,500,False,60,"undead",100,0,"light undead damage")
+holyblast = spell("holyblast",8,5,500,False,60,"holy",100,0,"light holy damage")
 
 
 #### status -1 spells HEAL AND DAMAGE
-life_drain = spell("life drain",5,5,True,100,"undead",50,1,"a life draining spell which heals the user")
+life_drain = spell("life drain",5,5,5,True,100,"undead",50,1,"a life draining spell which heals the user")
 
 ##################--STATUS EFFECT/DEBUFF SPELLS--##############################
 
 #### status 2 spells FREEZE
-snare = spell("snare",5,500,True,5,"ice",70,2,"snares the enemy in ice")
-blizzard = spell("blizzard",5,500,False,150,"ice",150,2,"freezes the enemy and does lots of damage")
-cone_of_cold = spell("cone of cold",5,500,False,50,"ice",50,2,"freezes the enemy and does damage")
+snare = spell("snare",5,5,500,True,5,"ice",70,2,"snares the enemy in ice")
+blizzard = spell("blizzard",5,5,500,False,150,"ice",150,2,"freezes the enemy and does lots of damage")
+cone_of_cold = spell("cone of cold",5,5,500,False,50,"ice",50,2,"freezes the enemy and does damage")
 #### status 3 spells POISON
-poison = spell("poison",5,50,True,5,"earth",70,3,"poisons the enemy")
+poison = spell("poison",5,5,50,True,5,"earth",70,3,"poisons the enemy")
 
 #### status 4 spells BURN
-burn = spell("burn",5,50,True,5,"fire",70,4,"burns the enemy")
-mega_burn = spell("burn",30,5000,False,500,"fire",70,4,"MFB")
+burn = spell("burn",5,5,50,True,5,"fire",70,4,"burns the enemy")
+mega_burn = spell("burn",30,5,5000,False,500,"fire",70,4,"MFB")
 
 #### status 5 spells SLEEP
-hypnosis = spell("hypnosis",50,50,True,5,"water",70,5,"puts the enemy to sleep")
+hypnosis = spell("hypnosis",50,5,50,True,5,"water",70,5,"puts the enemy to sleep")
 
 #### status 6 spells BADLY POISON
-toxic = spell("toxic",22,500,True,5,"earth",70,6,"badly poisons the enemy")
+toxic = spell("toxic",22,5,500,True,5,"earth",70,6,"badly poisons the enemy")
 
 ##################--BUFF/HEALING SPELLS--##############################
 
 #### status 100 spells HEAL
-mega_heal = spell("mega heal",15,1000,True,250,"holy",50,100,"a mega healing spell")
+mega_heal = spell("mega heal",15,5,1000,True,250,"holy",50,100,"a mega healing spell")
 
-super_heal = spell("super heal",5,500,True,100,"holy",50,100,"a super healing spell")
+super_heal = spell("super heal",5,5,500,True,100,"holy",50,100,"a super healing spell")
 
-prayer = spell("prayer",1,50,True,50,"holy",50,100,"a light healing spell")
+prayer = spell("prayer",1,5,50,True,50,"holy",50,100,"a light healing spell")
 
 
 

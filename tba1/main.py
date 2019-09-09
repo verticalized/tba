@@ -1,11 +1,16 @@
-import random
-from time import sleep
+import random # default python module
+from time import sleep # default python module
+
+##########--3RD PARTY MODULES--###############
+
 from colorama import init
 from colorama import Fore, Back, Style
-
 init(autoreset=True)
 
-###########################################
+import pygame
+pygame.init()
+
+#################--IMPORT_GAME_MODULES--####################
 
 from scene_module import *
 from npc_module import *
@@ -18,15 +23,16 @@ from enemy_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "1.8.2.2"
+version = "1.8.3"
 
 dev_mode = 1
+
 check_for_combat = True
-restock_shops = True
+restock_shops = False
 restock_ticks = 0
 
-steps_x = 0
-steps_y = 0
+steps_x = 1
+steps_y = 5
 steps_z = 0
 
 ###########################################
@@ -90,6 +96,7 @@ colour_scene_light_night = (Fore.BLUE + Style.DIM)
 colour_item_name = (Fore.BLACK + Style.BRIGHT) # text colour for all item names
 
 colour_gear_name = (Fore.CYAN + Style.DIM) # text colour for all gear names
+
 colour_spell_name = (Fore.CYAN + Style.NORMAL) # text colour
 
 colour_enemy_name = (Fore.RED + Style.DIM) # text colour
@@ -149,9 +156,9 @@ class combat_option:
     def __init__(self, name):
         self.name = name
 
-combat_option_hit = combat_option("Hit")
-combat_option_spell = combat_option("Spell")
-combat_option_run = combat_option("Run")
+combat_option_hit = combat_option("hit")
+combat_option_spell = combat_option("spell")
+combat_option_run = combat_option("run")
 ############################################--NPCS/DIALOUGE/QUESTS--#########################################
 
 class quest:
@@ -278,20 +285,21 @@ npc_wizard_tilly.npc_weapon_inventory.append(gladius)
 npc_wizard_tilly.npc_helmet_inventory.append(mage_hood)
 
 npc_wizard_tilly.npc_shield_inventory.append(mage_book)
+
 ######################------ENEMY_SPELLBOOKS------########################
 
-hobgoblin.spellbook.append(snare)
-hobgoblin.spellbook.append(snare)
-hobgoblin.spellbook.append(snare)
+hobgoblin.spellbook.append(cone_of_cold)
+hobgoblin.spellbook.append(cone_of_cold)
+hobgoblin.spellbook.append(cone_of_cold)
 hobgoblin.spellbook.append(earthblast)
 hobgoblin.spellbook.append(hydroblast)
 hobgoblin.spellbook.append(poison)
 hobgoblin.spellbook.append(snare)
 hobgoblin.spellbook.append(super_heal)
 
-hobgoblin.spellbook.append(snare)
-hobgoblin.spellbook.append(snare)
-hobgoblin.spellbook.append(snare)
+goblin.spellbook.append(cone_of_cold)
+goblin.spellbook.append(cone_of_cold)
+goblin.spellbook.append(cone_of_cold)
 goblin.spellbook.append(prayer)
 goblin.spellbook.append(burn)
 
@@ -303,9 +311,9 @@ giant_spider.spellbook.append(poison)
 
 giant_snail.spellbook.append(slime)
 
-hobgoblin.spellbook.append(snare)
-hobgoblin.spellbook.append(snare)
-hobgoblin.spellbook.append(snare)
+bandit.spellbook.append(cone_of_cold)
+bandit.spellbook.append(cone_of_cold)
+bandit.spellbook.append(cone_of_cold)
 bandit.spellbook.append(prayer)
 
 bandit_warlock.spellbook.append(snare)
@@ -505,71 +513,9 @@ super_healing_drop_table.append(hp_potion)
 super_healing_drop_table.append(hp_potion)
 super_healing_drop_table.append(super_hp_potion)
 
-items_drop_table.append(bones)
-items_drop_table.append(water_orb)
-items_drop_table.append(fire_orb)
-items_drop_table.append(torch)
-items_drop_table.append(tent)
-items_drop_table.append(rope)
-items_drop_table.append(jail_key)
+for item in all_game_items:
+    items_drop_table.append(item)
 
-#####################################################################
-
-bandit.drop_table_items.extend(items_drop_table)
-bandit.drop_table_items.extend(healing_drop_table)
-bandit.drop_table_items.extend(items_drop_table)
-
-goblin.drop_table_items.extend(items_drop_table)
-goblin.drop_table_items.extend(healing_drop_table)
-goblin.drop_table_items.extend(items_drop_table)
-
-hobgoblin.drop_table_items.extend(healing_drop_table)
-hobgoblin.drop_table_items.extend(items_drop_table)
-hobgoblin.drop_table_items.extend(healing_drop_table)
-
-legion_soldier.drop_table_items.extend(super_healing_drop_table)
-legion_soldier.drop_table_items.extend(items_drop_table)
-
-legion_spearman.drop_table_items.extend(super_healing_drop_table)
-legion_spearman.drop_table_items.extend(items_drop_table)
-
-#####################################################################
-goblin.drop_table_weapons.extend(weapons_drop_table)
-goblin.drop_table_helmets.extend(helmets_drop_table)
-
-hobgoblin.drop_table_weapons.extend(weapons_drop_table)
-hobgoblin.drop_table_armor.extend(armor_drop_table)
-hobgoblin.drop_table_helmets.extend(helmets_drop_table)
-hobgoblin.drop_table_shields.extend(shields_drop_table)
-
-bandit.drop_table_weapons.extend(weapons_drop_table)
-bandit.drop_table_armor.extend(armor_drop_table)
-bandit.drop_table_helmets.extend(helmets_drop_table)
-bandit.drop_table_shields.extend(shields_drop_table)
-
-legion_soldier.drop_table_weapons.extend(large_weapons_drop_table)
-legion_soldier.drop_table_armor.extend(armor_drop_table)
-legion_soldier.drop_table_helmets.extend(helmets_drop_table)
-legion_soldier.drop_table_shields.extend(shields_drop_table)
-
-legion_spearman.drop_table_weapons.extend(large_weapons_drop_table)
-legion_spearman.drop_table_armor.extend(armor_drop_table)
-legion_spearman.drop_table_helmets.extend(helmets_drop_table)
-legion_spearman.drop_table_shields.extend(shields_drop_table)
-
-bird_warrior.drop_table_weapons.extend(large_weapons_drop_table)
-bird_warrior.drop_table_weapons.extend(large_weapons_drop_table)
-bird_warrior.drop_table_helmets.extend(helmets_drop_table)
-bird_warrior.drop_table_shields.extend(shields_drop_table)
-
-skeleton_mage.drop_table_weapons.extend(magic_weapons_drop_table)
-skeleton_mage.drop_table_armor.extend(magic_armor_drop_table)
-
-skeleton_warrior.drop_table_weapons.extend(large_weapons_drop_table)
-skeleton_warrior.drop_table_weapons.extend(magic_weapons_drop_table)
-skeleton_warrior.drop_table_armor.extend(armor_drop_table)
-skeleton_warrior.drop_table_helmets.extend(helmets_drop_table)
-skeleton_warrior.drop_table_shields.extend(shields_drop_table)
 
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
@@ -615,16 +561,7 @@ spell_inventory = []
 
 inventory.append(pear)
 inventory.append(mushroom)
-inventory.append(cup_of_tea)
-inventory.append(magic_mushroom)
-inventory.append(cup)
-inventory.append(cup)
-inventory.append(tea_bag)
 
-# inventory.append(tent)
-# inventory.append(rope)
-# inventory.append(torch)
-# inventory.append(hp_potion)
 #
 # spell_inventory.append(fireblast)
 # spell_inventory.append(snare)
@@ -661,9 +598,17 @@ if dev_mode >= 1:
     equiped_spells.append(hydroblast)
     equiped_spells.append(earthblast)
     equiped_spells.append(windblast)
+    equiped_spells.append(snare)
+    equiped_spells.append(blizzard)
+    equiped_spells.append(poison)
+    equiped_spells.append(burn)
+    equiped_spells.append(mega_burn)
 
+    inventory.append(tent)
+    inventory.append(rope)
+    inventory.append(torch)
+    inventory.append(hp_potion)
 else:
-    equiped_weapon.append(iron_sword)
     equiped_armor.append(rags)
 
     equiped_spells.append(prayer)
@@ -725,195 +670,31 @@ def func_choose_combat_option():
 
 def func_choose_enemy():
 
+    #rolls for which enemy to fight
+
+
     combat_mod = random.randint(0,100)
     combat_rating = random.randint(0,100)
     if dev_mode != 0:
         print("Combat mod:", combat_mod)
         print("Combat rating:", combat_rating)
 
-    if dev_mode <= 10:
-    #rolls for which enemy to fight
-        if steps_z == 0: #check if on surface
-            for scene_type in location:
-                if scene_type.difficulty == 0:
-                    if combat_mod < 25:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(goblin)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(goblin)
-                            current_enemies.append(hobgoblin)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(bandit)
-                            current_enemies.append(goblin)
+    enemy_count = random.randint(1,3)
 
-                    if combat_mod >= 25 and combat_mod < 50:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(bandit_warlock)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(bandit)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit_warlock)
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(goblin)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(goblin)
+    for scene_type in location:
+        for enemy_stats in all_game_enemies:
+            encounter_chance = 0
+            if enemy_stats.level <= scene_type.difficulty:
+                encounter_chance = random.randint(0,1)
+                if encounter_chance == 1 and len(current_enemies) <= enemy_count and enemy_stats not in current_enemies:
+                    current_enemies.append(enemy_stats)
+    for enemy_stats in current_enemies:
+        enemy_stats.drop_table_items.extend(items_drop_table)
+        enemy_stats.drop_table_weapons.extend(weapons_drop_table)
+        enemy_stats.drop_table_armor.extend(armor_drop_table)
+        enemy_stats.drop_table_helmets.extend(helmets_drop_table)
+        enemy_stats.drop_table_shields.extend(shields_drop_table)
 
-                    if combat_mod >= 50 and combat_mod < 75:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(fire_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(water_elemental)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(water_elemental)
-                            current_enemies.append(fire_elemental)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(fire_elemental)
-                            current_enemies.append(water_elemental)
-
-                    if combat_mod >= 75 and combat_mod < 90:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(bandit_henchman)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(goblin)
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(air_elemental)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit)
-                            current_enemies.append(bandit_warlock)
-                            current_enemies.append(bandit_henchman)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(rock_golem)
-
-                    if combat_mod >= 90 and combat_mod <= 100:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(fire_elemental)
-                            current_enemies.append(water_elemental)
-                            current_enemies.append(earth_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(legion_spearman)
-                            current_enemies.append(legion_soldier)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(legion_spearman)
-                            current_enemies.append(legion_soldier)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(bird_warrior)
-
-                if scene_type.difficulty != 0:
-                    if combat_mod < 25:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(goblin)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(goblin)
-                            current_enemies.append(hobgoblin)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(bandit)
-                            current_enemies.append(bandit_henchman)
-
-                    if combat_mod >= 25 and combat_mod < 50:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(fire_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(bandit)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit)
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(goblin)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(goblin)
-
-                    if combat_mod >= 50 and combat_mod < 75:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(fire_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(water_elemental)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(bandit_warlock)
-                            current_enemies.append(fire_elemental)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(rock_golem)
-
-                    if combat_mod >= 75 and combat_mod < 90:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(legion_soldier)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(legion_spearman)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(legion_battle_mage)
-                            current_enemies.append(legion_soldier)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(mushroom_man)
-
-
-                    if combat_mod >= 90 and combat_mod <= 100:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(legion_archer)
-                            current_enemies.append(legion_spearman)
-                            current_enemies.append(earth_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(legion_spearman)
-                            current_enemies.append(legion_soldier)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(legion_spearman)
-                            current_enemies.append(legion_soldier)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(bird_warrior)
-
-        if steps_z <= -1: #check if underground
-            for scene_type in location:
-                if scene_type.difficulty == 0:
-                    if combat_mod < 25:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(earth_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(giant_snail)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(giant_moth)
-                            current_enemies.append(earth_elemental)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(giant_spider)
-
-                    if combat_mod >= 25 and combat_mod <= 50:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(hobgoblin)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(giant_snail)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(giant_moth)
-                            current_enemies.append(giant_snail)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(giant_spider)
-                            current_enemies.append(giant_snail)
-
-                    if combat_mod >= 50 and combat_mod <= 75:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(earth_elemental)
-                            current_enemies.append(giant_snail)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(big_slug)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(skeleton_warrior)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(skeleton_mage)
-
-                    if combat_mod >= 75 and combat_mod <= 100:
-                        if combat_rating >= 0 and combat_rating < 25:
-                            current_enemies.append(hobgoblin)
-                            current_enemies.append(earth_elemental)
-                        if combat_rating >= 25 and combat_rating < 50:
-                            current_enemies.append(big_slug)
-                            current_enemies.append(big_slug)
-                        if combat_rating >= 50 and combat_rating < 75:
-                            current_enemies.append(skeleton_warrior)
-                        if combat_rating >= 75 and combat_rating <= 100:
-                            current_enemies.append(skeleton_mage)
-                            current_enemies.append(skeleton_warrior)
 
 def func_enemy_dead(enemy_stats):
 
@@ -1449,11 +1230,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                             enemy_stats.hp = enemy_stats.maxhp
                         print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
                     sleep(sleep_time)
-                    if player1.hp <= 0:
-                        print("\nYOU ARE DEAD! \n")
-                        in_fight = False
-                        del current_enemies[:]
-                        game_start = 0
+                    func_check_player_dead()
                     break
                 if spell.effect == 100:
                     spell_healing = spell.damage
@@ -1475,6 +1252,13 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                         if frozen not in player_stats.status_effect_list:
                             player_stats.status_effect_list.append(frozen)
                             print("you were frozen by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
                     sleep(sleep_time)
                     break
                 if spell.effect == 3:
@@ -1485,6 +1269,13 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                         if poisoned not in player_stats.status_effect_list:
                             player_stats.status_effect_list.append(poisoned)
                             print("you were poisoned by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
                     sleep(sleep_time)
                     break
                 if spell.effect == 4:
@@ -1495,6 +1286,13 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                         if burning not in player_stats.status_effect_list:
                             player_stats.status_effect_list.append(burning)
                             print("you were burnt by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
                     sleep(sleep_time)
                     break
                 break
@@ -2279,7 +2077,7 @@ def player_position_check():
 def player_north_check():
     location_found = False
     for scene_type in all_scene_types:
-        if steps_y+1 == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
+        if steps_y-1 == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
             location_found = True
             del location_north[:]
             location_north.append(scene_type)
@@ -2307,7 +2105,7 @@ def player_north_check():
 def player_south_check():
     location_found = False
     for scene_type in all_scene_types:
-        if steps_y-1 == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
+        if steps_y+1 == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
             location_found = True
             del location_south[:]
             location_south.append(scene_type)
@@ -2615,7 +2413,7 @@ def location_desc():
 
 ##########--pre game stat calcutions--#########
 
-game_start = 1
+
 
 for player_stats in players:
     player_stats.level = 1
@@ -2634,7 +2432,26 @@ player_keys_check()
 player1.hp = player1.maxhp # has to be last as max hp is calculated from all other stats
 player1.mp = player1.maxmp
 
+##########--PYGAME--############
+
+win_map = pygame.display.set_mode((512,512))
+
+pygame.display.set_caption("Map Screen")
+
+x = 128
+y = 128
+
+tile_width = 16
+tile_height = 16
+
+char_width = 8
+char_height = 8
+
+vel = 16
+
 ########## GAME START #########
+game_start = 1
+
 print(Fore.RED + "Welcome to Bill & Phoebe's Adventure! \n")
 
 print("version: " + version + " \n")
@@ -2644,6 +2461,10 @@ print("version: " + version + " \n")
 #     player_stats.name = name
 
 while game_start == 1:
+    pygame.time.delay(100)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            game_start = 0
 
     func_shop_restock()
 
@@ -2652,6 +2473,17 @@ while game_start == 1:
     func_check_level()
     player_position_check()
 
+
+    if steps_z >= 0:
+        win_map.fill((0,14,214))
+    else:
+        win_map.fill((10,10,10))
+    for scene_type in all_scene_types:
+        if scene_type.zpos == steps_z:
+            pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( ((scene_type.xpos)*16), (scene_type.ypos)*16, tile_width, tile_height))
+
+    pygame.draw.rect(win_map, (255,0,0), (((steps_x)*16)+4, ((steps_y)*16)+4, char_width, char_height))
+    pygame.display.update()
     if in_fight == False:
         location_desc()
         func_HUD()
@@ -2702,17 +2534,17 @@ while game_start == 1:
 
                     combat_input = func_choose_combat_option()
 
-                    if combat_input == "Run":
+                    if combat_input == "run":
                         in_fight = False
                         print("you ran away! \n")
                         del current_enemies[:]
                         location_desc()
-                    elif combat_input == "Hit":
+                    elif combat_input == "hit":
                         player_turns -= 1
                         func_enemy_status_check()
                         func_player_status_check(True)
                         func_check_enemy_dead()
-                    elif combat_input == "Spell":
+                    elif combat_input == "spell":
                         print("\nYour equipped spells: \n")
                         for spell in equiped_spells:
                             print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
@@ -2722,7 +2554,7 @@ while game_start == 1:
                         if spell_input.isdigit():
                             input_val = int(spell_input)
                             val = (input_val - 1)
-                            if dev_mode >= 1:
+                            if dev_mode >= 2:
                                 print("spell input was an int")
                                 print(val)
                             if len(equiped_spells) >= val:
@@ -2732,7 +2564,7 @@ while game_start == 1:
                                 func_check_enemy_dead()
 
                         else:
-                            if dev_mode >= 1:
+                            if dev_mode >= 2:
                                 print("spell input was a string ")
                                 print(spell_input)
                             for spell in equiped_spells:
@@ -2779,15 +2611,15 @@ while game_start == 1:
                 print("there is nothing here...\n")
 
     elif player_input == "help":
-        print("commands: \n north (w) \n south (s) \n east (d) \n west (a) \n down (f) \n up (r) \n search (j) \n equip (e) \n stats (q) \n drop (l) \n pickup \n consume (k) \n inv (i) \n spellbook (b) \n cast (c) \n wait (*blank*) \n camp (u) \n quit \n")
+        print("commands: \n north (w) \n south (s) \n east (d) \n west (a) \n down (f) \n up (r) \n search (j) \n equip (e) \n stats (q) \n skills (Q) \n drop (l) \n pickup (p) \n pickupall (P) \n consume (k) \n inv (i) \n spellbook (b) \n cast (c) \n wait (*blank*) \n camp (u) \n quit \n")
 
     elif player_input == "north" or player_input == "w":
         has_moved = True
         for scene_type in location_north:
             if scene_type.passable == True:
-                steps_y += 1
+                steps_y -= 1
                 prev_y = steps_y
-                prev_y -= 1
+                prev_y += 1
             else:
                 print(scene_type.impass_msg + ", you have not moved.")
 
@@ -2795,9 +2627,9 @@ while game_start == 1:
         has_moved = True
         for scene_type in location_south:
             if scene_type.passable == True:
-                steps_y -= 1
+                steps_y += 1
                 prev_y = steps_y
-                prev_y += 1
+                prev_y -= 1
             else:
                 print(scene_type.impass_msg + ", you have not moved")
 
@@ -3470,7 +3302,6 @@ while game_start == 1:
 
     elif player_input == "quit":
         game_start = 0
-
 ################################################
 
 
@@ -3538,3 +3369,7 @@ while game_start == 1:
     if time == 12:
         print("\nthe sun has gone down...\n")
         sleep(sleep_time_fast)
+
+
+#end of script
+pygame.quit()
