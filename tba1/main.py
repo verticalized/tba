@@ -801,10 +801,7 @@ def func_refresh_pygame(battle_intro):
         pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
         pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-        win_map.blit(txt_1,(32,16))
-        win_map.blit(txt_2,(32,32))
-        win_map.blit(txt_3,(32,48))
-        win_map.blit(txt_4,(32,64))
+        func_blit_list(combat_option,combat_option_list,1)
 
         pygame.draw.rect(win_map, (247,255,0), ((0, ((combat_cursor_pos)*16), tile_width, tile_height)))
 
