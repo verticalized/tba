@@ -11,7 +11,7 @@ import pygame
 pygame.init()
 
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('Comic Sans MS', 16)
+myfont = pygame.font.SysFont('Comic Sans MS', 14)
 
 #################--IMPORT_GAME_MODULES--####################
 
@@ -707,8 +707,11 @@ pygame.display.set_caption("Map Screen")
 x = 128
 y = 128
 
-tile_width = 16
-tile_height = 16
+cursor_width = 16
+cursor_height = 8
+
+map_tile_width = 16
+map_tile_height = 16
 
 char_width = 8
 char_height = 8
@@ -724,6 +727,12 @@ def func_blit_list(list_object,list,gui_val):
         list_object_number += 1
         blit_text = myfont.render(list_object.name, False, (0, 0, 0))
         win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+def func_blit_menu_cursor(gui_val):
+    pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((menu_cursor_pos)*16)+8, cursor_width, cursor_height))))
+
+def func_blit_combat_cursor(gui_val):
+    pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((combat_cursor_pos)*16)+8, cursor_width, cursor_height))))
 
 def func_blit_HUD(hud_val):
     status_list = []
@@ -822,22 +831,22 @@ def func_refresh_pygame(battle_intro):
 
     for scene_type in all_scene_types:
         if scene_type.zpos == steps_z:
-            pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( ((scene_type.xpos)*16), (scene_type.ypos)*16, tile_width, tile_height))
+            pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( ((scene_type.xpos)*16), (scene_type.ypos)*16, map_tile_width, map_tile_height))
     pygame.draw.rect(win_map, (255,0,0), (((steps_x)*16)+4, ((steps_y)*16)+4, char_width, char_height))
 
     if battle_intro == True:
         battle_intro_ticks = 0
     while battle_intro == True:
-        while battle_intro_ticks <= 32:
+        while battle_intro_ticks < 48:
             for scene_type in all_scene_types:
                 if scene_type.zpos == steps_z:
-                    pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( (((scene_type.xpos)*16)), ((scene_type.ypos)*16)+(battle_intro_ticks*16), tile_width, tile_height))
+                    pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( (((scene_type.xpos)*16)), ((scene_type.ypos)*16)+(battle_intro_ticks*16), map_tile_width, map_tile_height))
             battle_intro_ticks += 1
             pygame.display.update()
             print("/")
             sleep(0.1)
 
-        if battle_intro_ticks == 33:
+        if battle_intro_ticks == 48:
             battle_intro = False
             break
 
@@ -850,7 +859,7 @@ def func_refresh_pygame(battle_intro):
 
         func_blit_list(combat_option,combat_option_list,1)
 
-        pygame.draw.rect(win_map, (247,255,0), ((0, ((combat_cursor_pos)*16), tile_width, tile_height)))
+        func_blit_combat_cursor(1)
 
         if in_submenu_cast_combat == True:
 
@@ -859,7 +868,7 @@ def func_refresh_pygame(battle_intro):
 
             func_blit_list(spell,equiped_spells,1)
 
-            pygame.draw.rect(win_map, (247,255,0), ((0, ((combat_cursor_pos)*16), tile_width, tile_height)))
+            func_blit_combat_cursor(1)
 
         if in_submenu_target_combat2 == True:
 
@@ -868,7 +877,7 @@ def func_refresh_pygame(battle_intro):
 
             func_blit_list(enemy_stats,current_enemies,2)
 
-            pygame.draw.rect(win_map, (247,255,0), ((200, ((combat_cursor_pos)*16), tile_width, tile_height)))
+            func_blit_combat_cursor(2)
 
     if in_menu == True and in_submenu == False:
 
@@ -894,7 +903,7 @@ def func_refresh_pygame(battle_intro):
         win_map.blit(txt_help,(32,(17*16)))
         win_map.blit(txt_quit,(32,(18*16)))
 
-        pygame.draw.rect(win_map, (247,255,0), ((16, ((menu_cursor_pos)*16)+6, (tile_width//2), (tile_height//2))))
+        func_blit_menu_cursor(1)
 
     if in_menu == True and in_submenu == True:
 
@@ -904,9 +913,8 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
             func_blit_list(item,inventory,1)
+            func_blit_menu_cursor(1)
 
-
-            pygame.draw.rect(win_map, (247,255,0), ((0, ((menu_cursor_pos)*16), tile_width, tile_height)))
 
         if in_submenu_cast == True:
 
@@ -914,9 +922,8 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
             func_blit_list(spell,equiped_spells,1)
+            func_blit_menu_cursor(1)
 
-
-            pygame.draw.rect(win_map, (247,255,0), ((0, ((menu_cursor_pos)*16), tile_width, tile_height)))
 
         if in_submenu_equip == True:
 
@@ -930,7 +937,8 @@ def func_refresh_pygame(battle_intro):
             win_map.blit(txt_5,(32,(5*16)))
             win_map.blit(txt_6,(32,(6*16)))
 
-            pygame.draw.rect(win_map, (247,255,0), ((0, ((menu_cursor_pos)*16), tile_width, tile_height)))
+            func_blit_menu_cursor(1)
+
 
             if in_submenu_equip2 == True:
 
@@ -967,7 +975,8 @@ def func_refresh_pygame(battle_intro):
                 win_map.blit(txt_12,(232,(12*16)))
 
 
-                pygame.draw.rect(win_map, (247,255,0), ((200, ((menu_cursor_pos)*16), tile_width, tile_height)))
+                func_blit_menu_cursor(2)
+
 
         if in_submenu_talk == True:
 
@@ -988,7 +997,8 @@ def func_refresh_pygame(battle_intro):
             win_map.blit(txt_12,(32,(12*16)))
 
 
-            pygame.draw.rect(win_map, (247,255,0), ((0, ((menu_cursor_pos)*16), tile_width, tile_height)))
+            func_blit_menu_cursor(1)
+
 
             if in_submenu_talk2 == True:
 
@@ -1025,7 +1035,8 @@ def func_refresh_pygame(battle_intro):
                 win_map.blit(txt_12,(232,(12*16)))
 
 
-                pygame.draw.rect(win_map, (247,255,0), ((200, ((menu_cursor_pos)*16), tile_width, tile_height)))
+                func_blit_menu_cursor(2)
+
 
                 if in_submenu_sell3 == True:
 
@@ -1062,7 +1073,8 @@ def func_refresh_pygame(battle_intro):
                     win_map.blit(txt_12,(332,(12*16)))
 
 
-                    pygame.draw.rect(win_map, (247,255,0), ((300, ((menu_cursor_pos)*16), tile_width, tile_height)))
+                    func_blit_menu_cursor(3)
+
 
                     if in_submenu_sell4== True:
 
@@ -1099,7 +1111,8 @@ def func_refresh_pygame(battle_intro):
                         win_map.blit(txt_12,(432,(12*16)))
 
 
-                        pygame.draw.rect(win_map, (247,255,0), ((400, ((menu_cursor_pos)*16), tile_width, tile_height)))
+                        func_blit_menu_cursor(4)
+
 
                 if in_submenu_buy3 == True:
 
@@ -1136,7 +1149,7 @@ def func_refresh_pygame(battle_intro):
                     win_map.blit(txt_12,(332,(12*16)))
 
 
-                    pygame.draw.rect(win_map, (247,255,0), ((300, ((menu_cursor_pos)*16), tile_width, tile_height)))
+                    func_blit_menu_cursor(3)
 
         if in_submenu_drop == True:
 
@@ -1156,7 +1169,8 @@ def func_refresh_pygame(battle_intro):
             win_map.blit(txt_11,(32,(11*16)))
             win_map.blit(txt_12,(32,(12*16)))
 
-            pygame.draw.rect(win_map, (247,255,0), ((0, ((menu_cursor_pos)*16), tile_width, tile_height)))
+            func_blit_menu_cursor(1)
+
 
             if in_submenu_drop2 == True:
 
@@ -1193,7 +1207,8 @@ def func_refresh_pygame(battle_intro):
                 win_map.blit(txt_12,(232,(12*16)))
 
 
-                pygame.draw.rect(win_map, (247,255,0), ((200, ((menu_cursor_pos)*16), tile_width, tile_height)))
+                func_blit_menu_cursor(2)
+
 
 
     pygame.draw.rect(win_map, (100,100,100), (0, 512, 1024, 256))
@@ -2405,6 +2420,7 @@ def func_drop(gear,player_gear_inv):
             in_submenu2 = False
             in_submenu_drop2 = False
             break
+
 def func_search_treasure():
             scene_difficulty = 0
             for scene_type in location:
