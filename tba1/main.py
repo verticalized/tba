@@ -11,7 +11,7 @@ import pygame
 pygame.init()
 
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('Comic Sans MS', 12)
+myfont = pygame.font.SysFont('Comic Sans MS', 16)
 
 #################--IMPORT_GAME_MODULES--####################
 
@@ -700,7 +700,7 @@ else:
 
 ##########--PYGAME--############
 
-win_map = pygame.display.set_mode((1024,512))
+win_map = pygame.display.set_mode((1024,768))
 
 pygame.display.set_caption("Map Screen")
 
@@ -724,6 +724,53 @@ def func_blit_list(list_object,list,gui_val):
         list_object_number += 1
         blit_text = myfont.render(list_object.name, False, (0, 0, 0))
         win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+def func_blit_HUD(hud_val):
+    status_list = []
+    for status_condition in player1.status_effect_list:
+        status_list.append(status_condition.name)
+    blit_HUD_name = myfont.render(player1.name, False, (0, 0, 0))
+    blit_HUD_lvl = myfont.render("Lvl: " + str(player1.level), False, (0, 0, 0))
+    for armor in equiped_armor:
+        blit_HUD_att = myfont.render("Att: " + armor.attribute, False, (0, 0, 0))
+    blit_HUD_hp = myfont.render("HP: " + str(player1.hp) + "/" + str(player1.maxhp), False, (0, 0, 0))
+    blit_HUD_mp = myfont.render("MP: " + str(player1.mp) + "/" + str(player1.maxmp), False, (0, 0, 0))
+    if len(player1.status_effect_list) != 0:
+        blit_HUD_status = myfont.render("Status: " + str(status_list), False, (0, 0, 0))
+    else:
+        blit_HUD_status = myfont.render("Status: ['N0NE']", False, (0, 0, 0))
+
+    win_map.blit(blit_HUD_name,(32+((hud_val-1)*200),(33*16)))
+    win_map.blit(blit_HUD_lvl,(32+((hud_val-1)*200),(34*16)))
+    win_map.blit(blit_HUD_att,(32+((hud_val-1)*200),(35*16)))
+    win_map.blit(blit_HUD_hp,(32+((hud_val-1)*200),(36*16)))
+    win_map.blit(blit_HUD_mp,(32+((hud_val-1)*200),(37*16)))
+    win_map.blit(blit_HUD_status,(32+((hud_val-1)*200),(38*16)))
+
+def func_blit_enemy_HUD(hud_val):
+    enemy_number = 0
+    for enemy_stats in current_enemies:
+        enemy_number += 1
+        status_list = []
+        for status_condition in enemy_stats.status_effect_list:
+            status_list.append(status_condition.name)
+        blit_HUD_name = myfont.render(enemy_stats.name, False, (0, 0, 0))
+        blit_HUD_lvl = myfont.render("Lvl: " + str(enemy_stats.level), False, (0, 0, 0))
+        blit_HUD_att = myfont.render("Att: " + enemy_stats.attribute, False, (0, 0, 0))
+        blit_HUD_hp = myfont.render("HP: " + str(enemy_stats.hp) + "/" + str(enemy_stats.maxhp), False, (0, 0, 0))
+        blit_HUD_mp = myfont.render("MP: " + str(enemy_stats.mp) + "/" + str(enemy_stats.maxmp), False, (0, 0, 0))
+        if len(enemy_stats.status_effect_list) != 0:
+            blit_HUD_status = myfont.render("Status: " + str(status_list), False, (0, 0, 0))
+        else:
+            blit_HUD_status = myfont.render("Status: ['N0NE']", False, (0, 0, 0))
+
+        win_map.blit(blit_HUD_name,(32+((hud_val+enemy_number-1)*200),(33*16)))
+        win_map.blit(blit_HUD_lvl,(32+((hud_val+enemy_number-1)*200),(34*16)))
+        win_map.blit(blit_HUD_att,(32+((hud_val+enemy_number-1)*200),(35*16)))
+        win_map.blit(blit_HUD_hp,(32+((hud_val+enemy_number-1)*200),(36*16)))
+        win_map.blit(blit_HUD_mp,(32+((hud_val+enemy_number-1)*200),(37*16)))
+        win_map.blit(blit_HUD_status,(32+((hud_val+enemy_number-1)*200),(38*16)))
+
 
 txt_1 = myfont.render('1', False, (0, 0, 0))
 txt_2 = myfont.render('2', False, (0, 0, 0))
@@ -876,6 +923,12 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
+            win_map.blit(txt_1,(32,(1*16)))
+            win_map.blit(txt_2,(32,(2*16)))
+            win_map.blit(txt_3,(32,(3*16)))
+            win_map.blit(txt_4,(32,(4*16)))
+            win_map.blit(txt_5,(32,(5*16)))
+            win_map.blit(txt_6,(32,(6*16)))
 
             pygame.draw.rect(win_map, (247,255,0), ((0, ((menu_cursor_pos)*16), tile_width, tile_height)))
 
@@ -1143,6 +1196,11 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (247,255,0), ((200, ((menu_cursor_pos)*16), tile_width, tile_height)))
 
 
+    pygame.draw.rect(win_map, (100,100,100), (0, 512, 1024, 256))
+    pygame.draw.rect(win_map, (125,125,125), (10,522, 1004, 236))
+
+    func_blit_HUD(1)
+    func_blit_enemy_HUD(1)
 
                 # n_submenu_equip = False@@
                 # in_submenu_equip2 = False@@
@@ -2947,6 +3005,7 @@ def func_choose_input_option():
             selected_input_option = target_input_option
             break
     return selected_input_option
+
 #######################---PLAYER LOCATION---#######################
 
 def player_position_check():
@@ -3302,8 +3361,6 @@ def location_desc():
         print("above you is " + scene_type.name + "")
         sleep(sleep_time_fast)
 
-
-
 ##########--pre game stat calcutions--#########
 
 for player_stats in players:
@@ -3358,7 +3415,6 @@ while game_start == 1:
         if in_fight == False:
             location_desc()
             func_HUD()
-
         if check_for_combat == True:
             for scene_type in location:
                 if scene_type.safe == False:
