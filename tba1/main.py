@@ -11,8 +11,8 @@ import pygame
 pygame.init()
 
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('Comic Sans MS', 14)
-
+myfont = pygame.font.SysFont('MS Gothic', 21)
+pygame.key.set_repeat(1000000,1000000)
 #################--IMPORT_GAME_MODULES--####################
 
 from scene_module import *
@@ -26,17 +26,17 @@ from enemy_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "1.8.3"
+version = "1.8.4"
 
 dev_mode = 1
 
 has_moved = False
-check_for_combat = True
+check_for_combat = False
 restock_shops = False
 restock_ticks = 0
 
-steps_x = 6
-steps_y = 1
+steps_x = 0
+steps_y = 0
 steps_z = 0
 
 ###########################################
@@ -81,6 +81,13 @@ in_submenu_cast_combat = False
 in_submenu_target_combat2 = False
 in_submenu_spell_target_combat2 = False
 
+in_menu_item = False
+in_menu_weapon = False
+in_menu_armor = False
+in_menu_helmet = False
+in_menu_shield = False
+in_menu_spell = False
+
 
 val = 999 #spell selection value
 val_npc = 999 #selection value
@@ -93,25 +100,19 @@ val_combat_input = 999 #selection value
 combat_cast_spell = "0"
 recipe_found = False
 
-
-if dev_mode >= 1:
-    sleep_time = 0
-    sleep_time_fast = 0
-    sleep_time_slow = 0
-else:
-    sleep_time = 0
-    sleep_time_fast = 0
-    sleep_time_slow = 0
+sleep_time = 0
+sleep_time_fast = 0
+sleep_time_slow = 0
 
 raining = 1
 weather = 0
 season = 3 # value from 0,3 that determines season
 
 time = 0
+time2 = 0
 days = 19
 months = 4
 years = 1567
-
 
 default_drop_table_items = []
 default_drop_table_weapons = []
@@ -119,6 +120,7 @@ default_drop_table_armor = []
 
 combat_option_list = []
 input_option_list = []
+
 menu_cursor_pos = 1
 combat_cursor_pos = 1
 
@@ -146,6 +148,110 @@ colour_misc_name = (Fore.BLACK + Style.BRIGHT) # misc. text colour
 
 colour_attribute = (Fore.BLACK + Style.BRIGHT) # misc. text colour
 
+############################----DROP_TABLES-###########################
+
+## default drop tables
+
+weapons_drop_table = []
+large_weapons_drop_table = []
+magic_weapons_drop_table = []
+
+armor_drop_table = []
+magic_armor_drop_table = []
+
+helmets_drop_table = []
+
+shields_drop_table = []
+
+healing_drop_table = []
+super_healing_drop_table = []
+items_drop_table = []
+
+## default shop tables
+
+weapons_shop_table = []
+armor_shop_table = []
+helmets_shop_table = []
+shields_shop_table = []
+
+spells_shop_table = []
+
+items_shop_table = []
+
+weapons_shop_table.extend(weapons_drop_table)
+weapons_shop_table.extend(large_weapons_drop_table)
+weapons_shop_table.extend(magic_weapons_drop_table)
+
+armor_shop_table.extend(armor_drop_table)
+armor_shop_table.extend(magic_armor_drop_table)
+
+helmets_shop_table.extend(helmets_drop_table)
+
+shields_shop_table.extend(shields_drop_table)
+
+items_shop_table.extend(items_drop_table)
+items_shop_table.extend(healing_drop_table)
+
+#####################################################
+
+weapons_drop_table.append(iron_sword)
+weapons_drop_table.append(iron_axe)
+weapons_drop_table.append(steel_sword)
+weapons_drop_table.append(steel_axe)
+weapons_drop_table.append(mithril_sword)
+weapons_drop_table.append(mithril_axe)
+weapons_drop_table.append(adamantite_sword)
+weapons_drop_table.append(adamantite_axe)
+weapons_drop_table.append(rune_sword)
+weapons_drop_table.append(rune_axe)
+
+large_weapons_drop_table.append(war_spear)
+large_weapons_drop_table.append(greatsword)
+large_weapons_drop_table.append(lance)
+large_weapons_drop_table.append(ultra_greatsword)
+
+magic_weapons_drop_table.append(gladius)
+magic_weapons_drop_table.append(gladius)
+magic_weapons_drop_table.append(bone_scimitar)
+
+#####################################################
+
+armor_drop_table.append(leather_armor)
+armor_drop_table.append(hard_leather_armor)
+armor_drop_table.append(iron_chain_mail)
+armor_drop_table.append(iron_plate_armor)
+armor_drop_table.append(steel_chain_mail)
+armor_drop_table.append(steel_plate_armor)
+
+magic_armor_drop_table.append(mage_robes)
+magic_armor_drop_table.append(mage_robes)
+magic_armor_drop_table.append(necro_robes)
+
+#######################################################
+
+helmets_drop_table.append(iron_helmet)
+helmets_drop_table.append(steel_helmet)
+helmets_drop_table.append(mage_hood)
+
+#####################################################
+
+shields_drop_table.append(mage_book)
+shields_drop_table.append(iron_square_shield)
+shields_drop_table.append(steel_square_shield)
+
+#####################################################
+
+healing_drop_table.append(apple)
+healing_drop_table.append(pear)
+healing_drop_table.append(hp_potion)
+healing_drop_table.append(hp_potion)
+
+super_healing_drop_table.append(hp_potion)
+super_healing_drop_table.append(hp_potion)
+super_healing_drop_table.append(super_hp_potion)
+
+for item in all_game_items:
+    items_drop_table.append(item)
 ##################################--PLAYER--############################################
 
 class player_stats:
@@ -319,6 +425,8 @@ npc_dismurth_smith.npc_armor_inventory.append(steel_chain_mail)
 npc_john_doe.npc_weapon_inventory.append(steel_sword)
 npc_john_doe.npc_weapon_inventory.append(steel_axe)
 
+npc_john_doe.npc_armor_inventory.append(steel_chain_mail)
+
 npc_john_doe.npc_helmet_inventory.append(steel_helmet)
 
 npc_john_doe.npc_shield_inventory.append(iron_square_shield)
@@ -359,6 +467,7 @@ npc_wizard_jim.npc_spell_inventory.append(life_drain)
 npc_wizard_jim.npc_inventory.append(hp_potion)
 npc_wizard_jim.npc_inventory.append(super_hp_potion)
 
+npc_wizard_tilly.npc_weapon_inventory.append(bird_sword)
 npc_wizard_tilly.npc_weapon_inventory.append(adamantite_axe)
 npc_wizard_tilly.npc_weapon_inventory.append(adamantite_sword)
 npc_wizard_tilly.npc_weapon_inventory.append(gladius)
@@ -369,18 +478,13 @@ npc_wizard_tilly.npc_shield_inventory.append(mage_book)
 
 ######################------ENEMY_SPELLBOOKS------########################
 
-hobgoblin.spellbook.append(cone_of_cold)
-hobgoblin.spellbook.append(cone_of_cold)
-hobgoblin.spellbook.append(cone_of_cold)
+
 hobgoblin.spellbook.append(earthblast)
 hobgoblin.spellbook.append(hydroblast)
 hobgoblin.spellbook.append(poison)
 hobgoblin.spellbook.append(snare)
 hobgoblin.spellbook.append(super_heal)
 
-goblin.spellbook.append(cone_of_cold)
-goblin.spellbook.append(cone_of_cold)
-goblin.spellbook.append(cone_of_cold)
 goblin.spellbook.append(prayer)
 goblin.spellbook.append(burn)
 
@@ -392,9 +496,7 @@ giant_spider.spellbook.append(poison)
 
 giant_snail.spellbook.append(slime)
 
-bandit.spellbook.append(cone_of_cold)
-bandit.spellbook.append(cone_of_cold)
-bandit.spellbook.append(cone_of_cold)
+
 bandit.spellbook.append(prayer)
 
 bandit_warlock.spellbook.append(snare)
@@ -410,8 +512,6 @@ bandit_henchman.spellbook.append(prayer)
 
 legion_soldier.spellbook.append(prayer)
 
-legion_spearman.spellbook.append(prayer)
-legion_spearman.spellbook.append(prayer)
 legion_spearman.spellbook.append(super_heal)
 
 legion_archer.spellbook.append(prayer)
@@ -492,110 +592,13 @@ big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 
-############################----DROP_TABLES-###########################
 
-## default drop tables
+# self.drop_table_items = drop_table_items
+# self.drop_table_weapons = drop_table_weapons
+# self.drop_table_armor = drop_table_armor
+# self.drop_table_helmets = drop_table_helmets
+# self.drop_table_shields = drop_table_shields
 
-weapons_drop_table = []
-large_weapons_drop_table = []
-magic_weapons_drop_table = []
-
-armor_drop_table = []
-magic_armor_drop_table = []
-
-helmets_drop_table = []
-
-shields_drop_table = []
-
-healing_drop_table = []
-super_healing_drop_table = []
-items_drop_table = []
-
-## default shop tables
-
-weapons_shop_table = []
-armor_shop_table = []
-helmets_shop_table = []
-shields_shop_table = []
-
-spells_shop_table = []
-
-items_shop_table = []
-
-weapons_shop_table.extend(weapons_drop_table)
-weapons_shop_table.extend(large_weapons_drop_table)
-weapons_shop_table.extend(magic_weapons_drop_table)
-
-armor_shop_table.extend(armor_drop_table)
-armor_shop_table.extend(magic_armor_drop_table)
-
-helmets_shop_table.extend(helmets_drop_table)
-
-shields_shop_table.extend(shields_drop_table)
-
-items_shop_table.extend(items_drop_table)
-items_shop_table.extend(healing_drop_table)
-
-#####################################################
-
-weapons_drop_table.append(iron_sword)
-weapons_drop_table.append(iron_axe)
-weapons_drop_table.append(steel_sword)
-weapons_drop_table.append(steel_axe)
-weapons_drop_table.append(mithril_sword)
-weapons_drop_table.append(mithril_axe)
-weapons_drop_table.append(adamantite_sword)
-weapons_drop_table.append(adamantite_axe)
-weapons_drop_table.append(rune_sword)
-weapons_drop_table.append(rune_axe)
-
-large_weapons_drop_table.append(war_spear)
-large_weapons_drop_table.append(greatsword)
-large_weapons_drop_table.append(lance)
-large_weapons_drop_table.append(ultra_greatsword)
-
-magic_weapons_drop_table.append(gladius)
-magic_weapons_drop_table.append(gladius)
-magic_weapons_drop_table.append(bone_scimitar)
-
-#####################################################
-
-armor_drop_table.append(leather_armor)
-armor_drop_table.append(hard_leather_armor)
-armor_drop_table.append(iron_chain_mail)
-armor_drop_table.append(iron_plate_armor)
-armor_drop_table.append(steel_chain_mail)
-armor_drop_table.append(steel_plate_armor)
-
-magic_armor_drop_table.append(mage_robes)
-magic_armor_drop_table.append(mage_robes)
-magic_armor_drop_table.append(necro_robes)
-
-#######################################################
-
-helmets_drop_table.append(iron_helmet)
-helmets_drop_table.append(steel_helmet)
-helmets_drop_table.append(mage_hood)
-
-#####################################################
-
-shields_drop_table.append(mage_book)
-shields_drop_table.append(iron_square_shield)
-shields_drop_table.append(steel_square_shield)
-
-#####################################################
-
-healing_drop_table.append(apple)
-healing_drop_table.append(pear)
-healing_drop_table.append(hp_potion)
-healing_drop_table.append(hp_potion)
-
-super_healing_drop_table.append(hp_potion)
-super_healing_drop_table.append(hp_potion)
-super_healing_drop_table.append(super_hp_potion)
-
-for item in all_game_items:
-    items_drop_table.append(item)
 
 
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
@@ -625,7 +628,7 @@ location_down = []
 location_up = []
 
 current_enemies = []
-
+current_npc = []
 
 combat_option_list.append(combat_option_hit)
 combat_option_list.append(combat_option_spell)
@@ -699,88 +702,6 @@ else:
 
 
 ##########--PYGAME--############
-
-win_map = pygame.display.set_mode((1024,768))
-
-pygame.display.set_caption("Map Screen")
-
-x = 128
-y = 128
-
-cursor_width = 16
-cursor_height = 8
-
-map_tile_width = 16
-map_tile_height = 16
-
-char_width = 8
-char_height = 8
-
-enemy_width = 32
-enemy_height = 32
-
-vel = 16
-
-def func_blit_list(list_object,list,gui_val):
-    list_object_number = 0
-    for list_object in list:
-        list_object_number += 1
-        blit_text = myfont.render(list_object.name, False, (0, 0, 0))
-        win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
-
-def func_blit_menu_cursor(gui_val):
-    pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((menu_cursor_pos)*16)+8, cursor_width, cursor_height))))
-
-def func_blit_combat_cursor(gui_val):
-    pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((combat_cursor_pos)*16)+8, cursor_width, cursor_height))))
-
-def func_blit_HUD(hud_val):
-    status_list = []
-    for status_condition in player1.status_effect_list:
-        status_list.append(status_condition.name)
-    blit_HUD_name = myfont.render(player1.name, False, (0, 0, 0))
-    blit_HUD_lvl = myfont.render("Lvl: " + str(player1.level), False, (0, 0, 0))
-    for armor in equiped_armor:
-        blit_HUD_att = myfont.render("Att: " + armor.attribute, False, (0, 0, 0))
-    blit_HUD_hp = myfont.render("HP: " + str(player1.hp) + "/" + str(player1.maxhp), False, (0, 0, 0))
-    blit_HUD_mp = myfont.render("MP: " + str(player1.mp) + "/" + str(player1.maxmp), False, (0, 0, 0))
-    if len(player1.status_effect_list) != 0:
-        blit_HUD_status = myfont.render("Status: " + str(status_list), False, (0, 0, 0))
-    else:
-        blit_HUD_status = myfont.render("Status: ['N0NE']", False, (0, 0, 0))
-
-    win_map.blit(blit_HUD_name,(32+((hud_val-1)*200),(33*16)))
-    win_map.blit(blit_HUD_lvl,(32+((hud_val-1)*200),(34*16)))
-    win_map.blit(blit_HUD_att,(32+((hud_val-1)*200),(35*16)))
-    win_map.blit(blit_HUD_hp,(32+((hud_val-1)*200),(36*16)))
-    win_map.blit(blit_HUD_mp,(32+((hud_val-1)*200),(37*16)))
-    win_map.blit(blit_HUD_status,(32+((hud_val-1)*200),(38*16)))
-
-def func_blit_enemy_HUD(hud_val):
-    enemy_number = 0
-    for enemy_stats in current_enemies:
-        enemy_number += 1
-        status_list = []
-        for status_condition in enemy_stats.status_effect_list:
-            status_list.append(status_condition.name)
-        blit_HUD_name = myfont.render(enemy_stats.name, False, (0, 0, 0))
-        blit_HUD_lvl = myfont.render("Lvl: " + str(enemy_stats.level), False, (0, 0, 0))
-        blit_HUD_att = myfont.render("Att: " + enemy_stats.attribute, False, (0, 0, 0))
-        blit_HUD_hp = myfont.render("HP: " + str(enemy_stats.hp) + "/" + str(enemy_stats.maxhp), False, (0, 0, 0))
-        blit_HUD_mp = myfont.render("MP: " + str(enemy_stats.mp) + "/" + str(enemy_stats.maxmp), False, (0, 0, 0))
-        if len(enemy_stats.status_effect_list) != 0:
-            blit_HUD_status = myfont.render("Status: " + str(status_list), False, (0, 0, 0))
-        else:
-            blit_HUD_status = myfont.render("Status: ['N0NE']", False, (0, 0, 0))
-
-        win_map.blit(blit_HUD_name,(32+((hud_val+enemy_number-1)*200),(33*16)))
-        win_map.blit(blit_HUD_lvl,(32+((hud_val+enemy_number-1)*200),(34*16)))
-        win_map.blit(blit_HUD_att,(32+((hud_val+enemy_number-1)*200),(35*16)))
-        win_map.blit(blit_HUD_hp,(32+((hud_val+enemy_number-1)*200),(36*16)))
-        win_map.blit(blit_HUD_mp,(32+((hud_val+enemy_number-1)*200),(37*16)))
-        win_map.blit(blit_HUD_status,(32+((hud_val+enemy_number-1)*200),(38*16)))
-
-
 txt_1 = myfont.render('1', False, (0, 0, 0))
 txt_2 = myfont.render('2', False, (0, 0, 0))
 txt_3 = myfont.render('3', False, (0, 0, 0))
@@ -819,8 +740,125 @@ txt_quit = myfont.render('quit', False, (0, 0, 0))
 txt_help = myfont.render('help', False, (0, 0, 0))
 txt_drop = myfont.render('drop', False, (0, 0, 0))
 
-def func_refresh_pygame(battle_intro):
+txt_items = myfont.render('items', False, (0, 0, 0))
+txt_weapons = myfont.render('weapons', False, (0, 0, 0))
+txt_armor = myfont.render('armor', False, (0, 0, 0))
+txt_helmets = myfont.render('helmets', False, (0, 0, 0))
+txt_shields = myfont.render('shields', False, (0, 0, 0))
+txt_spells = myfont.render('spells', False, (0, 0, 0))
 
+
+
+win_map = pygame.display.set_mode((1024,768))
+
+pygame.display.set_caption("Map Screen")
+
+x = 128
+y = 128
+
+cx = 512
+cy = 256
+
+cursor_width = 16
+cursor_height = 8
+
+map_tile_width = 32
+map_tile_height = 32
+
+char_width = 16
+char_height = 16
+
+enemy_width = 32
+enemy_height = 32
+
+vel = 16
+
+def func_blit_list(list_object,list,gui_val):
+    list_object_number = 0
+    for list_object in list:
+        list_object_number += 1
+        blit_text = myfont.render(list_object.name, False, (0, 0, 0))
+        win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+def func_blit_npc_list(list_object,list,gui_val):
+    list_object_number = 0
+    for list_object in list:
+        list_object_number += 1
+        blit_text = myfont.render(list_object.first_name + " " + list_object.last_name, False, (0, 0, 0))
+        win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+def func_blit_dialouge_list(list_object,list,gui_val):
+    list_object_number = 0
+    for list_object in list:
+        list_object_number += 1
+        blit_text = myfont.render(list_object.text, False, (0, 0, 0))
+        win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+
+def func_blit_menu_cursor(gui_val):
+    pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((menu_cursor_pos)*16)+8, cursor_width, cursor_height))))
+
+def func_blit_combat_cursor(gui_val):
+    pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((combat_cursor_pos)*16)+8, cursor_width, cursor_height))))
+
+def func_blit_HUD(hud_val):
+    status_list = []
+    for status_condition in player1.status_effect_list:
+        status_list.append(status_condition.name)
+    blit_HUD_name = myfont.render(player1.name, False, (0, 0, 0))
+    blit_HUD_lvl = myfont.render("Lvl: " + str(player1.level), False, (0, 0, 0))
+    for armor in equiped_armor:
+        blit_HUD_att = myfont.render("Att: " + armor.attribute, False, (0, 0, 0))
+    blit_HUD_hp = myfont.render("HP: " + str(player1.hp) + "/" + str(player1.maxhp), False, (0, 0, 0))
+    blit_HUD_mp = myfont.render("MP: " + str(player1.mp) + "/" + str(player1.maxmp), False, (0, 0, 0))
+    blit_HUD_xp = myfont.render("XP: " + str(player1.xp), False, (0, 0, 0))
+    blit_HUD_gp = myfont.render("GP: " + str(player1.gp), False, (0, 0, 0))
+    if len(player1.status_effect_list) != 0:
+        blit_HUD_status = myfont.render("Status: " + str(status_list), False, (0, 0, 0))
+    else:
+        blit_HUD_status = myfont.render("Status: ['N0NE']", False, (0, 0, 0))
+
+    win_map.blit(blit_HUD_name,(32+((hud_val-1)*200),(33*16)))
+    win_map.blit(blit_HUD_lvl,(32+((hud_val-1)*200),(34*16)))
+    win_map.blit(blit_HUD_att,(32+((hud_val-1)*200),(35*16)))
+    win_map.blit(blit_HUD_hp,(32+((hud_val-1)*200),(36*16)))
+    win_map.blit(blit_HUD_mp,(32+((hud_val-1)*200),(37*16)))
+    win_map.blit(blit_HUD_status,(32+((hud_val-1)*200),(38*16)))
+    win_map.blit(blit_HUD_xp,(32+((hud_val-1)*200),(39*16)))
+    win_map.blit(blit_HUD_gp,(32+((hud_val-1)*200),(40*16)))
+
+def func_blit_enemy_HUD(hud_val):
+    enemy_number = 0
+    for enemy_stats in current_enemies:
+        enemy_number += 1
+        status_list = []
+        for status_condition in enemy_stats.status_effect_list:
+            status_list.append(status_condition.name)
+        blit_HUD_name = myfont.render(enemy_stats.name, False, (0, 0, 0))
+        blit_HUD_lvl = myfont.render("Lvl: " + str(enemy_stats.level), False, (0, 0, 0))
+        blit_HUD_att = myfont.render("Att: " + enemy_stats.attribute, False, (0, 0, 0))
+        blit_HUD_hp = myfont.render("HP: " + str(enemy_stats.hp) + "/" + str(enemy_stats.maxhp), False, (0, 0, 0))
+        blit_HUD_mp = myfont.render("MP: " + str(enemy_stats.mp) + "/" + str(enemy_stats.maxmp), False, (0, 0, 0))
+        if len(enemy_stats.status_effect_list) != 0:
+            blit_HUD_status = myfont.render("Status: " + str(status_list), False, (0, 0, 0))
+        else:
+            blit_HUD_status = myfont.render("Status: ['N0NE']", False, (0, 0, 0))
+
+        win_map.blit(blit_HUD_name,(32+((hud_val+enemy_number-1)*200),(33*16)))
+        win_map.blit(blit_HUD_lvl,(32+((hud_val+enemy_number-1)*200),(34*16)))
+        win_map.blit(blit_HUD_att,(32+((hud_val+enemy_number-1)*200),(35*16)))
+        win_map.blit(blit_HUD_hp,(32+((hud_val+enemy_number-1)*200),(36*16)))
+        win_map.blit(blit_HUD_mp,(32+((hud_val+enemy_number-1)*200),(37*16)))
+        win_map.blit(blit_HUD_status,(32+((hud_val+enemy_number-1)*200),(38*16)))
+
+def func_blit_title(title_string,gui_val):
+    blit_title = myfont.render(title_string, False, (0, 0, 0))
+    pygame.draw.rect(win_map, (100,100,100), (32+((gui_val-1)*200), 0, 136, 16))
+    win_map.blit(blit_title,(32+((gui_val-1)*200),0))
+
+
+
+def func_refresh_pygame(battle_intro):
     if dev_mode >= 2:
         print("\nrefreshing pygame window//\n")
 
@@ -829,10 +867,43 @@ def func_refresh_pygame(battle_intro):
     else:
         win_map.fill((100,100,100))
 
+
     for scene_type in all_scene_types:
         if scene_type.zpos == steps_z:
-            pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( ((scene_type.xpos)*16), (scene_type.ypos)*16, map_tile_width, map_tile_height))
-    pygame.draw.rect(win_map, (255,0,0), (((steps_x)*16)+4, ((steps_y)*16)+4, char_width, char_height))
+            if time < 600:
+                tile_r = scene_type.tile_r + (time2/10)
+                tile_g = scene_type.tile_g + (time2/10)
+                tile_b = scene_type.tile_b + (time2/10)
+            if time >= 600 and time < 1200:
+                tile_r = (scene_type.tile_r + 60) - (time2/10)
+                tile_g = (scene_type.tile_g + 60) - (time2/10)
+                tile_b = (scene_type.tile_b + 60) - (time2/10)
+            if time >= 1200 and time < 1800:
+                tile_r = scene_type.tile_r - (time2/10)
+                tile_g = scene_type.tile_g - (time2/10)
+                tile_b = scene_type.tile_b - (time2/10)
+            if time >= 1800:
+                tile_r = (scene_type.tile_r - 60) + (time2/10)
+                tile_g = (scene_type.tile_g - 60) + (time2/10)
+                tile_b = (scene_type.tile_b - 60) + (time2/10)
+
+            if tile_r >= 255:
+                tile_r = 255
+            if tile_g >= 255:
+                tile_g = 255
+            if tile_b >= 255:
+                tile_b = 255
+            if tile_r < 0:
+                tile_r = 0
+            if tile_g < 0:
+                tile_g = 0
+            if tile_b < 0:
+                tile_b = 0
+
+            pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)), map_tile_width, map_tile_height))
+
+    # pygame.draw.rect(win_map, (255,0,0), (((steps_x)*32)+8, ((steps_y)*32)+8, char_width, char_height))
+    pygame.draw.rect(win_map, (255,0,0), (cx-8, cy-8, char_width, char_height))
 
     if battle_intro == True:
         battle_intro_ticks = 0
@@ -860,6 +931,7 @@ def func_refresh_pygame(battle_intro):
         func_blit_list(combat_option,combat_option_list,1)
 
         func_blit_combat_cursor(1)
+        func_blit_title("Battle:",1)
 
         if in_submenu_cast_combat == True:
 
@@ -869,6 +941,7 @@ def func_refresh_pygame(battle_intro):
             func_blit_list(spell,equiped_spells,1)
 
             func_blit_combat_cursor(1)
+            func_blit_title("Cast:",1)
 
         if in_submenu_target_combat2 == True:
 
@@ -878,6 +951,7 @@ def func_refresh_pygame(battle_intro):
             func_blit_list(enemy_stats,current_enemies,2)
 
             func_blit_combat_cursor(2)
+            func_blit_title("Target:",2)
 
     if in_menu == True and in_submenu == False:
 
@@ -930,265 +1004,167 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            win_map.blit(txt_1,(32,(1*16)))
-            win_map.blit(txt_2,(32,(2*16)))
-            win_map.blit(txt_3,(32,(3*16)))
-            win_map.blit(txt_4,(32,(4*16)))
-            win_map.blit(txt_5,(32,(5*16)))
-            win_map.blit(txt_6,(32,(6*16)))
+            win_map.blit(txt_weapons,(32,(1*16)))
+            win_map.blit(txt_armor,(32,(2*16)))
+            win_map.blit(txt_helmets,(32,(3*16)))
+            win_map.blit(txt_shields,(32,(4*16)))
+            win_map.blit(txt_spells,(32,(5*16)))
+
 
             func_blit_menu_cursor(1)
-
+            func_blit_title("Equip:",1)
 
             if in_submenu_equip2 == True:
 
                 pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-                win_map.blit(txt_1,(32,(1*16)))
-                win_map.blit(txt_2,(32,(2*16)))
-                win_map.blit(txt_3,(32,(3*16)))
-                win_map.blit(txt_4,(32,(4*16)))
-                win_map.blit(txt_5,(32,(5*16)))
-                win_map.blit(txt_6,(32,(6*16)))
-                win_map.blit(txt_7,(32,(7*16)))
-                win_map.blit(txt_8,(32,(8*16)))
-                win_map.blit(txt_9,(32,(9*16)))
-                win_map.blit(txt_10,(32,(10*16)))
-                win_map.blit(txt_11,(32,(11*16)))
-                win_map.blit(txt_12,(32,(12*16)))
-
                 pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
-                win_map.blit(txt_1,(232,(1*16)))
-                win_map.blit(txt_2,(232,(2*16)))
-                win_map.blit(txt_3,(232,(3*16)))
-                win_map.blit(txt_4,(232,(4*16)))
-                win_map.blit(txt_5,(232,(5*16)))
-                win_map.blit(txt_6,(232,(6*16)))
-                win_map.blit(txt_7,(232,(7*16)))
-                win_map.blit(txt_8,(232,(8*16)))
-                win_map.blit(txt_9,(232,(9*16)))
-                win_map.blit(txt_10,(232,(10*16)))
-                win_map.blit(txt_11,(232,(11*16)))
-                win_map.blit(txt_12,(232,(12*16)))
-
+                if in_menu_weapon == True:
+                    func_blit_list(weapon,weapon_inventory,2)
+                if in_menu_armor == True:
+                    func_blit_list(armor,armor_inventory,2)
+                if in_menu_helmet == True:
+                    func_blit_list(helmet,helmet_inventory,2)
+                if in_menu_shield == True:
+                    func_blit_list(shield,shield_inventory,2)
+                if in_menu_spell == True:
+                    func_blit_list(spell,spell_inventory,2)
 
                 func_blit_menu_cursor(2)
-
+                func_blit_title("Equip 2:",2)
 
         if in_submenu_talk == True:
 
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            win_map.blit(txt_1,(32,(1*16)))
-            win_map.blit(txt_2,(32,(2*16)))
-            win_map.blit(txt_3,(32,(3*16)))
-            win_map.blit(txt_4,(32,(4*16)))
-            win_map.blit(txt_5,(32,(5*16)))
-            win_map.blit(txt_6,(32,(6*16)))
-            win_map.blit(txt_7,(32,(7*16)))
-            win_map.blit(txt_8,(32,(8*16)))
-            win_map.blit(txt_9,(32,(9*16)))
-            win_map.blit(txt_10,(32,(10*16)))
-            win_map.blit(txt_11,(32,(11*16)))
-            win_map.blit(txt_12,(32,(12*16)))
+            for scene_type in location:
+                for npc in scene_type.npc_list:
+                    func_blit_npc_list(npc,scene_type.npc_list,1)
+                    break
 
 
             func_blit_menu_cursor(1)
-
+            func_blit_title("Talk:",1)
 
             if in_submenu_talk2 == True:
 
                 pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-                win_map.blit(txt_1,(32,(1*16)))
-                win_map.blit(txt_2,(32,(2*16)))
-                win_map.blit(txt_3,(32,(3*16)))
-                win_map.blit(txt_4,(32,(4*16)))
-                win_map.blit(txt_5,(32,(5*16)))
-                win_map.blit(txt_6,(32,(6*16)))
-                win_map.blit(txt_7,(32,(7*16)))
-                win_map.blit(txt_8,(32,(8*16)))
-                win_map.blit(txt_9,(32,(9*16)))
-                win_map.blit(txt_10,(32,(10*16)))
-                win_map.blit(txt_11,(32,(11*16)))
-                win_map.blit(txt_12,(32,(12*16)))
-
                 pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
-
-                win_map.blit(txt_1,(232,(1*16)))
-                win_map.blit(txt_2,(232,(2*16)))
-                win_map.blit(txt_3,(232,(3*16)))
-                win_map.blit(txt_4,(232,(4*16)))
-                win_map.blit(txt_5,(232,(5*16)))
-                win_map.blit(txt_6,(232,(6*16)))
-                win_map.blit(txt_7,(232,(7*16)))
-                win_map.blit(txt_8,(232,(8*16)))
-                win_map.blit(txt_9,(232,(9*16)))
-                win_map.blit(txt_10,(232,(10*16)))
-                win_map.blit(txt_11,(232,(11*16)))
-                win_map.blit(txt_12,(232,(12*16)))
-
+                for npc in current_npc:
+                    func_blit_dialouge_list(dialouge_option,npc.dialouge_options_list,2)
 
                 func_blit_menu_cursor(2)
-
+                func_blit_title("Talk 2:",2)
 
                 if in_submenu_sell3 == True:
 
                     pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
                     pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
-                    win_map.blit(txt_1,(232,(1*16)))
-                    win_map.blit(txt_2,(232,(2*16)))
-                    win_map.blit(txt_3,(232,(3*16)))
-                    win_map.blit(txt_4,(232,(4*16)))
-                    win_map.blit(txt_5,(232,(5*16)))
-                    win_map.blit(txt_6,(232,(6*16)))
-                    win_map.blit(txt_7,(232,(7*16)))
-                    win_map.blit(txt_8,(232,(8*16)))
-                    win_map.blit(txt_9,(232,(9*16)))
-                    win_map.blit(txt_10,(232,(10*16)))
-                    win_map.blit(txt_11,(232,(11*16)))
-                    win_map.blit(txt_12,(232,(12*16)))
 
-                    pygame.draw.rect(win_map, (100,100,100), (300, 0, 200, 500))
-                    pygame.draw.rect(win_map, (125,125,125), (310, 10, 180, 480))
+                    pygame.draw.rect(win_map, (100,100,100), (400, 0, 200, 500))
+                    pygame.draw.rect(win_map, (125,125,125), (410, 10, 180, 480))
 
-                    win_map.blit(txt_1,(332,(1*16)))
-                    win_map.blit(txt_2,(332,(2*16)))
-                    win_map.blit(txt_3,(332,(3*16)))
-                    win_map.blit(txt_4,(332,(4*16)))
-                    win_map.blit(txt_5,(332,(5*16)))
-                    win_map.blit(txt_6,(332,(6*16)))
-                    win_map.blit(txt_7,(332,(7*16)))
-                    win_map.blit(txt_8,(332,(8*16)))
-                    win_map.blit(txt_9,(332,(9*16)))
-                    win_map.blit(txt_10,(332,(10*16)))
-                    win_map.blit(txt_11,(332,(11*16)))
-                    win_map.blit(txt_12,(332,(12*16)))
+                    win_map.blit(txt_items,(432,(1*16)))
+                    win_map.blit(txt_weapons,(432,(2*16)))
+                    win_map.blit(txt_armor,(432,(3*16)))
+                    win_map.blit(txt_helmets,(432,(4*16)))
+                    win_map.blit(txt_shields,(432,(5*16)))
+                    win_map.blit(txt_spells,(432,(6*16)))
 
 
                     func_blit_menu_cursor(3)
-
+                    func_blit_title("Sell 3:",3)
 
                     if in_submenu_sell4== True:
 
-                        pygame.draw.rect(win_map, (100,100,100), (300, 0, 200, 500))
-                        pygame.draw.rect(win_map, (125,125,125), (310, 10, 180, 480))
-
-                        win_map.blit(txt_1,(332,(1*16)))
-                        win_map.blit(txt_2,(332,(2*16)))
-                        win_map.blit(txt_3,(332,(3*16)))
-                        win_map.blit(txt_4,(332,(4*16)))
-                        win_map.blit(txt_5,(332,(5*16)))
-                        win_map.blit(txt_6,(332,(6*16)))
-                        win_map.blit(txt_7,(332,(7*16)))
-                        win_map.blit(txt_8,(332,(8*16)))
-                        win_map.blit(txt_9,(332,(9*16)))
-                        win_map.blit(txt_10,(332,(10*16)))
-                        win_map.blit(txt_11,(332,(11*16)))
-                        win_map.blit(txt_12,(332,(12*16)))
-
                         pygame.draw.rect(win_map, (100,100,100), (400, 0, 200, 500))
-                        pygame.draw.rect(win_map, (125,125,125), (410,10, 180, 480))
+                        pygame.draw.rect(win_map, (125,125,125), (410, 10, 180, 480))
 
-                        win_map.blit(txt_1,(432,(1*16)))
-                        win_map.blit(txt_2,(432,(2*16)))
-                        win_map.blit(txt_3,(432,(3*16)))
-                        win_map.blit(txt_4,(432,(4*16)))
-                        win_map.blit(txt_5,(432,(5*16)))
-                        win_map.blit(txt_6,(432,(6*16)))
-                        win_map.blit(txt_7,(432,(7*16)))
-                        win_map.blit(txt_8,(432,(8*16)))
-                        win_map.blit(txt_9,(432,(9*16)))
-                        win_map.blit(txt_10,(432,(10*16)))
-                        win_map.blit(txt_11,(432,(11*16)))
-                        win_map.blit(txt_12,(432,(12*16)))
 
+                        pygame.draw.rect(win_map, (100,100,100), (600, 0, 200, 500))
+                        pygame.draw.rect(win_map, (125,125,125), (610,10, 180, 480))
+
+                        if in_menu_item == True:
+                            func_blit_list(item,inventory,4)
+                        if in_menu_weapon == True:
+                            func_blit_list(weapon,weapon_inventory,4)
+                        if in_menu_armor == True:
+                            func_blit_list(armor,armor_inventory,4)
+                        if in_menu_helmet == True:
+                            func_blit_list(helmet,helmet_inventory,4)
+                        if in_menu_shield == True:
+                            func_blit_list(shield,shield_inventory,4)
+                        if in_menu_spell == True:
+                            func_blit_list(spell,spell_inventory,4)
 
                         func_blit_menu_cursor(4)
-
+                        func_blit_title("Sell 4:",4)
 
                 if in_submenu_buy3 == True:
 
                     pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
                     pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
-                    win_map.blit(txt_1,(232,(1*16)))
-                    win_map.blit(txt_2,(232,(2*16)))
-                    win_map.blit(txt_3,(232,(3*16)))
-                    win_map.blit(txt_4,(232,(4*16)))
-                    win_map.blit(txt_5,(232,(5*16)))
-                    win_map.blit(txt_6,(232,(6*16)))
-                    win_map.blit(txt_7,(232,(7*16)))
-                    win_map.blit(txt_8,(232,(8*16)))
-                    win_map.blit(txt_9,(232,(9*16)))
-                    win_map.blit(txt_10,(232,(10*16)))
-                    win_map.blit(txt_11,(232,(11*16)))
-                    win_map.blit(txt_12,(232,(12*16)))
+                    pygame.draw.rect(win_map, (100,100,100), (400, 0, 200, 500))
+                    pygame.draw.rect(win_map, (125,125,125), (410, 10, 180, 480))
 
-                    pygame.draw.rect(win_map, (100,100,100), (300, 0, 200, 500))
-                    pygame.draw.rect(win_map, (125,125,125), (310, 10, 180, 480))
-
-                    win_map.blit(txt_1,(332,(1*16)))
-                    win_map.blit(txt_2,(332,(2*16)))
-                    win_map.blit(txt_3,(332,(3*16)))
-                    win_map.blit(txt_4,(332,(4*16)))
-                    win_map.blit(txt_5,(332,(5*16)))
-                    win_map.blit(txt_6,(332,(6*16)))
-                    win_map.blit(txt_7,(332,(7*16)))
-                    win_map.blit(txt_8,(332,(8*16)))
-                    win_map.blit(txt_9,(332,(9*16)))
-                    win_map.blit(txt_10,(332,(10*16)))
-                    win_map.blit(txt_11,(332,(11*16)))
-                    win_map.blit(txt_12,(332,(12*16)))
-
+                    for npc in current_npc:
+                        if in_menu_item == True:
+                            func_blit_list(item,npc.npc_inventory,3)
+                        if in_menu_weapon == True:
+                            func_blit_list(weapon,npc.npc_weapon_inventory,3)
+                        if in_menu_armor == True:
+                            func_blit_list(armor,npc.npc_armor_inventory,3)
+                        if in_menu_helmet == True:
+                            func_blit_list(helmet,npc.npc_helmet_inventory,3)
+                        if in_menu_shield == True:
+                            func_blit_list(shield,npc.npc_shield_inventory,3)
+                        if in_menu_spell == True:
+                            func_blit_list(spell,npc.npc_spell_inventory,3)
 
                     func_blit_menu_cursor(3)
-
+                    func_blit_title("Buy 3:",3)
         if in_submenu_drop == True:
 
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            win_map.blit(txt_1,(32,(1*16)))
-            win_map.blit(txt_2,(32,(2*16)))
-            win_map.blit(txt_3,(32,(3*16)))
-            win_map.blit(txt_4,(32,(4*16)))
-            win_map.blit(txt_5,(32,(5*16)))
-            win_map.blit(txt_6,(32,(6*16)))
-            win_map.blit(txt_7,(32,(7*16)))
-            win_map.blit(txt_8,(32,(8*16)))
-            win_map.blit(txt_9,(32,(9*16)))
-            win_map.blit(txt_10,(32,(10*16)))
-            win_map.blit(txt_11,(32,(11*16)))
-            win_map.blit(txt_12,(32,(12*16)))
+            win_map.blit(txt_items,(32,(1*16)))
+            win_map.blit(txt_weapons,(32,(2*16)))
+            win_map.blit(txt_armor,(32,(3*16)))
+            win_map.blit(txt_helmets,(32,(4*16)))
+            win_map.blit(txt_shields,(32,(5*16)))
+            win_map.blit(txt_spells,(32,(6*16)))
+
 
             func_blit_menu_cursor(1)
-
+            func_blit_title("Drop:",1)
 
             if in_submenu_drop2 == True:
 
                 pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-                win_map.blit(txt_1,(32,(1*16)))
-                win_map.blit(txt_2,(32,(2*16)))
-                win_map.blit(txt_3,(32,(3*16)))
-                win_map.blit(txt_4,(32,(4*16)))
-                win_map.blit(txt_5,(32,(5*16)))
-                win_map.blit(txt_6,(32,(6*16)))
-                win_map.blit(txt_7,(32,(7*16)))
-                win_map.blit(txt_8,(32,(8*16)))
-                win_map.blit(txt_9,(32,(9*16)))
-                win_map.blit(txt_10,(32,(10*16)))
-                win_map.blit(txt_11,(32,(11*16)))
-                win_map.blit(txt_12,(32,(12*16)))
+                if in_menu_item == True:
+                    func_blit_list(item,inventory,2)
+                if in_menu_weapon == True:
+                    func_blit_list(weapon,weapon_inventory,2)
+                if in_menu_armor == True:
+                    func_blit_list(armor,armor_inventory,2)
+                if in_menu_helmet == True:
+                    func_blit_list(helmet,helmet_inventory,2)
+                if in_menu_shield == True:
+                    func_blit_list(shield,shield_inventory,2)
+                if in_menu_spell == True:
+                    func_blit_list(spell,spell_inventory,2)
 
                 pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
@@ -1208,7 +1184,7 @@ def func_refresh_pygame(battle_intro):
 
 
                 func_blit_menu_cursor(2)
-
+                func_blit_title("Drop 2:",2)
 
 
     pygame.draw.rect(win_map, (100,100,100), (0, 512, 1024, 256))
@@ -1292,30 +1268,18 @@ def func_choose_combat_option():
 
 def func_choose_enemy():
 
-    #rolls for which enemy to fight
+    #rolls for which enemies to fight
 
-
-    combat_mod = random.randint(0,100)
-    combat_rating = random.randint(0,100)
-    if dev_mode != 0:
-        print("Combat mod:", combat_mod)
-        print("Combat rating:", combat_rating)
-
-    enemy_count = random.randint(1,3)
-
-    for scene_type in location:
-        for enemy_stats in all_game_enemies:
-            encounter_chance = 0
-            if enemy_stats.level <= scene_type.difficulty:
-                encounter_chance = random.randint(0,1)
-                if encounter_chance == 1 and len(current_enemies) <= enemy_count and enemy_stats not in current_enemies:
-                    current_enemies.append(enemy_stats)
-    for enemy_stats in current_enemies:
-        enemy_stats.drop_table_items.extend(items_drop_table)
-        enemy_stats.drop_table_weapons.extend(weapons_drop_table)
-        enemy_stats.drop_table_armor.extend(armor_drop_table)
-        enemy_stats.drop_table_helmets.extend(helmets_drop_table)
-        enemy_stats.drop_table_shields.extend(shields_drop_table)
+    enemy_count = 0
+    enemy_count = random.randint(1,4)
+    while len(current_enemies) < enemy_count:
+        for scene_type in location:
+            for enemy_stats in all_game_enemies:
+                encounter_chance = 0
+                if enemy_stats.level <= scene_type.difficulty:
+                    encounter_chance = random.randint(0,10)
+                    if encounter_chance == 1 and enemy_stats not in current_enemies:
+                        current_enemies.append(enemy_stats)
 
 def func_enemy_dead(enemy_stats):
 
@@ -1330,32 +1294,32 @@ def func_enemy_dead(enemy_stats):
             print("xp obtained \n")
             sleep(sleep_time)
 
-            loot_spawn_chance_item = 1
+            loot_spawn_chance_item = 0
             loot_chance_item = 0
             loot_amount_item = 0
-            loot_spawn_chance_weapon = 1
+            loot_spawn_chance_weapon = 0
             loot_chance_weapon = 0
             loot_amount_weapon = 0
 
-            loot_spawn_chance_armor = 1
+            loot_spawn_chance_armor = 0
             loot_chance_armor = 0
             loot_amount_armor = 0
 
-            loot_spawn_chance_helmet = 1
+            loot_spawn_chance_helmet = 0
             loot_chance_helmet = 0
             loot_amount_helmet = 0
 
-            loot_spawn_chance_shield = 1
+            loot_spawn_chance_shield = 0
             loot_chance_shield = 0
             loot_amount_shield = 0
 
             loot_quality = 0
 
-            # loot_spawn_chance_item = random.randint(0,1)
-            # loot_spawn_chance_weapon = random.randint(0,1)
-            # loot_spawn_chance_armor = random.randint(0,1)
-            # loot_spawn_chance_helmet = random.randint(0,1)
-            # loot_spawn_chance_shield = random.randint(0,1)
+            loot_spawn_chance_item = random.randint(0,2)
+            loot_spawn_chance_weapon = random.randint(0,5)
+            loot_spawn_chance_armor = random.randint(0,5)
+            loot_spawn_chance_helmet = random.randint(0,2)
+            loot_spawn_chance_shield = random.randint(0,2)
 
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
@@ -1982,6 +1946,13 @@ def func_shop(gear,npc_gear_inv):
     global in_submenu3
     global in_submenu_buy3
     global game_start
+    global in_menu_item
+    global in_menu_weapon
+    global in_menu_armor
+    global in_menu_helmet
+    global in_menu_shield
+    global in_menu_spell
+
     target_gear = "0"
     if player1.gp != -1:
         if game_start == 1:
@@ -1989,16 +1960,22 @@ def func_shop(gear,npc_gear_inv):
             print("shop inventory:\n")
             for gear in npc_gear_inv:
                 if gear in all_game_weapons:
+                    in_menu_weapon = True
                     print("|| " + str((npc_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
                 if gear in all_game_armor:
+                    in_menu_armor = True
                     print("|| " + str((npc_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
                 if gear in all_game_helmets:
+                    in_menu_helmet = True
                     print("|| " + str((npc_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
                 if gear in all_game_shields:
+                    in_menu_shield = True
                     print("|| " + str((npc_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
                 if gear in all_game_items:
+                    in_menu_item = True
                     print("|| " + str((npc_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + str(gear.value) + " gp. ")
                 if gear in all_game_spells:
+                    in_menu_spell = True
                     print("|| " + str((npc_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
 
             in_submenu3 = True
@@ -2067,6 +2044,13 @@ def func_shop(gear,npc_gear_inv):
                                 print("\nthanks, enjoy your " + gear.name + "\n")
                                 in_submenu3 = False
                                 in_submenu_buy3 = False
+                                in_menu_item = False
+                                in_menu_weapon = False
+                                in_menu_armor = False
+                                in_menu_helmet = False
+                                in_menu_shield = False
+                                in_menu_spell = False
+
                             else:
                                 print("You can't afford that!")
                                 in_submenu3 = False
@@ -2084,22 +2068,34 @@ def func_shop(gear,npc_gear_inv):
         in_submenu_buy3 = False
 
 def func_sell(gear,player_gear_inv):
+    global in_menu_item
+    global in_menu_weapon
+    global in_menu_armor
+    global in_menu_helmet
+    global in_menu_shield
+    global in_menu_spell
     global menu_cursor_pos
     global in_submenu4
     global in_submenu_sell4
     target_gear = "0"
     for gear in player_gear_inv:
         if gear in all_game_weapons:
+            in_menu_weapon = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_armor:
+            in_menu_armor = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_helmets:
+            in_menu_helmet = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_shields:
+            in_menu_shield = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_items:
+            in_menu_item = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + str(gear.value) + " gp. ")
         if gear in all_game_spells:
+            in_menu_spell = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
 
     in_submenu4 = True
@@ -2151,6 +2147,13 @@ def func_sell(gear,player_gear_inv):
                     break
             in_submenu4 = False
             in_submenu_sell4 = False
+            in_menu_item = False
+            in_menu_weapon = False
+            in_menu_armor = False
+            in_menu_helmet = False
+            in_menu_shield = False
+            in_menu_spell = False
+            break
 
 def func_use(gear,player_gear_inv):
     global menu_cursor_pos
@@ -2318,22 +2321,34 @@ def func_tp(x,y,z):
         print("you teleported to: ",x,y,z)
 
 def func_drop(gear,player_gear_inv):
+    global in_menu_item
+    global in_menu_weapon
+    global in_menu_armor
+    global in_menu_helmet
+    global in_menu_shield
+    global in_menu_spell
     global menu_cursor_pos
     global in_submenu2
     global in_submenu_drop2
     target_gear = "0"
     for gear in player_gear_inv:
         if gear in all_game_weapons:
+            in_menu_weapon = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_armor:
+            in_menu_armor = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_helmets:
+            in_menu_helmet = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_shields:
+            in_menu_shield = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_items:
+            in_menu_item = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + str(gear.value) + " gp. ")
         if gear in all_game_spells:
+            in_menu_spell = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
 
     print("\nwhat do you want to drop\n")
@@ -2419,6 +2434,12 @@ def func_drop(gear,player_gear_inv):
                         pass # WEAPONS AND ARMOR WILL BE REMOVED FORM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
             in_submenu2 = False
             in_submenu_drop2 = False
+            in_menu_item = False
+            in_menu_weapon = False
+            in_menu_armor = False
+            in_menu_helmet = False
+            in_menu_shield = False
+            in_menu_spell = False
             break
 
 def func_search_treasure():
@@ -2696,20 +2717,31 @@ def func_equip(gear,player_gear_inv,current_gear):
     global menu_cursor_pos
     global in_submenu2
     global in_submenu_equip2
+    global in_menu_item
+    global in_menu_weapon
+    global in_menu_armor
+    global in_menu_helmet
+    global in_menu_shield
+    global in_menu_spell
     target_gear = "0"
     has_level = False
     has_space = False
     for gear in player_gear_inv:
         if gear in all_game_weapons:
+            in_menu_weapon = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + gear.type + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_armor:
+            in_menu_armor = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + gear.type + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_helmets:
+            in_menu_helmet = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + gear.type + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_shields:
+            in_menu_shield = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + gear.type + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
 
         if gear in all_game_spells:
+            in_menu_spell = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
 
     print("\nwhat do you want to equip\n")
@@ -2830,6 +2862,16 @@ def func_equip(gear,player_gear_inv,current_gear):
                         print("\nYou are not high enough level to equip this!\n")
                     if has_level == False and has_space == True:
                         print("\nYou are not high enough level to equip this!\n")
+
+            in_submenu_equip2 == False
+            in_submenu2 = False
+            in_menu_item = False
+            in_menu_weapon = False
+            in_menu_armor = False
+            in_menu_helmet = False
+            in_menu_shield = False
+            in_menu_spell = False
+            break
 
 def func_inv(gear,player_gear_inv):
     target_gear = "0"
@@ -3402,9 +3444,9 @@ if dev_mode >= 1:
 ########## GAME START #########
 game_start = 1
 
-print(Fore.RED + "Welcome to Bill & Phoebe's Adventure! \n")
+print(Fore.RED + "\nWelcome to Bill & Phoebe's Adventure! \n")
 
-print("version: " + version + " \n")
+print("\nversion: " + version + " \n")
 
 # if dev_mode == 0:
 #     name = input("Please enter your name: \n")
@@ -3436,18 +3478,20 @@ while game_start == 1:
                 if scene_type.safe == False:
                     if in_fight == False:
                         if time >= 12:
-                            combat_chance = random.randint(0,100)
+                            combat_chance = random.randint(0,50)
                         if time < 12:
-                            combat_chance = random.randint(0,200)
-                        if combat_chance > 50:
+                            combat_chance = random.randint(0,100)
+                        if combat_chance > 5:
                             in_fight = False
-                        if combat_chance <= 50:
+                        if combat_chance <= 5:
                             in_fight = True
                 if in_fight == True: #init combat
                     if npc_fight == False:
                         func_choose_enemy()
                     npc_fight = False
                     for enemy_stats in current_enemies:
+                        enemy_stats.drop_table_items.extend(items_drop_table)
+                        enemy_stats.level += (random.randint(0,5))
                         enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
                         enemy_stats.hp = (0 + enemy_stats.maxhp)
                         enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
@@ -3938,7 +3982,7 @@ while game_start == 1:
                                     print("you have no shields...")
                             elif menu_cursor_pos == 6:
                                 if len(spell_inventory) != 0:
-                                    func_edrop(spell,spell_inventory)
+                                    func_drop(spell,spell_inventory)
                                 else:
                                     print("you have no spell scrolls...")
                             else:
@@ -4232,7 +4276,7 @@ while game_start == 1:
 
                                                     for npc in scene_type.npc_list:
                                                         if npc.first_name == target_npc:
-
+                                                            current_npc.append(npc)
                                                             if npc.is_animal == True:
                                                                 print("in front of you is a " + npc.gender + " " + npc.race + "\n")
 
@@ -4437,7 +4481,7 @@ while game_start == 1:
                                                                     in_submenu2 = False
                                                                     in_submenu_talk2 = False
                                                                     break
-
+                                                            current_npc.remove(npc)
 
                                             in_submenu = False
                                             in_submenu_talk = False
@@ -4447,7 +4491,7 @@ while game_start == 1:
 
             ################################################
 
-                elif menu_cursor_pos == 9:
+                elif menu_cursor_pos == 90000:
                     ing_1 = "0"
                     ing_2 = "0"
                     ing_1_index = 0
@@ -4558,59 +4602,15 @@ while game_start == 1:
                     sleep(sleep_time_fast)
 
 
-            in_submenu = False
-            in_submenu2 = False
-            in_submenu3 = False
-            in_submenu4 = False
-
-
-            in_submenu_equip = False
-            in_submenu_equip2 = False
-
-            in_submenu_cast = False
-            in_submenu_drop = False
-            in_submenu_pickup = False
-
-            in_submenu_talk = False
-            in_submenu_talk2 = False
-
-            in_submenu_buy3 = False
-
-            in_submenu_sell3 = False
-            in_submenu_sell4 = False
-
-            in_submenu_consume = False
-            in_submenu_make = False
-
-    in_menu = False
-    in_submenu = False
-    in_submenu2 = False
-    in_submenu3 = False
-    in_submenu4 = False
-
-
-    in_submenu_equip = False
-    in_submenu_equip2 = False
-
-    in_submenu_cast = False
-    in_submenu_drop = False
-    in_submenu_pickup = False
-
-    in_submenu_talk = False
-    in_submenu_talk2 = False
-
-    in_submenu_buy3 = False
-
-    in_submenu_sell3 = False
-    in_submenu_sell4 = False
-
-    in_submenu_consume = False
-    in_submenu_make = False
-
-
+#######################################################################################
 
 
     time += 1
+    time2 += 1
+
+    if time2 >= 600:
+        time2 = 0
+
     if time >= 2400:
         time = 0
         print("\nthe sun has risen...\n")
