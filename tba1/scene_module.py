@@ -101,6 +101,8 @@ class scene_type:
 dev = scene_type(16,16,0,"dev skill test area","temperate","sunny",True,True,True,True,True,True,True,0,"forest",False,False,"","rolling green hills",[],[],[],[],[])
 
 # starting area
+hills2 = scene_type(0,0,0,"the hills","temperate","sunny",True,False,False,False,False,True,False,0,"forest",False,False,"","rolling green hills",[],[],[],[],[])
+hills3 = scene_type(1,0,0,"the hills","temperate","sunny",True,False,False,False,False,True,False,0,"forest",False,False,"","rolling green hills",[],[],[],[],[])
 
 hills = scene_type(1,5,0,"the hills","temperate","sunny",True,False,False,False,False,True,False,0,"forest",False,False,"","rolling green hills",[],[],[],[],[])
 lakeside = scene_type(1,6,0,"lakeside","temperate","sunny",True,False,False,False,False,True,False,0,"forest",False,False,"","the shore of the lake",[],[],[],[],[])
@@ -261,8 +263,26 @@ high_road_h = scene_type(3,13,0,"the high road","temperate","cloudy",True,False,
 
 sorlund_church = scene_type(2,9,0,"the Sorlund church","temperate","cloudy",True,False,False,False,False,True,False,0,"town",False,False,"", "an ancient monument to the gods of harvest",[],[],[],[],[])
 sorlund_graveyard = scene_type(1,9,0,"the Sorlund graveyard","temperate","cloudy",True,False,False,False,False,True,False,0,"town",False,False,"", "the people of Sorlund bury their dead here...",[],[],[],[],[])
+sorlund_road_a = scene_type(2,10,0,"the west road of Sorlund","temperate","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road leads to the graveyard",[],[],[],[],[])
+sorlund_road_b = scene_type(1,10,0,"the west road of Sorlund","temperate","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road leads to the church",[],[],[],[],[])
+
 sorlund_tavern = scene_type(2,11,0,"the Sorlund tavern","temperate","cloudy",True,False,False,False,False,True,False,0,"town",False,False,"", "A tavern",[],[],[],[],[])
 sorlund_training_ground = scene_type(4,11,0,"the training ground","temperate","cloudy",True,False,False,False,False,True,False,0,"town",False,False,"", "the melee training ground for the Sorlund millita",[],[],[],[],[])
+
+sorr_river_a = scene_type(0,9,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_b = scene_type(0,10,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_c = scene_type(0,11,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_d = scene_type(0,12,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_e = scene_type(0,13,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_f = scene_type(0,14,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_g = scene_type(0,15,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_h = scene_type(0,16,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_i = scene_type(0,17,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_j = scene_type(0,18,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_k = scene_type(0,19,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_l = scene_type(1,19,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+sorr_river_m = scene_type(2,19,0,"the river Sorr","temperate","cloudy",True,False,False,False,False,False,False,0,"water",False,False,"The river is too deep to pass", "a wide river, i can't see the other side...",[],[],[],[],[])
+
 
 
 # south east cave
@@ -323,7 +343,7 @@ cavern_m = scene_type(2,6,-9,"a misty cavern","temperate","cloudy",False,False,F
 
 ###--  UNIQUE IMPASSABLE TERRAIN  --###
 
-cliffs_a = scene_type(1,0,0,"cliffs","temp_string","light_string",False,False,False,False,False,False,False,0,"dirt",False,False,"cliffs block your path","",[],[],[],[],[])
+cliffs_a = scene_type(0,1,0,"cliffs","temp_string","light_string",False,False,False,False,False,False,False,0,"dirt",False,False,"cliffs block your path","",[],[],[],[],[])
 cliffs_b = scene_type(1,1,0,"cliffs","temp_string","light_string",False,False,False,False,False,False,False,0,"dirt",False,False,"cliffs block your path","",[],[],[],[],[])
 cliffs_c = scene_type(1,2,0,"cliffs","temp_string","light_string",False,False,False,False,False,False,False,0,"dirt",False,False,"cliffs block your path","",[],[],[],[],[])
 cliffs_d = scene_type(1,3,0,"cliffs","temp_string","light_string",False,False,False,False,False,False,False,0,"dirt",False,False,"cliffs block your path","",[],[],[],[],[])
