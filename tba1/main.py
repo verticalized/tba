@@ -8,11 +8,12 @@ from colorama import Fore, Back, Style
 init(autoreset=True)
 
 import pygame
-pygame.init()
 
+pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('MS Gothic', 21)
-pygame.key.set_repeat(1000000,1000000)
+myfont = pygame.font.SysFont('MS Gothic', 21) # you have to call this at the start if you want to use fonts
+pygame.key.set_repeat(100000,100000) # held key repeat timer
+
 #################--IMPORT_GAME_MODULES--####################
 
 from scene_module import *
@@ -29,7 +30,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 has_moved = False
 check_for_combat = False
