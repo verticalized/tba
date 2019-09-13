@@ -603,7 +603,7 @@ big_slug.spellbook.append(slime)
 
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
-forest_c.scene_inventory.append(ground_oak_key)
+forest_1.scene_inventory.append(ground_oak_key)
 
 fortress.scene_inventory.append(ground_certificate_of_passage)
 
@@ -900,7 +900,26 @@ def func_refresh_pygame(battle_intro):
             if tile_b < 0:
                 tile_b = 0
 
+            tile_r_2 = tile_r - 20
+            tile_g_2 = tile_g - 20
+            tile_b_2 = tile_b - 20
+
+            if tile_r_2 >= 255:
+                tile_r_2 = 255
+            if tile_g_2 >= 255:
+                tile_g_2 = 255
+            if tile_b_2 >= 255:
+                tile_b_2 = 255
+            if tile_r_2 < 0:
+                tile_r_2 = 0
+            if tile_g_2 < 0:
+                tile_g_2 = 0
+            if tile_b_2 < 0:
+                tile_b_2 = 0
+
             pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)), map_tile_width, map_tile_height))
+            if scene_type.indoors == True:
+                pygame.draw.rect(win_map, (tile_r_2,tile_g_2,tile_b_2), ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)), map_tile_width-4, map_tile_height-12))
 
     # pygame.draw.rect(win_map, (255,0,0), (((steps_x)*32)+8, ((steps_y)*32)+8, char_width, char_height))
     pygame.draw.rect(win_map, (255,0,0), (cx-8, cy-8, char_width, char_height))
@@ -1153,6 +1172,9 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
+                pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
+                pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
+
                 if in_menu_item == True:
                     func_blit_list(item,inventory,2)
                 if in_menu_weapon == True:
@@ -1165,23 +1187,6 @@ def func_refresh_pygame(battle_intro):
                     func_blit_list(shield,shield_inventory,2)
                 if in_menu_spell == True:
                     func_blit_list(spell,spell_inventory,2)
-
-                pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
-                pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
-
-                win_map.blit(txt_1,(232,(1*16)))
-                win_map.blit(txt_2,(232,(2*16)))
-                win_map.blit(txt_3,(232,(3*16)))
-                win_map.blit(txt_4,(232,(4*16)))
-                win_map.blit(txt_5,(232,(5*16)))
-                win_map.blit(txt_6,(232,(6*16)))
-                win_map.blit(txt_7,(232,(7*16)))
-                win_map.blit(txt_8,(232,(8*16)))
-                win_map.blit(txt_9,(232,(9*16)))
-                win_map.blit(txt_10,(232,(10*16)))
-                win_map.blit(txt_11,(232,(11*16)))
-                win_map.blit(txt_12,(232,(12*16)))
-
 
                 func_blit_menu_cursor(2)
                 func_blit_title("Drop 2:",2)
