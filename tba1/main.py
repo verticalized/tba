@@ -23,6 +23,7 @@ from equipment_module import *
 from spell_module import *
 
 from enemy_module import *
+from party_member_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
@@ -2311,6 +2312,7 @@ def func_cast(gear,player_gear_inv):
 
             in_submenu = False
             in_submenu_cast = False
+
 #############################----SCENE_FUNCTIONS----#########################
 
 def func_tp(x,y,z):
