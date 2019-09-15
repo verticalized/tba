@@ -5,7 +5,7 @@ from colorama import Fore, Back, Style
 
 init(autoreset=True)
 
-all_game_enemies = []
+all_game_party_members = []
 
 class party_member_stats:
     def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect):
@@ -51,7 +51,7 @@ class party_member_stats:
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.BRIGHT + attribute + Style.RESET_ALL)
 
-        all_game_enemies.append(self)
+        all_game_party_members.append(self)
 
 # Attributes: name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness,
 # LIsts: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
