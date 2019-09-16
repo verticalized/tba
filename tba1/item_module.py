@@ -70,6 +70,7 @@ fire_orb = item(106,"fire orb",7,False,False,0,"")
 water_orb = item(106,"water orb",7,False,False,0,"")
 earth_orb = item(106,"earth orb",7,False,False,0,"")
 air_orb = item(106,"air orb",7,False,False,0,"")
+
 bones = item(112,"bones",2,False,False,0,"")
 cup = item(104,"cup",12,False,False,0,"")
 mug = item(104,"mug",12,False,False,0,"")

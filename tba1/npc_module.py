@@ -82,4 +82,4 @@ npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a 
 npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof")
 
 npc_merchant_ollie = npc("Ollie","Zedex","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof")
-npc_merchant_dech = npc("Dechen","Pavoni","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof")
+npc_merchant_dech = npc("Dechen","Kneepar","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof")
