@@ -56,9 +56,15 @@ class enemy_stats:
 # Attributes: name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness,
 # LIsts: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
 # Status: status_effect
-goblin = enemy_stats("goblin",2,5,1000,1000,100,100,1,8,4,100,"earth","fire",[],[],[],[],[],[],0)
-hobgoblin = enemy_stats("hobgoblin",3,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0)
-hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",6,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0)
+
+imp = enemy_stats("imp",2,2,400,400,100,100,1,6,6,100,"fire","holy",[],[],[],[],[],[],0)
+goon = enemy_stats("goon",2,3,550,550,100,100,1,6,4,100,"earth","fire",[],[],[],[],[],[],0)
+mangy_goblin = enemy_stats("mangy goblin",2,4,578,578,100,100,10,8,4,100,"earth","fire",[],[],[],[],[],[],0)
+
+
+goblin = enemy_stats("goblin",2,5,800,800,100,100,1,8,4,100,"earth","fire",[],[],[],[],[],[],0)
+hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0)
+hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0)
 bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0)
 bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0)
 bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,4,230,"fire","earth",[],[],[],[],[],[],0)
@@ -89,3 +95,6 @@ skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,2
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0)
 
 ## npc enemies
+cow = enemy_stats("cow",2,2,200,200,100,100,1,3,3,100,"fire","holy",[],[],[],[],[],[],0)
+sheep = enemy_stats("sheep",2,2,100,100,100,100,1,2,2,100,"fire","holy",[],[],[],[],[],[],0)
+town_guard = enemy_stats("town_guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0)

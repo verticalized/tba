@@ -30,7 +30,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 has_moved = False
 check_for_combat = True
@@ -309,35 +309,29 @@ class input_option:
         if is_default_option == True:
             input_option_list.append(self)
 
-#       commands:  north (w)  south (s)  east (d)  west (a)
-#        down (f)  up (r)  search (j)  equip (e)  stats (q)  skills (Q)
-#        drop (l)  pickup (p)  pickupall (P)  consume (k)  inv (i)  spellbook (b)  cast (c)  wait (W)  camp (u)  quit ")
-
-
-
-input_option_talk = input_option("talk","t",True,True)
-input_option_equip = input_option("equip","e",True,True)
-input_option_gear = input_option("gear","w",True,True)
-input_option_stats = input_option("stats","q",True,True)
-input_option_skills = input_option("skills","Q",True,True)
-input_option_search = input_option("search","j",True,True)
-input_option_drop = input_option("drop","l",True,True)
-input_option_pickup = input_option("pickup","p",True,True)
-input_option_pickupall = input_option("pickupall","P",True,True)
-input_option_consume = input_option("consume","k",True,True)
-input_option_inv = input_option("inv","i",True,True)
-input_option_spellbook = input_option("spellbook","b",True,True)
-input_option_cast = input_option("cast","c",True,True)
-input_option_wait = input_option("wait","W",True,True)
-
-input_option_help = input_option("help","H",True,True)
-input_option_quit = input_option("quit","Z",True,True)
-input_option_camp = input_option("camp","u",False,True)
-
-input_option_dev = input_option("dev","dv",True,False)
-input_option_dev_xp = input_option("/xp","/xp",True,False)
-input_option_dev_tp = input_option("/tp","/tp",True,False)
-input_option_dev_gp = input_option("/gp","/gp",True,False)
+        # input_option_talk = input_option("talk","t",True,True)
+        # input_option_equip = input_option("equip","e",True,True)
+        # input_option_gear = input_option("gear","w",True,True)
+        # input_option_stats = input_option("stats","q",True,True)
+        # input_option_skills = input_option("skills","Q",True,True)
+        # input_option_search = input_option("search","j",True,True)
+        # input_option_drop = input_option("drop","l",True,True)
+        # input_option_pickup = input_option("pickup","p",True,True)
+        # input_option_pickupall = input_option("pickupall","P",True,True)
+        # input_option_consume = input_option("consume","k",True,True)
+        # input_option_inv = input_option("inv","i",True,True)
+        # input_option_spellbook = input_option("spellbook","b",True,True)
+        # input_option_cast = input_option("cast","c",True,True)
+        # input_option_wait = input_option("wait","W",True,True)
+        #
+        # input_option_help = input_option("help","H",True,True)
+        # input_option_quit = input_option("quit","Z",True,True)
+        # input_option_camp = input_option("camp","u",False,True)
+        #
+        # input_option_dev = input_option("dev","dv",True,False)
+        # input_option_dev_xp = input_option("/xp","/xp",True,False)
+        # input_option_dev_tp = input_option("/tp","/tp",True,False)
+        # input_option_dev_gp = input_option("/gp","/gp",True,False)
 
 
 class combat_option:
@@ -364,7 +358,7 @@ class quest:
 quest_1 = quest("The Bandit Menace","eliminate the local bandit population",200,80,[],False,0,True,10)
 
 # place npcs in the world
-
+dismurth_gates.npc_list.append(npc_town_guard)
 dismurth_square.npc_list.append(npc_jenkins)
 dismurth_market.npc_list.append(npc_john_doe)
 dismurth_market.npc_list.append(npc_jane_doe)
@@ -375,9 +369,18 @@ dismurth_smith.npc_list.append(npc_dismurth_smith)
 forest_cabin.npc_list.append(npc_wizard_jim)
 forest_cabin.npc_list.append(npc_wizard_tilly)
 
+grassland_2.npc_list.append(npc_cow)
+grassland_2.npc_list.append(npc_sheep)
+grassland_4.npc_list.append(npc_sheep)
+grassland_5.npc_list.append(npc_cow)
+grassland_8.npc_list.append(npc_cow)
+
 ################################
 
 # give npc dialouge options
+
+npc_town_guard.dialouge_options_list.append(dialouge_talk)
+npc_town_guard.dialouge_options_list.append(dialouge_gf)
 
 npc_jenkins.dialouge_options_list.append(dialouge_talk)
 npc_jenkins.dialouge_options_list.append(dialouge_gf)
@@ -414,6 +417,21 @@ npc_wizard_tilly.dialouge_options_list.append(dialouge_talk)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_weapon)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_helmet)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_shield)
+
+npc_cow.dialouge_options_list.append(dialouge_talk)
+npc_cow.dialouge_options_list.append(dialouge_attack)
+
+npc_sheep.dialouge_options_list.append(dialouge_talk)
+npc_sheep.dialouge_options_list.append(dialouge_attack)
+
+####################-NPC COMBAT ENCOUNTERS--#########################
+
+npc_jenkins.combat_enemy_list.append(hobgoblin)
+npc_town_guard.combat_enemy_list.append(town_guard)
+npc_jenkins.combat_enemy_list.append(cow)
+npc_jenkins.combat_enemy_list.append(sheep)
+npc_cow.combat_enemy_list.append(cow)
+npc_sheep.combat_enemy_list.append(sheep)
 
 #######################--SHOP INVENTORIES--############################
 
@@ -607,10 +625,6 @@ big_slug.spellbook.append(slime)
 forest_1.scene_inventory.append(ground_oak_key)
 
 fortress.scene_inventory.append(ground_certificate_of_passage)
-
-####################-NPC COMBAT ENCOUNTERS--#########################
-
-npc_jenkins.combat_enemy_list.append(hobgoblin)
 
 ########################################------LISTS------###############################################
 
@@ -1403,15 +1417,14 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
-                        loot_chance_item = random.randint(0,1)
+                        loot_chance_item = random.randint(0,10)
                         if loot_chance_item == 1:
                             for ground_item in all_ground_game_items:
                                 if ground_item.name == item.name:
                                     scene_type.scene_inventory.append(ground_item)
                                     print(enemy_stats.name + " dropped " + item.print_name + " \n")
-                                    sleep(sleep_time_fast)
-                            loot_amount_item = random.randint(0,5)
-                            if loot_amount_item != 5:
+                            loot_amount_item = random.randint(0,10)
+                            if loot_amount_item == 10:
                                 break
 
             if loot_spawn_chance_weapon == 1:
@@ -1536,7 +1549,7 @@ def func_player_melee(status_str,status_atk):
             player_weapon_level = 0
             for weapon in equiped_weapon:
                 player_weapon_level = weapon.level
-            player_damage = (player1.attack + player1.attack_bonus + status_atk + player_weapon_level) + (player1.strength + status_str + player1.strength_bonus + player_weapon_level) + (random.randint(1,5) * (enemy_stats.level // 2))
+            player_damage = (player1.attack + player1.attack_bonus + status_atk + player_weapon_level) + (player1.strength + status_str + player1.strength_bonus + player_weapon_level) + (random.randint(1,player1.level) * (player1.level // 2))
             if player_damage > (enemy_stats.hp):
                 player_damage = (enemy_stats.hp)
             enemy_stats.hp = enemy_stats.hp - player_damage
@@ -1887,12 +1900,15 @@ def func_enemy_status_check():
             func_enemy_attack(enemy_stats,status_str_bonus,status_atk_bonus,status_mgk_bonus,status_def_bonus)
 
 def func_check_enemy_dead():
+    global npc_enemy_fname
+    global npc_enemy_lname
     global in_fight
     global npc_fight
     for enemy_stats in current_enemies:
         if enemy_stats.hp <= 0:
             current_enemies.remove(enemy_stats)
             func_enemy_dead(enemy_stats)
+
     if len(current_enemies) == 0:
         in_fight = False
         for scene_type in location:
@@ -3552,11 +3568,11 @@ while game_start == 1:
 
     keys = pygame.key.get_pressed()
 
-    if has_moved == True:
+    if has_moved == True or in_fight == True:
         if in_fight == False:
             location_desc()
             func_HUD()
-        if check_for_combat == True:
+        if npc_fight == False and check_for_combat == True:
             for scene_type in location:
                 if scene_type.safe == False:
                     if in_fight == False:
@@ -3568,154 +3584,160 @@ while game_start == 1:
                             in_fight = False
                         if combat_chance <= 5:
                             in_fight = True
-                if in_fight == True: #init combat
-                    if npc_fight == False:
-                        print("choosing enemy")
-                        func_choose_enemy()
-                        print("enemy chosen")
-                    npc_fight = False
-                    for enemy_stats in current_enemies:
-                        if dev_mode >= 1:
-                            print("building drop tables")
-                        enemy_stats.drop_table_items.extend(all_game_items)
-                        for weapon in all_game_weapons:
-                            if weapon.level <= enemy_stats.level:
-                                enemy_stats.drop_table_weapons.append(weapon)
-                        for armor in all_game_armor:
-                            if armor.level <= enemy_stats.level:
-                                enemy_stats.drop_table_armor.append(armor)
-                        for helmet in all_game_helmets:
-                            if helmet.level <= enemy_stats.level:
-                                enemy_stats.drop_table_helmets.append(helmet)
-                        for shield in all_game_shields:
-                            if shield.level <= enemy_stats.level:
-                                enemy_stats.drop_table_shields.append(shield)
+        if in_fight == True: #init combat
+            if npc_fight == False:
+                if dev_mode >= 1:
+                    print("choosing enemies")
+                func_choose_enemy()
+                if dev_mode >= 1:
+                    print("enemies chosen")
 
-                        if dev_mode >= 1:
-                            print("modifying enemy stats")
-                        enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
-                        enemy_stats.hp = (0 + enemy_stats.maxhp)
-                        enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
-                        if dev_mode >= 1:
-                            print("enemy stats have been calculated")
-                    player_turns = 10
-                    if dev_mode >= 1:
-                        print("playing battle intro")
-                    func_refresh_pygame(True)
-                    if dev_mode >= 1:
-                        print("battle intro finished")
-                    print(Fore.RED + "\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
-                    print("\nLocation: " + scene_type.name)
-                    print("\nEnemy stats:")
-                    for enemy_stats in current_enemies:
-                        status_list = []
-                        for status_condition in enemy_stats.status_effect_list:
-                            status_list.append(status_condition.name)
-                        print("Name: " + enemy_stats.name)
-                        print("LVL: " + str(enemy_stats.level))
-                        print("ATT.: " + enemy_stats.print_attribute)
-                        print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
-                        print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
-                        if len(enemy_stats.status_effect_list) != 0:
-                            print("Status: " + str(status_list) + " \n")
-                        else:
-                            print("Status: ['N0NE'] \n")
+            for enemy_stats in current_enemies:
+                if dev_mode >= 1:
+                    print("building drop tables")
+                enemy_stats.drop_table_items.extend(all_game_items)
+                for weapon in all_game_weapons:
+                    if weapon.level <= enemy_stats.level:
+                        enemy_stats.drop_table_weapons.append(weapon)
+                for armor in all_game_armor:
+                    if armor.level <= enemy_stats.level:
+                        enemy_stats.drop_table_armor.append(armor)
+                for helmet in all_game_helmets:
+                    if helmet.level <= enemy_stats.level:
+                        enemy_stats.drop_table_helmets.append(helmet)
+                for shield in all_game_shields:
+                    if shield.level <= enemy_stats.level:
+                        enemy_stats.drop_table_shields.append(shield)
 
-                    func_HUD()
+                if dev_mode >= 1:
+                    print("modifying enemy stats")
+                enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
+                enemy_stats.hp = (0 + enemy_stats.maxhp)
+                enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
+                if dev_mode >= 1:
+                    print("enemy stats have been calculated")
+            player_turns = 10
+            if dev_mode >= 1:
+                print("playing battle intro")
+            if npc_fight == False:
+                func_refresh_pygame(True)
+            else:
+                func_refresh_pygame(False)
+            npc_fight = False
+            if dev_mode >= 1:
+                print("battle intro finished")
+            print(Fore.RED + "\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
+            print("\nLocation: " + scene_type.name)
+            print("\nEnemy stats:")
+            for enemy_stats in current_enemies:
+                status_list = []
+                for status_condition in enemy_stats.status_effect_list:
+                    status_list.append(status_condition.name)
+                print("Name: " + enemy_stats.name)
+                print("LVL: " + str(enemy_stats.level))
+                print("ATT.: " + enemy_stats.print_attribute)
+                print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
+                print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
+                if len(enemy_stats.status_effect_list) != 0:
+                    print("Status: " + str(status_list) + " \n")
+                else:
+                    print("Status: ['N0NE'] \n")
 
-                    while in_fight == True:
-                        pygame.time.delay(100)
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                game_start = 0
-                                in_fight = False
+            func_HUD()
 
-                        func_check_level()
-                        func_refresh_pygame(False)
-                        keys = pygame.key.get_pressed()
+            while in_fight == True:
+                pygame.time.delay(100)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        game_start = 0
+                        in_fight = False
 
-                        if keys[pygame.K_w]:
-                            combat_cursor_pos -= 1
-                            if combat_cursor_pos < 1:
-                                combat_cursor_pos == 1
+                func_check_level()
+                func_refresh_pygame(False)
+                keys = pygame.key.get_pressed()
 
-                        if keys[pygame.K_s]:
-                            combat_cursor_pos += 1
+                if keys[pygame.K_w]:
+                    combat_cursor_pos -= 1
+                    if combat_cursor_pos < 1:
+                        combat_cursor_pos == 1
 
-                        if keys[pygame.K_e]:
-                            if combat_cursor_pos == 3:
-                                in_fight = False
-                                print("you ran away! \n")
-                                del current_enemies[:]
-                                location_desc()
-                            elif combat_cursor_pos == 1:
-                                player_turns -= 1
-                                func_enemy_status_check()
-                                func_player_status_check(True)
-                                func_check_enemy_dead()
-                            elif combat_cursor_pos == 2:
-                                print("\nYour equipped spells: \n")
+                if keys[pygame.K_s]:
+                    combat_cursor_pos += 1
+
+                if keys[pygame.K_e]:
+                    if combat_cursor_pos == 3:
+                        in_fight = False
+                        print("you ran away! \n")
+                        del current_enemies[:]
+                        location_desc()
+                    elif combat_cursor_pos == 1:
+                        player_turns -= 1
+                        func_enemy_status_check()
+                        func_player_status_check(True)
+                        func_check_enemy_dead()
+                    elif combat_cursor_pos == 2:
+                        print("\nYour equipped spells: \n")
+                        for spell in equiped_spells:
+                            print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
+                        print("")
+
+                        print("which spell will you cast? \n")
+
+                        in_submenu = True
+                        in_submenu_cast_combat = True
+                        while in_submenu_cast_combat == True:
+                            pygame.time.delay(100)
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                    game_start = 0
+                                    in_fight = False
+                                    in_submenu = False
+                                    in_submenu_cast_combat = False
+
+                            func_check_level()
+                            func_refresh_pygame(False)
+
+                            keys = pygame.key.get_pressed()
+
+                            if keys[pygame.K_q]:
+                                in_submenu = False
+                                in_submenu_cast_combat = False
+
+                            if keys[pygame.K_w]:
+                                combat_cursor_pos -= 1
+                                if combat_cursor_pos < 1:
+                                    combat_cursor_pos == 1
+
+                            if keys[pygame.K_s]:
+                                combat_cursor_pos += 1
+
+                            if keys[pygame.K_e]:
+
+                                val_combat_spell = combat_cursor_pos
+                                val = val_combat_spell - 1
+                                for spell in spell_inventory:
+                                    if val == spell_inventory.index(spell):
+                                        combat_cast_spell = spell.name
+
+                                has_spell = 0
+
                                 for spell in equiped_spells:
-                                    print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
-                                print("")
+                                    if spell.name == combat_cast_spell:
+                                        has_spell = 1
 
-                                print("which spell will you cast? \n")
+                                func_enemy_status_check()
+                                func_player_status_check(False)
+                                func_check_enemy_dead()
+                                in_submenu = False
+                                in_submenu_cast_combat = False
+                                break
 
-                                in_submenu = True
-                                in_submenu_cast_combat = True
-                                while in_submenu_cast_combat == True:
-                                    pygame.time.delay(100)
-                                    for event in pygame.event.get():
-                                        if event.type == pygame.QUIT:
-                                            game_start = 0
-                                            in_fight = False
-                                            in_submenu = False
-                                            in_submenu_cast_combat = False
+                    elif combat_cursor_pos == 4:
+                        in_fight = False
+                        game_start = 0
 
-                                    func_check_level()
-                                    func_refresh_pygame(False)
-
-                                    keys = pygame.key.get_pressed()
-
-                                    if keys[pygame.K_q]:
-                                        in_submenu = False
-                                        in_submenu_cast_combat = False
-
-                                    if keys[pygame.K_w]:
-                                        combat_cursor_pos -= 1
-                                        if combat_cursor_pos < 1:
-                                            combat_cursor_pos == 1
-
-                                    if keys[pygame.K_s]:
-                                        combat_cursor_pos += 1
-
-                                    if keys[pygame.K_e]:
-
-                                        val_combat_spell = combat_cursor_pos
-                                        val = val_combat_spell - 1
-                                        for spell in spell_inventory:
-                                            if val == spell_inventory.index(spell):
-                                                combat_cast_spell = spell.name
-
-                                        has_spell = 0
-
-                                        for spell in equiped_spells:
-                                            if spell.name == combat_cast_spell:
-                                                has_spell = 1
-
-                                        func_enemy_status_check()
-                                        func_player_status_check(False)
-                                        func_check_enemy_dead()
-                                        in_submenu = False
-                                        in_submenu_cast_combat = False
-                                        break
-
-                            elif combat_cursor_pos == 4:
-                                in_fight = False
-                                game_start = 0
-
-                            else:
-                                print("invalid combat command \n")
+                    else:
+                        print("invalid combat command \n")
 
         has_moved = False
 
@@ -4098,6 +4120,7 @@ while game_start == 1:
                             in_submenu = False
                             in_submenu_drop = False
                             break
+
                 elif menu_cursor_pos == 10:
                     print("Which item do you want to pickup? NON FUNCTIONAL COMMAND\n")
                     pickedup_item = "0"
@@ -4416,6 +4439,7 @@ while game_start == 1:
                                                                         in_submenu_talk2 = False
                                                                         in_menu = False
 
+
                                                                 func_check_level()
                                                                 func_refresh_pygame(False)
 
@@ -4485,7 +4509,10 @@ while game_start == 1:
                                                                                             break
 
                                                                                         if dialouge_option.is_talk == True:
-                                                                                            print("you have a conversation")
+                                                                                            if npc.is_animal == True:
+                                                                                                print("You cannot speak with animals")
+                                                                                            else:
+                                                                                                print(npc.talk_text)
                                                                                             in_submenu2 = False
                                                                                             in_submenu_talk2 = False
                                                                                             break
@@ -4570,6 +4597,9 @@ while game_start == 1:
                                                                                             in_fight = True
                                                                                             npc_fight = True
                                                                                             is_talking = False
+                                                                                            in_submenu2 = False
+                                                                                            in_submenu_talk2 = False
+                                                                                            in_menu = False
                                                                                             break
 
                                                                                         if dialouge_option.is_give == True:
