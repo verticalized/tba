@@ -68,8 +68,9 @@ legion_spearman = enemy_stats("legion spearman",25,500,10500,10500,100,100,10,16
 legion_archer = enemy_stats("legion archer",23,500,8700,8700,100,100,10,11,22,654,"air","earth",[],[],[],[],[],[],0)
 legion_battle_mage = enemy_stats("legion battle mage",29,500,12400,12400,100,100,45,5,6,2245,"air","earth",[],[],[],[],[],[],0)
 
-rock_golem = enemy_stats("rock golem",62,800,10230,10230,100,100,0,55,18,20230,"earth","water",[],[],[],[],[],[],0)
+rock_golem = enemy_stats("rock golem",62,800,10520,10520,100,100,0,55,18,20230,"earth","water",[],[],[],[],[],[],0)
 mushroom_man = enemy_stats("mushroom man",67,800,10230,10230,100,100,0,50,20,10230,"earth","fire",[],[],[],[],[],[],0)
+magical_mushroom_man = enemy_stats("magic mushroom man",62,800,10230,10230,100,100,45,20,20,10230,"earth","fire",[],[],[],[],[],[],0)
 
 bird_warrior = enemy_stats("bird warrior",191,100000,2408070,2408070,1000000,1000000,100,300,220,1000,"air","water",[],[],[],[],[],[],0)#leg
 
@@ -82,7 +83,7 @@ giant_snail = enemy_stats("giant snail",14,10,9300,9300,100,100,0,12,2,930,"eart
 giant_spider = enemy_stats("giant spider",33,64,23000,23000,100,100,0,50,2,2300,"earth","fire",[],[],[],[],[],[],0)
 giant_moth = enemy_stats("giant moth",18,5,13400,13400,100,100,0,10,20,100,"earth","air",[],[],[],[],[],[],0)
 
-big_slug = enemy_stats("big slug",1,500,103000,103000,100,100,0,0,0,0,"slime","salt",[],[],[],[],[],[],0)#legendary
+big_slug = enemy_stats("big slug",1,500,1035000,1035000,100,100,0,0,0,0,"slime","salt",[],[],[],[],[],[],0)#legendary
 
 skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,22,100,"undead","holy",[],[],[],[],[],[],0)
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0)

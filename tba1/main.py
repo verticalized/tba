@@ -3575,20 +3575,35 @@ while game_start == 1:
                         print("enemy chosen")
                     npc_fight = False
                     for enemy_stats in current_enemies:
-                        print("modifying enemy stats")
+                        if dev_mode >= 1:
+                            print("building drop tables")
                         enemy_stats.drop_table_items.extend(all_game_items)
-                        enemy_stats.drop_table_weapons.extend(all_game_weapons)
-                        enemy_stats.drop_table_armor.extend(all_game_armor)
-                        enemy_stats.drop_table_shields.extend(all_game_shields)
-                        enemy_stats.drop_table_helmets.extend(all_game_helmets)
+                        for weapon in all_game_weapons:
+                            if weapon.level <= enemy_stats.level:
+                                enemy_stats.drop_table_weapons.append(weapon)
+                        for armor in all_game_armor:
+                            if armor.level <= enemy_stats.level:
+                                enemy_stats.drop_table_armor.append(armor)
+                        for helmet in all_game_helmets:
+                            if helmet.level <= enemy_stats.level:
+                                enemy_stats.drop_table_helmets.append(helmet)
+                        for shield in all_game_shields:
+                            if shield.level <= enemy_stats.level:
+                                enemy_stats.drop_table_shields.append(shield)
+
+                        if dev_mode >= 1:
+                            print("modifying enemy stats")
                         enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
                         enemy_stats.hp = (0 + enemy_stats.maxhp)
                         enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
-                        print("enemy stats have been calculated")
+                        if dev_mode >= 1:
+                            print("enemy stats have been calculated")
                     player_turns = 10
-                    print("playing battle intro")
+                    if dev_mode >= 1:
+                        print("playing battle intro")
                     func_refresh_pygame(True)
-                    print("battle intro finished")
+                    if dev_mode >= 1:
+                        print("battle intro finished")
                     print(Fore.RED + "\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
                     print("\nLocation: " + scene_type.name)
                     print("\nEnemy stats:")
