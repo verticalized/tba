@@ -32,6 +32,7 @@ dialouge_buy_spell = dialouge_option("do you have any spells for sale?",False,Fa
 dialouge_sell = dialouge_option("can I sell something?",False,False,False,False,False,False,False,True,False,False,False,False)
 dialouge_talk = dialouge_option("have you heard any interesting news?",False,False,False,False,False,False,False,False,True,False,False,False)
 dialouge_gf = dialouge_option("get fucked mate!",False,False,False,False,False,False,False,False,False,True,False,False)
+dialouge_attack = dialouge_option("attack",False,False,False,False,False,False,False,False,False,True,False,False)
 dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,False,True,False)
 dialouge_quest = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True)
 
@@ -40,7 +41,7 @@ dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,Fals
 all_npcs = []
 
 class npc:
-    def __init__(self, first_name, last_name, title, npc_desc, greeting, is_animal, race, gender, faction, attire, assault_dialouge):
+    def __init__(self, first_name, last_name, title, npc_desc, greeting, is_animal, race, gender, faction, attire, assault_dialouge,talk_text):
         self.first_name = first_name
         self.last_name = last_name
         self.npc_desc = npc_desc
@@ -52,6 +53,7 @@ class npc:
         self.faction = faction
         self.attire = attire
         self.assault_dialouge = assault_dialouge
+        self.talk_text = talk_text
 
         self.dialouge_options_list = []
         self.dialouge_options_list.append(dialouge_quit)
@@ -71,15 +73,19 @@ class npc:
 
 #########   TWO NPCS CANNOT HAVE THE SAME FIRST NAME !!!!   #############
 
-npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*")
-npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof")
-npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof")
-npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof")
-npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of magic...","woof!",True,"dog","cute","0","0","WOOF!")
-npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof")
+npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","")
+npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","")
+npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","")
+npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof","")
+npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of magic...","woof!",True,"dog","cute","0","0","WOOF!","")
+npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof","")
 
-npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof")
-npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof")
+npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof","")
+npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","")
 
-npc_merchant_ollie = npc("Ollie","Zedex","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof")
-npc_merchant_dech = npc("Dechen","Kneepar","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof")
+npc_merchant_ollie = npc("Ollie","Zedex","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","")
+npc_merchant_dech = npc("Dechen","Pavoni","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","")
+
+npc_cow = npc("cow","","","","moo",True,"cow","large","0","0","Moo!","")
+npc_sheep = npc("sheep","","","","baaaa",True,"sheep","wooley","0","0","Baa!","")
+npc_town_guard = npc("Joneses","Keeneye","Town Guard","Keeps an eye on the gate...","hello",False,"human","man","0","chain mail","Prepare to die, invader!","")

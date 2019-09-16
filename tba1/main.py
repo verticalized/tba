@@ -8,11 +8,12 @@ from colorama import Fore, Back, Style
 init(autoreset=True)
 
 import pygame
-pygame.init()
 
+pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('MS Gothic', 21)
-pygame.key.set_repeat(1000000,1000000)
+myfont = pygame.font.SysFont('MS Gothic', 21) # you have to call this at the start if you want to use fonts
+# pygame.key.set_repeat(100000,100000) # held key repeat timer
+
 #################--IMPORT_GAME_MODULES--####################
 
 from scene_module import *
@@ -23,15 +24,16 @@ from equipment_module import *
 from spell_module import *
 
 from enemy_module import *
+from party_member_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 has_moved = False
-check_for_combat = False
+check_for_combat = True
 restock_shops = False
 restock_ticks = 0
 
@@ -55,7 +57,6 @@ in_submenu = False
 in_submenu2 = False
 in_submenu3 = False
 in_submenu4 = False
-
 
 in_submenu_equip = False
 in_submenu_equip2 = False
@@ -308,35 +309,29 @@ class input_option:
         if is_default_option == True:
             input_option_list.append(self)
 
-#       commands:  north (w)  south (s)  east (d)  west (a)
-#        down (f)  up (r)  search (j)  equip (e)  stats (q)  skills (Q)
-#        drop (l)  pickup (p)  pickupall (P)  consume (k)  inv (i)  spellbook (b)  cast (c)  wait (W)  camp (u)  quit ")
-
-
-
-input_option_talk = input_option("talk","t",True,True)
-input_option_equip = input_option("equip","e",True,True)
-input_option_gear = input_option("gear","w",True,True)
-input_option_stats = input_option("stats","q",True,True)
-input_option_skills = input_option("skills","Q",True,True)
-input_option_search = input_option("search","j",True,True)
-input_option_drop = input_option("drop","l",True,True)
-input_option_pickup = input_option("pickup","p",True,True)
-input_option_pickupall = input_option("pickupall","P",True,True)
-input_option_consume = input_option("consume","k",True,True)
-input_option_inv = input_option("inv","i",True,True)
-input_option_spellbook = input_option("spellbook","b",True,True)
-input_option_cast = input_option("cast","c",True,True)
-input_option_wait = input_option("wait","W",True,True)
-
-input_option_help = input_option("help","H",True,True)
-input_option_quit = input_option("quit","Z",True,True)
-input_option_camp = input_option("camp","u",False,True)
-
-input_option_dev = input_option("dev","dv",True,False)
-input_option_dev_xp = input_option("/xp","/xp",True,False)
-input_option_dev_tp = input_option("/tp","/tp",True,False)
-input_option_dev_gp = input_option("/gp","/gp",True,False)
+        # input_option_talk = input_option("talk","t",True,True)
+        # input_option_equip = input_option("equip","e",True,True)
+        # input_option_gear = input_option("gear","w",True,True)
+        # input_option_stats = input_option("stats","q",True,True)
+        # input_option_skills = input_option("skills","Q",True,True)
+        # input_option_search = input_option("search","j",True,True)
+        # input_option_drop = input_option("drop","l",True,True)
+        # input_option_pickup = input_option("pickup","p",True,True)
+        # input_option_pickupall = input_option("pickupall","P",True,True)
+        # input_option_consume = input_option("consume","k",True,True)
+        # input_option_inv = input_option("inv","i",True,True)
+        # input_option_spellbook = input_option("spellbook","b",True,True)
+        # input_option_cast = input_option("cast","c",True,True)
+        # input_option_wait = input_option("wait","W",True,True)
+        #
+        # input_option_help = input_option("help","H",True,True)
+        # input_option_quit = input_option("quit","Z",True,True)
+        # input_option_camp = input_option("camp","u",False,True)
+        #
+        # input_option_dev = input_option("dev","dv",True,False)
+        # input_option_dev_xp = input_option("/xp","/xp",True,False)
+        # input_option_dev_tp = input_option("/tp","/tp",True,False)
+        # input_option_dev_gp = input_option("/gp","/gp",True,False)
 
 
 class combat_option:
@@ -363,7 +358,7 @@ class quest:
 quest_1 = quest("The Bandit Menace","eliminate the local bandit population",200,80,[],False,0,True,10)
 
 # place npcs in the world
-
+dismurth_gates.npc_list.append(npc_town_guard)
 dismurth_square.npc_list.append(npc_jenkins)
 dismurth_market.npc_list.append(npc_john_doe)
 dismurth_market.npc_list.append(npc_jane_doe)
@@ -374,9 +369,18 @@ dismurth_smith.npc_list.append(npc_dismurth_smith)
 forest_cabin.npc_list.append(npc_wizard_jim)
 forest_cabin.npc_list.append(npc_wizard_tilly)
 
+grassland_2.npc_list.append(npc_cow)
+grassland_2.npc_list.append(npc_sheep)
+grassland_4.npc_list.append(npc_sheep)
+grassland_5.npc_list.append(npc_cow)
+grassland_8.npc_list.append(npc_cow)
+
 ################################
 
 # give npc dialouge options
+
+npc_town_guard.dialouge_options_list.append(dialouge_talk)
+npc_town_guard.dialouge_options_list.append(dialouge_gf)
 
 npc_jenkins.dialouge_options_list.append(dialouge_talk)
 npc_jenkins.dialouge_options_list.append(dialouge_gf)
@@ -413,6 +417,21 @@ npc_wizard_tilly.dialouge_options_list.append(dialouge_talk)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_weapon)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_helmet)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_shield)
+
+npc_cow.dialouge_options_list.append(dialouge_talk)
+npc_cow.dialouge_options_list.append(dialouge_attack)
+
+npc_sheep.dialouge_options_list.append(dialouge_talk)
+npc_sheep.dialouge_options_list.append(dialouge_attack)
+
+####################-NPC COMBAT ENCOUNTERS--#########################
+
+npc_jenkins.combat_enemy_list.append(hobgoblin)
+npc_town_guard.combat_enemy_list.append(town_guard)
+npc_jenkins.combat_enemy_list.append(cow)
+npc_jenkins.combat_enemy_list.append(sheep)
+npc_cow.combat_enemy_list.append(cow)
+npc_sheep.combat_enemy_list.append(sheep)
 
 #######################--SHOP INVENTORIES--############################
 
@@ -603,13 +622,9 @@ big_slug.spellbook.append(slime)
 
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
-forest_c.scene_inventory.append(ground_oak_key)
+forest_1.scene_inventory.append(ground_oak_key)
 
 fortress.scene_inventory.append(ground_certificate_of_passage)
-
-####################-NPC COMBAT ENCOUNTERS--#########################
-
-npc_jenkins.combat_enemy_list.append(hobgoblin)
 
 ########################################------LISTS------###############################################
 
@@ -643,24 +658,23 @@ helmet_inventory = []
 shield_inventory = []
 spell_inventory = []
 
-inventory.append(pear)
-inventory.append(mushroom)
+
 
 #
-spell_inventory.append(fireblast)
-spell_inventory.append(snare)
-
-weapon_inventory.append(super_bird_sword)
-weapon_inventory.append(gladius)
-
-armor_inventory.append(iron_chain_mail)
-armor_inventory.append(steel_chain_mail)
-
-helmet_inventory.append(iron_helmet)
-helmet_inventory.append(steel_helmet)
-
-shield_inventory.append(iron_square_shield)
-shield_inventory.append(steel_square_shield)
+# spell_inventory.append(fireblast)
+# spell_inventory.append(snare)
+#
+# weapon_inventory.append(super_bird_sword)
+# weapon_inventory.append(gladius)
+#
+# armor_inventory.append(iron_chain_mail)
+# armor_inventory.append(steel_chain_mail)
+#
+# helmet_inventory.append(iron_helmet)
+# helmet_inventory.append(steel_helmet)
+#
+# shield_inventory.append(iron_square_shield)
+# shield_inventory.append(steel_square_shield)
 
 ####################################################################
 
@@ -765,13 +779,15 @@ cursor_height = 8
 map_tile_width = 32
 map_tile_height = 32
 
-char_width = 16
-char_height = 16
+char_width = 10
+char_height = 10
 
 enemy_width = 32
 enemy_height = 32
 
 vel = 16
+
+##############################--GUI / GRAPHICS FUNCTIONS--#################################
 
 def func_blit_list(list_object,list,gui_val):
     list_object_number = 0
@@ -856,9 +872,11 @@ def func_blit_title(title_string,gui_val):
     pygame.draw.rect(win_map, (100,100,100), (32+((gui_val-1)*200), 0, 136, 16))
     win_map.blit(blit_title,(32+((gui_val-1)*200),0))
 
-
+##############################--MAIN GRAPHICS FUNCTION--################################
+#########################################################################################
 
 def func_refresh_pygame(battle_intro):
+    battle_intro_ticks = 0
     if dev_mode >= 2:
         print("\nrefreshing pygame window//\n")
 
@@ -900,24 +918,108 @@ def func_refresh_pygame(battle_intro):
             if tile_b < 0:
                 tile_b = 0
 
+            tile_r_2 = tile_r - 20
+            tile_g_2 = tile_g - 20
+            tile_b_2 = tile_b - 20
+
+            if tile_r_2 >= 255:
+                tile_r_2 = 255
+            if tile_g_2 >= 255:
+                tile_g_2 = 255
+            if tile_b_2 >= 255:
+                tile_b_2 = 255
+            if tile_r_2 < 0:
+                tile_r_2 = 0
+            if tile_g_2 < 0:
+                tile_g_2 = 0
+            if tile_b_2 < 0:
+                tile_b_2 = 0
+
             pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)), map_tile_width, map_tile_height))
+            if scene_type.indoors == True:
+                pygame.draw.rect(win_map, (tile_r_2,tile_g_2,tile_b_2), ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)), map_tile_width-4, map_tile_height-12))
+            if len(scene_type.npc_list) == 1:
+                pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-4) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
+            if len(scene_type.npc_list) > 1:
+                pygame.draw.rect(win_map, (182,0,0), ( ((cx+6) + ((scene_type.xpos - steps_x)*32)), ((cy+6) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
+                pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
 
     # pygame.draw.rect(win_map, (255,0,0), (((steps_x)*32)+8, ((steps_y)*32)+8, char_width, char_height))
-    pygame.draw.rect(win_map, (255,0,0), (cx-8, cy-8, char_width, char_height))
+    pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
 
     if battle_intro == True:
         battle_intro_ticks = 0
     while battle_intro == True:
-        while battle_intro_ticks < 48:
+        pygame.time.delay(100)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_start = 0
+                battle_intro = False
+                break
+
+        while battle_intro_ticks < 18:
+            pygame.time.delay(100)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_start = 0
+                    battle_intro_ticks = 18
+                    break
             for scene_type in all_scene_types:
                 if scene_type.zpos == steps_z:
-                    pygame.draw.rect(win_map, (scene_type.tile_r,scene_type.tile_g,scene_type.tile_b), ( (((scene_type.xpos)*16)), ((scene_type.ypos)*16)+(battle_intro_ticks*16), map_tile_width, map_tile_height))
+                    if time < 600:
+                        tile_r = scene_type.tile_r + (time2/10)
+                        tile_g = scene_type.tile_g + (time2/10)
+                        tile_b = scene_type.tile_b + (time2/10)
+                    if time >= 600 and time < 1200:
+                        tile_r = (scene_type.tile_r + 60) - (time2/10)
+                        tile_g = (scene_type.tile_g + 60) - (time2/10)
+                        tile_b = (scene_type.tile_b + 60) - (time2/10)
+                    if time >= 1200 and time < 1800:
+                        tile_r = scene_type.tile_r - (time2/10)
+                        tile_g = scene_type.tile_g - (time2/10)
+                        tile_b = scene_type.tile_b - (time2/10)
+                    if time >= 1800:
+                        tile_r = (scene_type.tile_r - 60) + (time2/10)
+                        tile_g = (scene_type.tile_g - 60) + (time2/10)
+                        tile_b = (scene_type.tile_b - 60) + (time2/10)
+
+                    if tile_r >= 255:
+                        tile_r = 255
+                    if tile_g >= 255:
+                        tile_g = 255
+                    if tile_b >= 255:
+                        tile_b = 255
+                    if tile_r < 0:
+                        tile_r = 0
+                    if tile_g < 0:
+                        tile_g = 0
+                    if tile_b < 0:
+                        tile_b = 0
+
+                    tile_r_2 = tile_r - 20
+                    tile_g_2 = tile_g - 20
+                    tile_b_2 = tile_b - 20
+
+                    if tile_r_2 >= 255:
+                        tile_r_2 = 255
+                    if tile_g_2 >= 255:
+                        tile_g_2 = 255
+                    if tile_b_2 >= 255:
+                        tile_b_2 = 255
+                    if tile_r_2 < 0:
+                        tile_r_2 = 0
+                    if tile_g_2 < 0:
+                        tile_g_2 = 0
+                    if tile_b_2 < 0:
+                        tile_b_2 = 0
+
+                    pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32*random.randint(1,3))), ((cy-16) + ((scene_type.ypos - steps_y)*(32*random.randint(1,3)))), map_tile_width, map_tile_height))
+
             battle_intro_ticks += 1
             pygame.display.update()
             print("/")
-            sleep(0.1)
 
-        if battle_intro_ticks == 48:
+        if battle_intro_ticks >= 18:
             battle_intro = False
             break
 
@@ -1153,6 +1255,9 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
                 pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
+                pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
+                pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
+
                 if in_menu_item == True:
                     func_blit_list(item,inventory,2)
                 if in_menu_weapon == True:
@@ -1166,23 +1271,6 @@ def func_refresh_pygame(battle_intro):
                 if in_menu_spell == True:
                     func_blit_list(spell,spell_inventory,2)
 
-                pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
-                pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
-
-                win_map.blit(txt_1,(232,(1*16)))
-                win_map.blit(txt_2,(232,(2*16)))
-                win_map.blit(txt_3,(232,(3*16)))
-                win_map.blit(txt_4,(232,(4*16)))
-                win_map.blit(txt_5,(232,(5*16)))
-                win_map.blit(txt_6,(232,(6*16)))
-                win_map.blit(txt_7,(232,(7*16)))
-                win_map.blit(txt_8,(232,(8*16)))
-                win_map.blit(txt_9,(232,(9*16)))
-                win_map.blit(txt_10,(232,(10*16)))
-                win_map.blit(txt_11,(232,(11*16)))
-                win_map.blit(txt_12,(232,(12*16)))
-
-
                 func_blit_menu_cursor(2)
                 func_blit_title("Drop 2:",2)
 
@@ -1193,27 +1281,9 @@ def func_refresh_pygame(battle_intro):
     func_blit_HUD(1)
     func_blit_enemy_HUD(1)
 
-                # n_submenu_equip = False@@
-                # in_submenu_equip2 = False@@
-                #
-                # in_submenu_cast = False@
-                # in_submenu_drop = False@
-                # in_submenu_drop2 = False@
-                # in_submenu_pickup = False@ #rework needed
-                #
-                # in_submenu_talk = False@@
-                # in_submenu_talk2 = False@@
-                #
-                # in_submenu_buy3 = False@@
-                #
-                # in_submenu_sell3 = False@@
-                # in_submenu_sell4 = False@@
-                #
-                # in_submenu_consume = False@
-                # in_submenu_make = False@ #rework needed
-
     pygame.display.update()
 
+#########################################################################################
 ##############################--SHOP INVENTORY FUNCTIONS--##############################
 
 def func_shop_restock():
@@ -1239,6 +1309,17 @@ def func_shop_restock():
                         print(item.name + " appended to " + npc.first_name + npc.last_name)
 
 #############################----COMBAT FUNCTIONS----#########################
+
+def func_player_mp_change(amount,is_add):
+    if is_add == True:
+        player1.mp += amount
+        if player1.mp > player1.max_mp:
+            player1.mp = player1.max_mp
+    if is_add == False:
+        player1.mp -= amount
+        if player1.mp < 0:
+            player1.mp = 0
+
 def func_choose_combat_option():
     target_combat_option = "0"
     selected_combat_option = "0"
@@ -1267,19 +1348,31 @@ def func_choose_combat_option():
     return selected_combat_option
 
 def func_choose_enemy():
-
+    global in_fight
     #rolls for which enemies to fight
-
+    compatible_enemies_found = False
     enemy_count = 0
     enemy_count = random.randint(1,4)
     while len(current_enemies) < enemy_count:
+        if dev_mode >= 1:
+            print("looking for " + str(enemy_count) + " enemies")
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_start = 0
         for scene_type in location:
+            scene_level = scene_type.difficulty
+            for enemy_stats in all_game_enemies:
+                if enemy_stats.level <= scene_level and enemy_stats.level >= scene_level - 10:
+                    compatible_enemies_found = True
+        if compatible_enemies_found == True:
             for enemy_stats in all_game_enemies:
                 encounter_chance = 0
-                if enemy_stats.level <= scene_type.difficulty:
-                    encounter_chance = random.randint(0,10)
-                    if encounter_chance == 1 and enemy_stats not in current_enemies:
-                        current_enemies.append(enemy_stats)
+                encounter_chance = random.randint(1,10)
+                if encounter_chance == 1 and enemy_stats not in current_enemies and len(current_enemies) < enemy_count and enemy_stats.level <= scene_level and enemy_stats.level >= scene_level - 10:
+                    current_enemies.append(enemy_stats)
+        if compatible_enemies_found == False:
+            print("no compatitible enemies found for difficulty level of scene!")
+            in_fight = False
 
 def func_enemy_dead(enemy_stats):
 
@@ -1324,15 +1417,14 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
-                        loot_chance_item = random.randint(0,1)
+                        loot_chance_item = random.randint(0,10)
                         if loot_chance_item == 1:
                             for ground_item in all_ground_game_items:
                                 if ground_item.name == item.name:
                                     scene_type.scene_inventory.append(ground_item)
                                     print(enemy_stats.name + " dropped " + item.print_name + " \n")
-                                    sleep(sleep_time_fast)
-                            loot_amount_item = random.randint(0,5)
-                            if loot_amount_item != 5:
+                            loot_amount_item = random.randint(0,10)
+                            if loot_amount_item == 10:
                                 break
 
             if loot_spawn_chance_weapon == 1:
@@ -1457,7 +1549,7 @@ def func_player_melee(status_str,status_atk):
             player_weapon_level = 0
             for weapon in equiped_weapon:
                 player_weapon_level = weapon.level
-            player_damage = (player1.attack + player1.attack_bonus + status_atk + player_weapon_level) * (player1.strength + status_str + player1.strength_bonus + player_weapon_level)
+            player_damage = (player1.attack + player1.attack_bonus + status_atk + player_weapon_level) + (player1.strength + status_str + player1.strength_bonus + player_weapon_level) + (random.randint(1,player1.level) * (player1.level // 2))
             if player_damage > (enemy_stats.hp):
                 player_damage = (enemy_stats.hp)
             enemy_stats.hp = enemy_stats.hp - player_damage
@@ -1482,152 +1574,156 @@ def func_player_spell(status_mgk):
             spell_found = True
 
         if spell_found == True:
-            if spell.effect == 0 or spell.effect == 1:
-                target = func_get_target()
-                for enemy_stats in current_enemies:
-                    if enemy_stats.name == target:
-                        spell_damage = spell.damage
-                        print("\nyou cast " + spell.print_name)
-                        sleep(sleep_time)
-                        for enemy_stats in current_enemies:
-                            if enemy_stats.name == target:
-                                player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
-                                if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
-                                    if spell.attribute == enemy_stats.weakness:
-                                        print("it's super effective")
+            if player1.mp >= spell.mp_cost:
+                func_player_mp_change(spell.mp_cost,False)
+                if spell.effect == 0 or spell.effect == 1:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            spell_damage = spell.damage
+                            print("\nyou cast " + spell.print_name)
+                            sleep(sleep_time)
+                            for enemy_stats in current_enemies:
+                                if enemy_stats.name == target:
+                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                        if spell.attribute == enemy_stats.weakness:
+                                            print("it's super effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage * 2
+                                        if spell.attribute == enemy_stats.attribute:
+                                            print("it's not very effective")
+                                            sleep(sleep_time)
+                                            player_damage = player_damage // 2
+                                    if player_damage > (enemy_stats.hp):
+                                        player_damage = (enemy_stats.hp)
+                                    enemy_stats.hp = enemy_stats.hp - player_damage
+                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                    if spell.effect == 1:
+                                        player_healing = player_spell_damage // 2
+                                        player_stats.hp = player_stats.hp + player_healing
+                                        if player_stats.hp > player_stats.maxhp:
+                                            player_stats.hp = player_stats.maxhp
+                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
+                                    sleep(sleep_time)
+                                    player1.magic_xp += (player1.magic + spell.xp + spell.damage + (player_damage // 100))
+                if spell.effect == 100:
+                    spell_healing = spell.damage
+                    print("you cast " + spell.print_name)
+                    player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                    sleep(sleep_time)
+                    player_healing = (player1.level + spell_healing) * (player1.magic + player1.magic_bonus + status_mgk)
+                    player_stats.hp = player_stats.hp + player_healing
+                    if player_stats.hp > player_stats.maxhp:
+                        player_stats.hp = player_stats.maxhp
+                    print("\nyou heal for:" + Fore.GREEN + Style.BRIGHT + str(player_healing))
+                    sleep(sleep_time)
+                    player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                if spell.effect == 2:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            if frozen not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(frozen)
+                                print("you freeze the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                        if spell.effect == 1:
+                                            player_healing = player_spell_damage // 2
+                                            player_stats.hp = player_stats.hp + player_healing
+                                            if player_stats.hp > player_stats.maxhp:
+                                                player_stats.hp = player_stats.maxhp
+                                            print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
                                         sleep(sleep_time)
-                                        player_damage = player_damage * 2
-                                    if spell.attribute == enemy_stats.attribute:
-                                        print("it's not very effective")
+
+                            sleep(sleep_time)
+                if spell.effect == 3:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                            if poisoned not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(poisoned)
+                                print("you poison the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                        if spell.effect == 1:
+                                            player_healing = player_spell_damage // 2
+                                            player_stats.hp = player_stats.hp + player_healing
+                                            if player_stats.hp > player_stats.maxhp:
+                                                player_stats.hp = player_stats.maxhp
+                                            print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
                                         sleep(sleep_time)
-                                        player_damage = player_damage // 2
-                                if player_damage > (enemy_stats.hp):
-                                    player_damage = (enemy_stats.hp)
-                                enemy_stats.hp = enemy_stats.hp - player_damage
-                                print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
-                                if spell.effect == 1:
-                                    player_healing = player_spell_damage // 2
-                                    player_stats.hp = player_stats.hp + player_healing
-                                    if player_stats.hp > player_stats.maxhp:
-                                        player_stats.hp = player_stats.maxhp
-                                    print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
-                                sleep(sleep_time)
-                                player1.magic_xp += (player1.magic + spell.xp + spell.damage + (player_damage // 100))
-            if spell.effect == 100:
-                spell_healing = spell.damage
-                print("you cast " + spell.print_name)
-                player1.magic_xp += (player1.magic + spell.xp + spell.damage)
-                sleep(sleep_time)
-                player_healing = (player1.level + spell_healing) * (player1.magic + player1.magic_bonus + status_mgk)
-                player_stats.hp = player_stats.hp + player_healing
-                if player_stats.hp > player_stats.maxhp:
-                    player_stats.hp = player_stats.maxhp
-                print("\nyou heal for:" + Fore.GREEN + Style.BRIGHT + str(player_healing))
-                sleep(sleep_time)
-                player1.magic_xp += (player1.magic + spell.xp + spell.damage)
-            if spell.effect == 2:
-                target = func_get_target()
-                for enemy_stats in current_enemies:
-                    if enemy_stats.name == target:
-                        print("you cast " + spell.print_name)
-                        if frozen not in enemy_stats.status_effect_list:
-                            enemy_stats.status_effect_list.append(frozen)
-                            print("you freeze the " + enemy_stats.name)
-                        if spell.utility == False:
-                            for enemy_stats in current_enemies:
-                                if enemy_stats.name == target:
-                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
-                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
-                                        if spell.attribute == enemy_stats.weakness:
-                                            print("it's super effective")
-                                            sleep(sleep_time)
-                                            player_damage = player_damage * 2
-                                        if spell.attribute == enemy_stats.attribute:
-                                            print("it's not very effective")
-                                            sleep(sleep_time)
-                                            player_damage = player_damage // 2
-                                    if player_damage > (enemy_stats.hp):
-                                        player_damage = (enemy_stats.hp)
-                                    enemy_stats.hp = enemy_stats.hp - player_damage
-                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
-                                    if spell.effect == 1:
-                                        player_healing = player_spell_damage // 2
-                                        player_stats.hp = player_stats.hp + player_healing
-                                        if player_stats.hp > player_stats.maxhp:
-                                            player_stats.hp = player_stats.maxhp
-                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
-                                    sleep(sleep_time)
+                            sleep(sleep_time)
+                if spell.effect == 4:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                            if burning not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(burning)
+                                print("you burn the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+                                        if spell.effect == 1:
+                                            player_healing = player_spell_damage // 2
+                                            player_stats.hp = player_stats.hp + player_healing
+                                            if player_stats.hp > player_stats.maxhp:
+                                                player_stats.hp = player_stats.maxhp
+                                            print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
+                                        sleep(sleep_time)
 
-                        sleep(sleep_time)
-            if spell.effect == 3:
-                target = func_get_target()
-                for enemy_stats in current_enemies:
-                    if enemy_stats.name == target:
-                        print("you cast " + spell.print_name)
-                        player1.magic_xp += (player1.magic + spell.xp + spell.damage)
-                        if poisoned not in enemy_stats.status_effect_list:
-                            enemy_stats.status_effect_list.append(poisoned)
-                            print("you poison the " + enemy_stats.name)
-                        if spell.utility == False:
-                            for enemy_stats in current_enemies:
-                                if enemy_stats.name == target:
-                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
-                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
-                                        if spell.attribute == enemy_stats.weakness:
-                                            print("it's super effective")
-                                            sleep(sleep_time)
-                                            player_damage = player_damage * 2
-                                        if spell.attribute == enemy_stats.attribute:
-                                            print("it's not very effective")
-                                            sleep(sleep_time)
-                                            player_damage = player_damage // 2
-                                    if player_damage > (enemy_stats.hp):
-                                        player_damage = (enemy_stats.hp)
-                                    enemy_stats.hp = enemy_stats.hp - player_damage
-                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
-                                    if spell.effect == 1:
-                                        player_healing = player_spell_damage // 2
-                                        player_stats.hp = player_stats.hp + player_healing
-                                        if player_stats.hp > player_stats.maxhp:
-                                            player_stats.hp = player_stats.maxhp
-                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
-                                    sleep(sleep_time)
-                        sleep(sleep_time)
-            if spell.effect == 4:
-                target = func_get_target()
-                for enemy_stats in current_enemies:
-                    if enemy_stats.name == target:
-                        print("you cast " + spell.print_name)
-                        player1.magic_xp += (player1.magic + spell.xp + spell.damage)
-                        if burning not in enemy_stats.status_effect_list:
-                            enemy_stats.status_effect_list.append(burning)
-                            print("you burn the " + enemy_stats.name)
-                        if spell.utility == False:
-                            for enemy_stats in current_enemies:
-                                if enemy_stats.name == target:
-                                    player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
-                                    if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
-                                        if spell.attribute == enemy_stats.weakness:
-                                            print("it's super effective")
-                                            sleep(sleep_time)
-                                            player_damage = player_damage * 2
-                                        if spell.attribute == enemy_stats.attribute:
-                                            print("it's not very effective")
-                                            sleep(sleep_time)
-                                            player_damage = player_damage // 2
-                                    if player_damage > (enemy_stats.hp):
-                                        player_damage = (enemy_stats.hp)
-                                    enemy_stats.hp = enemy_stats.hp - player_damage
-                                    print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
-                                    if spell.effect == 1:
-                                        player_healing = player_spell_damage // 2
-                                        player_stats.hp = player_stats.hp + player_healing
-                                        if player_stats.hp > player_stats.maxhp:
-                                            player_stats.hp = player_stats.maxhp
-                                        print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
-                                    sleep(sleep_time)
-
-                        sleep(sleep_time)
+                            sleep(sleep_time)
+            else:
+                print(Fore.RED + "\nNOT ENOUGH MANA!\n")
     func_check_level()
 
 def func_player_spell_non_combat(cast_spell):
@@ -1728,10 +1824,10 @@ def func_check_player_dead():
         in_fight = False
         del current_enemies[:]
         game_start = 0
-        dead_timer = 100
-        while deadtimer > 0:
+        dead_timer = 10
+        while dead_timer > 0:
             dead_timer -= 1
-            print("\nYOU ARE DEAD! \n")
+            print("YOU ARE DEAD!")
 
 def func_enemy_status_check():
 
@@ -1804,12 +1900,15 @@ def func_enemy_status_check():
             func_enemy_attack(enemy_stats,status_str_bonus,status_atk_bonus,status_mgk_bonus,status_def_bonus)
 
 def func_check_enemy_dead():
+    global npc_enemy_fname
+    global npc_enemy_lname
     global in_fight
     global npc_fight
     for enemy_stats in current_enemies:
         if enemy_stats.hp <= 0:
             current_enemies.remove(enemy_stats)
             func_enemy_dead(enemy_stats)
+
     if len(current_enemies) == 0:
         in_fight = False
         for scene_type in location:
@@ -1927,18 +2026,13 @@ def func_enemy_melee(enemy_stats):
         enemy_damage = 0
         for armor in equiped_armor:
             player_armor_level = armor.level
-        enemy_damage = (enemy_stats.attack * enemy_stats.strength)
+        enemy_damage = (enemy_stats.attack + enemy_stats.strength + (random.randint(1,5) * (enemy_stats.level // 2)))
         enemy_damage = (enemy_damage * enemy_damage)//(player_armor_level + player1.defence + player1.defence_bonus)
         player_stats.hp = player_stats.hp - enemy_damage
         print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_damage) + Style.RESET_ALL + " melee damage!" )
         sleep(sleep_time)
         player1.defence_xp += (player1.defence * (enemy_damage))
-        if player_stats.hp <= 0:
-            print("\nYOU ARE DEAD \n")
-            in_fight = False
-            del current_enemies[:]
-            game_start = 0
-
+        func_check_player_dead()
 #############################--DIALOUGE FUNCTIONS--#######################
 
 def func_shop(gear,npc_gear_inv):
@@ -2306,6 +2400,7 @@ def func_cast(gear,player_gear_inv):
 
             in_submenu = False
             in_submenu_cast = False
+
 #############################----SCENE_FUNCTIONS----#########################
 
 def func_tp(x,y,z):
@@ -3265,7 +3360,6 @@ def location_desc():
     func_check_light()
     if dev_mode >= 1:
         print("\n///   DEV MODE " + str(dev_mode) +"!  ///\n")
-
         if dev_mode >= 2:
             # for player_stats in players:
             #     print("status effect: ", player_stats.status_effect)
@@ -3313,7 +3407,7 @@ def location_desc():
     for scene_type in location:
         scene_npc_count = 0
         scene_animal_count = 0
-
+        print(Fore.YELLOW + Style.BRIGHT + "\n///////////// ///////////// ////////////\n")
         print("you are in " + scene_type.name + "\n")
         sleep(sleep_time_fast)
         print("it is " + scene_type.temp + "" + scene_type.light + ".\n")
@@ -3444,17 +3538,22 @@ if dev_mode >= 1:
 ########## GAME START #########
 game_start = 1
 
-print(Fore.RED + "\nWelcome to Bill & Phoebe's Adventure! \n")
+print(Fore.RED + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to Bill & Phoebe's Adventure! \n")
 
 print("\nversion: " + version + " \n")
 
+print("\n  Controls:\n  W,A,S,D: Move \n  SPACE: Menu\n  E: Select \n  Q: Back")
+
+print("\npress the D key to start! \n")
 # if dev_mode == 0:
 #     name = input("Please enter your name: \n")
 #     for player_stats in players:
 #         player_stats.name = name
 
 while game_start == 1:
+
     pygame.time.delay(100)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_start = 0
@@ -3469,11 +3568,11 @@ while game_start == 1:
 
     keys = pygame.key.get_pressed()
 
-    if has_moved == True:
+    if has_moved == True or in_fight == True:
         if in_fight == False:
             location_desc()
             func_HUD()
-        if check_for_combat == True:
+        if npc_fight == False and check_for_combat == True:
             for scene_type in location:
                 if scene_type.safe == False:
                     if in_fight == False:
@@ -3485,130 +3584,160 @@ while game_start == 1:
                             in_fight = False
                         if combat_chance <= 5:
                             in_fight = True
-                if in_fight == True: #init combat
-                    if npc_fight == False:
-                        func_choose_enemy()
-                    npc_fight = False
-                    for enemy_stats in current_enemies:
-                        enemy_stats.drop_table_items.extend(items_drop_table)
-                        enemy_stats.level += (random.randint(0,5))
-                        enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
-                        enemy_stats.hp = (0 + enemy_stats.maxhp)
-                        enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
-                    player_turns = 10
-                    func_refresh_pygame(True)
-                    print("\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
-                    print("\nLocation: " + scene_type.name)
-                    print("\nEnemy stats:")
-                    for enemy_stats in current_enemies:
-                        status_list = []
-                        for status_condition in enemy_stats.status_effect_list:
-                            status_list.append(status_condition.name)
-                        print("Name: " + enemy_stats.name)
-                        print("LVL: " + str(enemy_stats.level))
-                        print("ATT.: " + enemy_stats.print_attribute)
-                        print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
-                        print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
-                        if len(enemy_stats.status_effect_list) != 0:
-                            print("Status: " + str(status_list) + " \n")
-                        else:
-                            print("Status: ['N0NE'] \n")
+        if in_fight == True: #init combat
+            if npc_fight == False:
+                if dev_mode >= 1:
+                    print("choosing enemies")
+                func_choose_enemy()
+                if dev_mode >= 1:
+                    print("enemies chosen")
 
-                    func_HUD()
+            for enemy_stats in current_enemies:
+                if dev_mode >= 1:
+                    print("building drop tables")
+                enemy_stats.drop_table_items.extend(all_game_items)
+                for weapon in all_game_weapons:
+                    if weapon.level <= enemy_stats.level:
+                        enemy_stats.drop_table_weapons.append(weapon)
+                for armor in all_game_armor:
+                    if armor.level <= enemy_stats.level:
+                        enemy_stats.drop_table_armor.append(armor)
+                for helmet in all_game_helmets:
+                    if helmet.level <= enemy_stats.level:
+                        enemy_stats.drop_table_helmets.append(helmet)
+                for shield in all_game_shields:
+                    if shield.level <= enemy_stats.level:
+                        enemy_stats.drop_table_shields.append(shield)
 
-                    while in_fight == True:
-                        pygame.time.delay(100)
-                        for event in pygame.event.get():
-                            if event.type == pygame.QUIT:
-                                game_start = 0
-                                in_fight = False
+                if dev_mode >= 1:
+                    print("modifying enemy stats")
+                enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
+                enemy_stats.hp = (0 + enemy_stats.maxhp)
+                enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
+                if dev_mode >= 1:
+                    print("enemy stats have been calculated")
+            player_turns = 10
+            if dev_mode >= 1:
+                print("playing battle intro")
+            if npc_fight == False:
+                func_refresh_pygame(True)
+            else:
+                func_refresh_pygame(False)
+            npc_fight = False
+            if dev_mode >= 1:
+                print("battle intro finished")
+            print(Fore.RED + "\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
+            print("\nLocation: " + scene_type.name)
+            print("\nEnemy stats:")
+            for enemy_stats in current_enemies:
+                status_list = []
+                for status_condition in enemy_stats.status_effect_list:
+                    status_list.append(status_condition.name)
+                print("Name: " + enemy_stats.name)
+                print("LVL: " + str(enemy_stats.level))
+                print("ATT.: " + enemy_stats.print_attribute)
+                print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
+                print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
+                if len(enemy_stats.status_effect_list) != 0:
+                    print("Status: " + str(status_list) + " \n")
+                else:
+                    print("Status: ['N0NE'] \n")
 
-                        func_check_level()
-                        func_refresh_pygame(False)
-                        keys = pygame.key.get_pressed()
+            func_HUD()
 
-                        if keys[pygame.K_w]:
-                            combat_cursor_pos -= 1
-                            if combat_cursor_pos < 1:
-                                combat_cursor_pos == 1
+            while in_fight == True:
+                pygame.time.delay(100)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        game_start = 0
+                        in_fight = False
 
-                        if keys[pygame.K_s]:
-                            combat_cursor_pos += 1
+                func_check_level()
+                func_refresh_pygame(False)
+                keys = pygame.key.get_pressed()
 
-                        if keys[pygame.K_e]:
-                            if combat_cursor_pos == 3:
-                                in_fight = False
-                                print("you ran away! \n")
-                                del current_enemies[:]
-                                location_desc()
-                            elif combat_cursor_pos == 1:
-                                player_turns -= 1
-                                func_enemy_status_check()
-                                func_player_status_check(True)
-                                func_check_enemy_dead()
-                            elif combat_cursor_pos == 2:
-                                print("\nYour equipped spells: \n")
+                if keys[pygame.K_w]:
+                    combat_cursor_pos -= 1
+                    if combat_cursor_pos < 1:
+                        combat_cursor_pos == 1
+
+                if keys[pygame.K_s]:
+                    combat_cursor_pos += 1
+
+                if keys[pygame.K_e]:
+                    if combat_cursor_pos == 3:
+                        in_fight = False
+                        print("you ran away! \n")
+                        del current_enemies[:]
+                        location_desc()
+                    elif combat_cursor_pos == 1:
+                        player_turns -= 1
+                        func_enemy_status_check()
+                        func_player_status_check(True)
+                        func_check_enemy_dead()
+                    elif combat_cursor_pos == 2:
+                        print("\nYour equipped spells: \n")
+                        for spell in equiped_spells:
+                            print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
+                        print("")
+
+                        print("which spell will you cast? \n")
+
+                        in_submenu = True
+                        in_submenu_cast_combat = True
+                        while in_submenu_cast_combat == True:
+                            pygame.time.delay(100)
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                    game_start = 0
+                                    in_fight = False
+                                    in_submenu = False
+                                    in_submenu_cast_combat = False
+
+                            func_check_level()
+                            func_refresh_pygame(False)
+
+                            keys = pygame.key.get_pressed()
+
+                            if keys[pygame.K_q]:
+                                in_submenu = False
+                                in_submenu_cast_combat = False
+
+                            if keys[pygame.K_w]:
+                                combat_cursor_pos -= 1
+                                if combat_cursor_pos < 1:
+                                    combat_cursor_pos == 1
+
+                            if keys[pygame.K_s]:
+                                combat_cursor_pos += 1
+
+                            if keys[pygame.K_e]:
+
+                                val_combat_spell = combat_cursor_pos
+                                val = val_combat_spell - 1
+                                for spell in spell_inventory:
+                                    if val == spell_inventory.index(spell):
+                                        combat_cast_spell = spell.name
+
+                                has_spell = 0
+
                                 for spell in equiped_spells:
-                                    print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
-                                print("")
+                                    if spell.name == combat_cast_spell:
+                                        has_spell = 1
 
-                                print("which spell will you cast? \n")
+                                func_enemy_status_check()
+                                func_player_status_check(False)
+                                func_check_enemy_dead()
+                                in_submenu = False
+                                in_submenu_cast_combat = False
+                                break
 
-                                in_submenu = True
-                                in_submenu_cast_combat = True
-                                while in_submenu_cast_combat == True:
-                                    pygame.time.delay(100)
-                                    for event in pygame.event.get():
-                                        if event.type == pygame.QUIT:
-                                            game_start = 0
-                                            in_fight = False
-                                            in_submenu = False
-                                            in_submenu_cast_combat = False
+                    elif combat_cursor_pos == 4:
+                        in_fight = False
+                        game_start = 0
 
-                                    func_check_level()
-                                    func_refresh_pygame(False)
-
-                                    keys = pygame.key.get_pressed()
-
-                                    if keys[pygame.K_q]:
-                                        in_submenu = False
-                                        in_submenu_cast_combat = False
-
-                                    if keys[pygame.K_w]:
-                                        combat_cursor_pos -= 1
-                                        if combat_cursor_pos < 1:
-                                            combat_cursor_pos == 1
-
-                                    if keys[pygame.K_s]:
-                                        combat_cursor_pos += 1
-
-                                    if keys[pygame.K_e]:
-
-                                        val_combat_spell = combat_cursor_pos
-                                        val = val_combat_spell - 1
-                                        for spell in spell_inventory:
-                                            if val == spell_inventory.index(spell):
-                                                combat_cast_spell = spell.name
-
-                                        has_spell = 0
-
-                                        for spell in equiped_spells:
-                                            if spell.name == combat_cast_spell:
-                                                has_spell = 1
-
-                                        func_enemy_status_check()
-                                        func_player_status_check(False)
-                                        func_check_enemy_dead()
-                                        in_submenu = False
-                                        in_submenu_cast_combat = False
-                                        break
-
-                            elif combat_cursor_pos == 4:
-                                in_fight = False
-                                game_start = 0
-
-                            else:
-                                print("invalid combat command \n")
+                    else:
+                        print("invalid combat command \n")
 
         has_moved = False
 
@@ -3710,6 +3839,7 @@ while game_start == 1:
         while in_menu == True:
 
             pygame.time.delay(100)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game_start = 0
@@ -3990,6 +4120,7 @@ while game_start == 1:
                             in_submenu = False
                             in_submenu_drop = False
                             break
+
                 elif menu_cursor_pos == 10:
                     print("Which item do you want to pickup? NON FUNCTIONAL COMMAND\n")
                     pickedup_item = "0"
@@ -4308,6 +4439,7 @@ while game_start == 1:
                                                                         in_submenu_talk2 = False
                                                                         in_menu = False
 
+
                                                                 func_check_level()
                                                                 func_refresh_pygame(False)
 
@@ -4377,7 +4509,10 @@ while game_start == 1:
                                                                                             break
 
                                                                                         if dialouge_option.is_talk == True:
-                                                                                            print("you have a conversation")
+                                                                                            if npc.is_animal == True:
+                                                                                                print("You cannot speak with animals")
+                                                                                            else:
+                                                                                                print(npc.talk_text)
                                                                                             in_submenu2 = False
                                                                                             in_submenu_talk2 = False
                                                                                             break
@@ -4462,6 +4597,9 @@ while game_start == 1:
                                                                                             in_fight = True
                                                                                             npc_fight = True
                                                                                             is_talking = False
+                                                                                            in_submenu2 = False
+                                                                                            in_submenu_talk2 = False
+                                                                                            in_menu = False
                                                                                             break
 
                                                                                         if dialouge_option.is_give == True:
@@ -4630,6 +4768,8 @@ while game_start == 1:
         print("\nthe sun has gone down...\n")
         sleep(sleep_time_fast)
 
+    if game_start == 0:
+        break
 
 #end of script
 pygame.quit()
