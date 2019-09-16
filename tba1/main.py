@@ -12,6 +12,7 @@ import pygame
 pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
 myfont = pygame.font.SysFont('MS Gothic', 21) # you have to call this at the start if you want to use fonts
+
 # pygame.key.set_repeat(100000,100000) # held key repeat timer
 
 #################--IMPORT_GAME_MODULES--####################
@@ -253,6 +254,7 @@ super_healing_drop_table.append(super_hp_potion)
 
 for item in all_game_items:
     items_drop_table.append(item)
+
 ##################################--PLAYER--############################################
 
 class player_stats:
@@ -341,6 +343,7 @@ class combat_option:
 combat_option_hit = combat_option("hit")
 combat_option_spell = combat_option("spell")
 combat_option_run = combat_option("run")
+
 ############################################--NPCS/DIALOUGE/QUESTS--#########################################
 
 class quest:
@@ -362,6 +365,7 @@ dismurth_gates.npc_list.append(npc_town_guard)
 dismurth_square.npc_list.append(npc_jenkins)
 dismurth_market.npc_list.append(npc_john_doe)
 dismurth_market.npc_list.append(npc_jane_doe)
+dismurth_market.npc_list.append(npc_doctor)
 dismurth_tower_1f.npc_list.append(npc_wizard_traenus)
 dismurth_tower_gf.npc_list.append(npc_wizard_marbles)
 dismurth_smith.npc_list.append(npc_dismurth_smith)
@@ -423,6 +427,9 @@ npc_cow.dialouge_options_list.append(dialouge_attack)
 
 npc_sheep.dialouge_options_list.append(dialouge_talk)
 npc_sheep.dialouge_options_list.append(dialouge_attack)
+
+npc_doctor.dialouge_options_list.append(dialouge_talk)
+npc_doctor.dialouge_options_list.append(dialouge_heal)
 
 ####################-NPC COMBAT ENCOUNTERS--#########################
 
@@ -658,8 +665,6 @@ helmet_inventory = []
 shield_inventory = []
 spell_inventory = []
 
-
-
 #
 # spell_inventory.append(fireblast)
 # spell_inventory.append(snare)
@@ -684,8 +689,8 @@ equiped_helmet = []
 equiped_shield = []
 equiped_spells = []
 
-
 if dev_mode >= 1:
+
     equiped_helmet.append(bird_hat)
     equiped_shield.append(bird_shield)
     equiped_weapon.append(super_bird_sword)
@@ -706,13 +711,11 @@ if dev_mode >= 1:
     inventory.append(rope)
     inventory.append(torch)
     inventory.append(hp_potion)
+
 else:
+
     equiped_armor.append(rags)
 
-    equiped_spells.append(prayer)
-    equiped_spells.append(snare)
-    equiped_spells.append(poison)
-    equiped_spells.append(burn)
 
 
 ##########--PYGAME--############
@@ -3819,7 +3822,7 @@ while game_start == 1:
                 has_rope = True
                 can_climb = True
         for scene_type in location:
-            if scene_type.has_stairs == True:
+            if scene_type.has_sta       irs == True:
                 can_climb = True
                 has_stairs = True
         if can_climb == True:
@@ -4610,6 +4613,12 @@ while game_start == 1:
 
                                                                                         if dialouge_option.is_quest == True:
                                                                                             print("execute func_quest")
+                                                                                            in_submenu2 = False
+                                                                                            in_submenu_talk2 = False
+                                                                                            break
+                                                                                        if dialouge_option.is_heal == True:
+                                                                                            print("\nHealed by the doctor!\n")
+                                                                                            player1.hp = player1.maxhp
                                                                                             in_submenu2 = False
                                                                                             in_submenu_talk2 = False
                                                                                             break

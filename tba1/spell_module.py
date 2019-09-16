@@ -138,4 +138,4 @@ atk_down_lvl_1 = status_condition("ATK DOWN",1,False,False,False,False,False,Fal
 mgk_down_lvl_1 = status_condition("MGK DOWN",1,False,False,False,False,False,False,False,False,False,False,False,True,False)
 def_down_lvl_1 = status_condition("DEF DOWN",1,False,False,False,False,False,False,False,False,False,False,False,False,True)
 
-knocked_out = status_condition("KO'd",1,False,False,False,False,False,False,False,False,False,True,False,False,False)
+knocked_out = status_condition("KO'd",1,False,False,False,False,False,False,False,False,False,False,False,False,False)

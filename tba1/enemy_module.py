@@ -59,7 +59,8 @@ class enemy_stats:
 
 imp = enemy_stats("imp",2,2,400,400,100,100,1,6,6,100,"fire","holy",[],[],[],[],[],[],0)
 goon = enemy_stats("goon",2,3,550,550,100,100,1,6,4,100,"earth","fire",[],[],[],[],[],[],0)
-mangy_goblin = enemy_stats("mangy goblin",2,4,578,578,100,100,10,8,4,100,"earth","fire",[],[],[],[],[],[],0)
+wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,7,6,100,"earth","water",[],[],[],[],[],[],0)
+ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,7,6,100,"ice","fire",[],[],[],[],[],[],0)
 
 
 goblin = enemy_stats("goblin",2,5,800,800,100,100,1,8,4,100,"earth","fire",[],[],[],[],[],[],0)
