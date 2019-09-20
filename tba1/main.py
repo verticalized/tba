@@ -813,7 +813,6 @@ def func_blit_dialouge_list(list_object,list,gui_val):
         blit_text = myfont.render(list_object.text, False, (0, 0, 0))
         win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
 
-
 def func_blit_menu_cursor(gui_val):
     pygame.draw.rect(win_map, (247,255,0), (((14+((gui_val-1)*200), ((menu_cursor_pos)*16)+8, cursor_width, cursor_height))))
 
@@ -3803,7 +3802,7 @@ while game_start == 1:
                 has_stairs = True
         if can_climb == True:
             for scene_type in location_up:
-                if scene_type.passable == True:
+                if scene_type.passable == True and scene_type.has_stairs == True:
                     steps_z += 1
                     prev_z = steps_z
                     prev_z -= 1
@@ -3822,12 +3821,12 @@ while game_start == 1:
                 has_rope = True
                 can_climb = True
         for scene_type in location:
-            if scene_type.has_sta       irs == True:
+            if scene_type.has_stairs == True:
                 can_climb = True
                 has_stairs = True
         if can_climb == True:
             for scene_type in location_down:
-                if scene_type.passable == True:
+                if scene_type.passable == True and scene_type.has_stairs == True:
                     steps_z -= 1
                     prev_z = steps_z
                     prev_z += 1
@@ -4333,7 +4332,10 @@ while game_start == 1:
                     can_camp = False
                     for item in inventory:
                         if item.name == "tent":
-                            can_camp = True
+                            has_tent = True
+                            for scene_type in location:
+                                if scene_type.safe == True:
+                                    can_camp = True
                             print("You camp untill the next morning, your hp has been restored.")
                             time += 24
                             for player_stats in players:
