@@ -78,7 +78,7 @@ in_submenu_sell4 = False
 in_submenu_use = False
 in_submenu_make = False
 
-
+in_submenu_use_combat = False
 in_submenu_cast_combat = False
 in_submenu_target_combat2 = False
 in_submenu_spell_target_combat2 = False
@@ -345,6 +345,7 @@ class combat_option:
 
 combat_option_hit = combat_option("hit")
 combat_option_spell = combat_option("spell")
+combat_option_item = combat_option("item")
 combat_option_run = combat_option("run")
 
 ############################################--NPCS/DIALOUGE/QUESTS--#########################################
@@ -657,6 +658,7 @@ current_npc = []
 
 combat_option_list.append(combat_option_hit)
 combat_option_list.append(combat_option_spell)
+combat_option_list.append(combat_option_item)
 combat_option_list.append(combat_option_run)
 ##############
 
@@ -767,6 +769,7 @@ txt_helmets = myfont.render('helmets', False, (0, 0, 0))
 txt_shields = myfont.render('shields', False, (0, 0, 0))
 txt_spells = myfont.render('spells', False, (0, 0, 0))
 
+spr_house = pygame.image.load("house1.png")
 
 
 win_map = pygame.display.set_mode((1024,768))
@@ -898,56 +901,62 @@ def func_refresh_pygame(battle_intro):
 
     for scene_type in all_scene_types:
         if scene_type.zpos == steps_z:
-            if time < 600:
-                tile_r = scene_type.tile_r + (time2/10)
-                tile_g = scene_type.tile_g + (time2/10)
-                tile_b = scene_type.tile_b + (time2/10)
-            if time >= 600 and time < 1200:
-                tile_r = (scene_type.tile_r + 60) - (time2/10)
-                tile_g = (scene_type.tile_g + 60) - (time2/10)
-                tile_b = (scene_type.tile_b + 60) - (time2/10)
-            if time >= 1200 and time < 1800:
-                tile_r = scene_type.tile_r - (time2/10)
-                tile_g = scene_type.tile_g - (time2/10)
-                tile_b = scene_type.tile_b - (time2/10)
-            if time >= 1800:
-                tile_r = (scene_type.tile_r - 60) + (time2/10)
-                tile_g = (scene_type.tile_g - 60) + (time2/10)
-                tile_b = (scene_type.tile_b - 60) + (time2/10)
+            if time != -1:
+                if time < 600:
+                    tile_r = scene_type.tile_r + (time2/10)
+                    tile_g = scene_type.tile_g + (time2/10)
+                    tile_b = scene_type.tile_b + (time2/10)
+                if time >= 600 and time < 1200:
+                    tile_r = (scene_type.tile_r + 60) - (time2/10)
+                    tile_g = (scene_type.tile_g + 60) - (time2/10)
+                    tile_b = (scene_type.tile_b + 60) - (time2/10)
+                if time >= 1200 and time < 1800:
+                    tile_r = scene_type.tile_r - (time2/10)
+                    tile_g = scene_type.tile_g - (time2/10)
+                    tile_b = scene_type.tile_b - (time2/10)
+                if time >= 1800:
+                    tile_r = (scene_type.tile_r - 60) + (time2/10)
+                    tile_g = (scene_type.tile_g - 60) + (time2/10)
+                    tile_b = (scene_type.tile_b - 60) + (time2/10)
 
-            if tile_r >= 255:
-                tile_r = 255
-            if tile_g >= 255:
-                tile_g = 255
-            if tile_b >= 255:
-                tile_b = 255
-            if tile_r < 0:
-                tile_r = 0
-            if tile_g < 0:
-                tile_g = 0
-            if tile_b < 0:
-                tile_b = 0
+                if tile_r >= 255:
+                    tile_r = 255
+                if tile_g >= 255:
+                    tile_g = 255
+                if tile_b >= 255:
+                    tile_b = 255
+                if tile_r < 0:
+                    tile_r = 0
+                if tile_g < 0:
+                    tile_g = 0
+                if tile_b < 0:
+                    tile_b = 0
 
-            tile_r_2 = tile_r - 20
-            tile_g_2 = tile_g - 20
-            tile_b_2 = tile_b - 20
+                tile_r_2 = tile_r - 20
+                tile_g_2 = tile_g - 20
+                tile_b_2 = tile_b - 20
 
-            if tile_r_2 >= 255:
-                tile_r_2 = 255
-            if tile_g_2 >= 255:
-                tile_g_2 = 255
-            if tile_b_2 >= 255:
-                tile_b_2 = 255
-            if tile_r_2 < 0:
-                tile_r_2 = 0
-            if tile_g_2 < 0:
-                tile_g_2 = 0
-            if tile_b_2 < 0:
-                tile_b_2 = 0
+                if tile_r_2 >= 255:
+                    tile_r_2 = 255
+                if tile_g_2 >= 255:
+                    tile_g_2 = 255
+                if tile_b_2 >= 255:
+                    tile_b_2 = 255
+                if tile_r_2 < 0:
+                    tile_r_2 = 0
+                if tile_g_2 < 0:
+                    tile_g_2 = 0
+                if tile_b_2 < 0:
+                    tile_b_2 = 0
 
-            pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)), map_tile_width, map_tile_height))
+            win_map.blit(scene_type.tile_sprite, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
+
+            #pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)), map_tile_width, map_tile_height))
+
             if scene_type.indoors == True:
-                pygame.draw.rect(win_map, (tile_r_2,tile_g_2,tile_b_2), ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)), map_tile_width-4, map_tile_height-12))
+                win_map.blit(spr_house, ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+
+                #pygame.draw.rect(win_map, (tile_r_2,tile_g_2,tile_b_2), ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)), map_tile_width-4, map_tile_height-12))
             if len(scene_type.npc_list) == 1:
                 pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-4) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
             if len(scene_type.npc_list) > 1:
@@ -1055,6 +1064,16 @@ def func_refresh_pygame(battle_intro):
             func_blit_combat_cursor(1)
             func_blit_title("Cast:",1)
 
+
+        if in_submenu_use_combat == True:
+
+            pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
+            pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
+
+            func_blit_list(item,inventory,1)
+
+            func_blit_combat_cursor(1)
+            func_blit_title("Cast:",1)
 
         if in_submenu_target_combat2 == True:
 
@@ -2054,6 +2073,7 @@ def func_enemy_melee(enemy_stats):
         blit_player_damage_amount = enemy_damage
         player1.defence_xp += (player1.defence * (enemy_damage))
         func_check_player_dead()
+
 #############################--DIALOUGE FUNCTIONS--#######################
 
 def func_shop(gear,npc_gear_inv):
@@ -2328,19 +2348,20 @@ def func_use(gear,player_gear_inv):
 
             for item in inventory:
                 has_item = False
+                can_eat = False
                 for item in inventory:
                     if eaten_item == item.name:
                         has_item = True
                         if item.edible == True:
                             if item.poisonous == False:
                                 print("you consume " + item.print_name)
-
+                                can_eat = True
                                 player1.hp = player1.hp + item.hp
                                 if player1.hp > player1.maxhp:
                                     player1.hp = player1.maxhp
                             else:
                                 print("\nyou consume " + item.print_name + " !\n")
-
+                                can_eat = True
                                 player1.hp = player1.hp - item.hp
                                 print("you feel sick...")
 
@@ -2349,17 +2370,109 @@ def func_use(gear,player_gear_inv):
                                     game_start = 0
                             inventory.remove(item)
                             break
-                        else:
-                            print("you can't consume " + item.print_name)
+                    if can_eat == False:
+                        print("you can't consume " + item.print_name)
 
-                            break
+                break
 
-            if has_item == False:
-                print("you don't have " + eaten_item)
+            # if has_item == False:
+            #     print("you don't have " + eaten_item)
 
 
             in_submenu = False
             in_submenu_use = False
+
+def func_use_combat(gear,player_gear_inv):
+    global combat_cursor_pos
+    global in_submenu
+    global in_submenu_use_combat
+    eaten_item = "0"
+    for gear in player_gear_inv:
+        if gear in all_game_weapons:
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
+        if gear in all_game_armor:
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
+        if gear in all_game_helmets:
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
+        if gear in all_game_shields:
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
+        if gear in all_game_items:
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + str(gear.value) + " gp. ")
+        if gear in all_game_spells:
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
+
+    in_submenu = True
+    in_submenu_use_combat = True
+    while in_submenu_use_combat == True:
+        pygame.time.delay(100)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_start = 0
+                in_fight = False
+                in_submenu = False
+                in_submenu_use_combat = False
+                in_menu = False
+
+        func_check_level()
+        func_refresh_pygame(False)
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            in_submenu = False
+            in_submenu_use_combat = False
+
+        if keys[pygame.K_w]:
+            combat_cursor_pos -= 1
+            if combat_cursor_pos < 1:
+                combat_cursor_pos == 1
+
+        if keys[pygame.K_s]:
+            combat_cursor_pos += 1
+
+        if keys[pygame.K_e]:
+            has_item = False
+            val_used_item = combat_cursor_pos
+            val_use = val_used_item - 1
+            for gear in player_gear_inv:
+                if val_use == player_gear_inv.index(gear):
+                    eaten_item = gear.name
+
+            for item in inventory:
+                has_item = False
+                can_eat = False
+                for item in inventory:
+                    if eaten_item == item.name:
+                        has_item = True
+                        if item.edible == True:
+                            if item.poisonous == False:
+                                print("you consume " + item.print_name)
+                                can_eat = True
+                                player1.hp = player1.hp + item.hp
+                                if player1.hp > player1.maxhp:
+                                    player1.hp = player1.maxhp
+                            else:
+                                print("\nyou consume " + item.print_name + " !\n")
+                                can_eat = True
+                                player1.hp = player1.hp - item.hp
+                                print("you feel sick...")
+
+                                if player1.hp <= 0:
+                                    print("\nYOU ARE DEAD \n")
+                                    game_start = 0
+                            inventory.remove(item)
+                            break
+                        if can_eat == False:
+                            print("you can't consume " + item.print_name)
+
+                break
+
+            # if has_item == False:
+            #     print("you don't have " + eaten_item)
+
+
+            in_submenu = False
+            in_submenu_use_combat = False
 
 def func_cast(gear,player_gear_inv):
     global menu_cursor_pos
@@ -3590,9 +3703,6 @@ while game_start == 1:
     keys = pygame.key.get_pressed()
 
     if has_moved == True or in_fight == True:
-        if in_fight == False:
-            location_desc()
-            func_HUD()
         if npc_fight == False and check_for_combat == True:
             for scene_type in location:
                 if scene_type.safe == False:
@@ -3686,7 +3796,7 @@ while game_start == 1:
                     combat_cursor_pos += 1
 
                 if keys[pygame.K_e]:
-                    if combat_cursor_pos == 3:
+                    if combat_cursor_pos == 4:
                         in_fight = False
                         print("you ran away! \n")
                         del current_enemies[:]
@@ -3753,13 +3863,25 @@ while game_start == 1:
                                 in_submenu_cast_combat = False
                                 break
 
-                    elif combat_cursor_pos == 4:
+                    elif combat_cursor_pos == 3:
+                        func_use_combat(item,inventory)
+                        func_enemy_status_check()
+                        func_check_enemy_dead()
+
+                    elif combat_cursor_pos == 5:
+                        in_fight = False
+                        game_start = 0
+
+                    elif combat_cursor_pos == 10:
                         in_fight = False
                         game_start = 0
 
                     else:
                         print("invalid combat command \n")
 
+        if in_fight == False:
+            location_desc()
+            func_HUD()
         has_moved = False
 
     func_check_stat_bonus()
@@ -3991,7 +4113,7 @@ while game_start == 1:
                             func_check_stat_bonus()
                             in_submenu = False
                             in_submenu_equip = False
-                            
+
                 elif menu_cursor_pos == 15:
                     for player1 in players:
                         print("|| Stats: \n")

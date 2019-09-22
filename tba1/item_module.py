@@ -30,7 +30,7 @@ class item:
     #rope is unique item used to travel down and up on the z axis below 0
 rope = item(109,"rope",120,False,False,0,"")
     #tent allows player to use "camp" command to heal fully, late game item.
-tent = item(108,"tent",200,True,False,8,"")
+tent = item(108,"tent",200,False,False,8,"")
     #torch changes description text in dark enviroments, need to implement encounter rate change at night and in dark areas
 torch = item(110,"torch",80,False,False,0,"")
 
