@@ -77,7 +77,6 @@ class npc:
 
 npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","0")
 
-
 npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","")
 npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","")
 npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","")

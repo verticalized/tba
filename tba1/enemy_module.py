@@ -90,7 +90,7 @@ giant_snail = enemy_stats("giant snail",14,10,9300,9300,100,100,0,12,2,930,"eart
 giant_spider = enemy_stats("giant spider",33,64,23000,23000,100,100,0,50,2,2300,"earth","fire",[],[],[],[],[],[],0)
 giant_moth = enemy_stats("giant moth",18,5,13400,13400,100,100,0,10,20,100,"earth","air",[],[],[],[],[],[],0)
 
-big_slug = enemy_stats("big slug",1,500,1035000,1035000,100,100,0,0,0,0,"slime","salt",[],[],[],[],[],[],0)#legendary
+big_slug = enemy_stats("big slug",100,500,1035000,1035000,100,100,0,0,0,0,"slime","salt",[],[],[],[],[],[],0)#legendary
 
 skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,22,100,"undead","holy",[],[],[],[],[],[],0)
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0)
@@ -98,4 +98,4 @@ skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,
 ## npc enemies
 cow = enemy_stats("cow",2,2,200,200,100,100,1,3,3,100,"fire","holy",[],[],[],[],[],[],0)
 sheep = enemy_stats("sheep",2,2,100,100,100,100,1,2,2,100,"fire","holy",[],[],[],[],[],[],0)
-town_guard = enemy_stats("town_guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0)
+town_guard = enemy_stats("town guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0)
