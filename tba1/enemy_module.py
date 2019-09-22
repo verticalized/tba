@@ -98,4 +98,4 @@ skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,
 ## npc enemies
 cow = enemy_stats("cow",2,2,200,200,100,100,1,3,3,100,"fire","holy",[],[],[],[],[],[],0)
 sheep = enemy_stats("sheep",2,2,100,100,100,100,1,2,2,100,"fire","holy",[],[],[],[],[],[],0)
-town_guard = enemy_stats("town_guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0)
+town_guard = enemy_stats("town guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0)

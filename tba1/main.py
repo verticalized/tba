@@ -31,7 +31,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 0
+dev_mode = 1
 
 has_moved = False
 check_for_combat = True
@@ -123,9 +123,12 @@ default_drop_table_armor = []
 combat_option_list = []
 input_option_list = []
 
+#blit globals
+
 menu_cursor_pos = 1
 combat_cursor_pos = 1
 
+blit_player_damage_amount = 0
 
 ###########################------COLOUR_VARIABLES-------#############################
 
@@ -845,6 +848,11 @@ def func_blit_HUD(hud_val):
     win_map.blit(blit_HUD_xp,(32+((hud_val-1)*200),(39*16)))
     win_map.blit(blit_HUD_gp,(32+((hud_val-1)*200),(40*16)))
 
+def func_blit_player_damage(hud_val,hud_val_damage,damage):
+    blit_player_damage = myfont.render(str(damage), False, (244, 0, 0))
+    if blit_player_damage_amount > 0:
+        win_map.blit(blit_player_damage,(32+((hud_val-1)*200),(hud_val_damage*16)))
+
 def func_blit_enemy_HUD(hud_val):
     enemy_number = 0
     for enemy_stats in current_enemies:
@@ -1033,9 +1041,9 @@ def func_refresh_pygame(battle_intro):
         pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
         func_blit_list(combat_option,combat_option_list,1)
-
         func_blit_combat_cursor(1)
         func_blit_title("Battle:",1)
+
 
         if in_submenu_cast_combat == True:
 
@@ -1047,7 +1055,14 @@ def func_refresh_pygame(battle_intro):
             func_blit_combat_cursor(1)
             func_blit_title("Cast:",1)
 
+
         if in_submenu_target_combat2 == True:
+
+            pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
+            pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
+
+            func_blit_list(combat_option,combat_option_list,1)
+            func_blit_title("Battle:",1)
 
             pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
@@ -1282,7 +1297,7 @@ def func_refresh_pygame(battle_intro):
 
     func_blit_HUD(1)
     func_blit_enemy_HUD(1)
-
+    func_blit_player_damage(1,32,blit_player_damage_amount)
     pygame.display.update()
 
 #########################################################################################
@@ -1410,13 +1425,13 @@ def func_enemy_dead(enemy_stats):
 
             loot_quality = 0
 
-            loot_spawn_chance_item = random.randint(0,2)
+            loot_spawn_chance_item = random.randint(0,10)
             loot_spawn_chance_weapon = random.randint(0,5)
             loot_spawn_chance_armor = random.randint(0,5)
             loot_spawn_chance_helmet = random.randint(0,2)
             loot_spawn_chance_shield = random.randint(0,2)
 
-            if loot_spawn_chance_item == 1:
+            if loot_spawn_chance_item != 0:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
                         loot_chance_item = random.randint(0,10)
@@ -1777,7 +1792,7 @@ def func_player_status_check(is_attack_type_hit):
                     if poison_chance != 1:
                         player_poison_damage = (player_stats.hp // 100) + (status_condition.scalar * 10)
                         player_stats.hp -= player_poison_damage
-                        print("\n" + player_stats.name + " takes" + str(player_poison_damage) + " poison damage!")
+                        print("\n" + player_stats.name + " takes " + str(player_poison_damage) + " poison damage!")
                         func_check_player_dead()
                         player_can_attack = True
                     else:
@@ -1921,6 +1936,9 @@ def func_check_enemy_dead():
                     npc_fight = False
 
 def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
+
+    global blit_player_damage_amount
+
     if (not enemy_stats.spellbook):
         func_enemy_melee(enemy_stats)
     else:
@@ -1951,7 +1969,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                         if enemy_stats.hp > enemy_stats.maxhp:
                             enemy_stats.hp = enemy_stats.maxhp
                         print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
-                    sleep(sleep_time)
+                    blit_player_damage_amount = enemy_spell_damage
                     func_check_player_dead()
                     break
                 if spell.effect == 100:
@@ -2023,6 +2041,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                 break
 
 def func_enemy_melee(enemy_stats):
+    global blit_player_damage_amount
     for player_stats in players:
         player_armor_level = 0
         enemy_damage = 0
@@ -2032,7 +2051,7 @@ def func_enemy_melee(enemy_stats):
         enemy_damage = (enemy_damage * enemy_damage)//(player_armor_level + player1.defence + player1.defence_bonus)
         player_stats.hp = player_stats.hp - enemy_damage
         print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_damage) + Style.RESET_ALL + " melee damage!" )
-        sleep(sleep_time)
+        blit_player_damage_amount = enemy_damage
         player1.defence_xp += (player1.defence * (enemy_damage))
         func_check_player_dead()
 #############################--DIALOUGE FUNCTIONS--#######################
@@ -3970,7 +3989,9 @@ while game_start == 1:
                                 print("\ninvalid choice!\n")
 
                             func_check_stat_bonus()
-
+                            in_submenu = False
+                            in_submenu_equip = False
+                            
                 elif menu_cursor_pos == 15:
                     for player1 in players:
                         print("|| Stats: \n")
