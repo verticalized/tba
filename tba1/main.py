@@ -3822,7 +3822,7 @@ while game_start == 1:
                 has_rope = True
                 can_climb = True
         for scene_type in location:
-            if scene_type.has_sta       irs == True:
+            if scene_type.has_stairs == True:
                 can_climb = True
                 has_stairs = True
         if can_climb == True:
