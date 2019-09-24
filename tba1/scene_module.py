@@ -302,15 +302,15 @@ woods_16 = scene_type(12,10,0,"woods","","",False,False,False,False,False,True,F
 woods_17 = scene_type(12,11,0,"woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","thick foliage",[],[],[],[],[])
 woods_18 = scene_type(12,12,0,"woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","thick foliage",[],[],[],[],[])
 
-woods_19 = scene_type(13,8,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","some nice woods",[],[],[],[],[])
-woods_20 = scene_type(13,9,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","interesting woods",[],[],[],[],[])
-woods_21 = scene_type(13,10,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","strange woods",[],[],[],[],[])
-woods_22 = scene_type(13,11,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","thick foliage",[],[],[],[],[])
-woods_23 = scene_type(13,12,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","thick foliage",[],[],[],[],[])
+woods_19 = scene_type(13,8,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","some nice woods",[],[],[],[],[])
+woods_20 = scene_type(13,9,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","interesting woods",[],[],[],[],[])
+woods_21 = scene_type(13,10,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","strange woods",[],[],[],[],[])
+woods_22 = scene_type(13,11,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","thick foliage",[],[],[],[],[])
+woods_23 = scene_type(13,12,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","thick foliage",[],[],[],[],[])
 
-woods_20 = scene_type(14,9,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","interesting woods",[],[],[],[],[])
-woods_21 = scene_type(14,10,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","strange woods",[],[],[],[],[])
-woods_22 = scene_type(14,11,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","thick foliage",[],[],[],[],[])
+woods_20 = scene_type(14,9,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","interesting woods",[],[],[],[],[])
+woods_21 = scene_type(14,10,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","strange woods",[],[],[],[],[])
+woods_22 = scene_type(14,11,0,"deep woods","","",False,False,False,False,False,True,False,70,"forest",False,False,"","thick foliage",[],[],[],[],[])
 woods_23 = scene_type(14,12,0,"woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","thick foliage",[],[],[],[],[])
 
 woods_20 = scene_type(15,9,0,"deep woods","","",False,False,False,False,False,True,False,40,"forest",False,False,"","interesting woods",[],[],[],[],[])
@@ -338,14 +338,20 @@ south_road_b = scene_type(6,8,0,"the south road","","cloudy",True,False,False,Fa
 
 # Sorlund
 
-high_road_a = scene_type(5,8,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_b = scene_type(4,8,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_c = scene_type(3,8,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_d = scene_type(3,9,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_e = scene_type(3,10,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_f = scene_type(3,11,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_g = scene_type(3,12,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
-high_road_h = scene_type(3,13,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_1 = scene_type(5,8,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_2 = scene_type(4,8,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_3 = scene_type(3,8,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_4 = scene_type(3,9,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_5 = scene_type(3,10,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_6 = scene_type(3,11,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_7 = scene_type(3,12,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_8 = scene_type(3,13,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_9 = scene_type(3,14,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_10 = scene_type(4,14,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_11 = scene_type(4,15,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+high_road_12 = scene_type(4,16,0,"the high road","","cloudy",True,False,False,False,False,True,False,0,"road",False,False,"", "this road continues from the crossroads to the south west",[],[],[],[],[])
+
+
 
 sorlund_church = scene_type(2,9,0,"the Sorlund church","","cloudy",True,False,False,False,False,True,False,0,"town",False,True,"", "an ancient monument to the gods of harvest",[],[],[],[],[])
 sorlund_graveyard = scene_type(1,9,0,"the Sorlund graveyard","","cloudy",True,False,False,False,False,True,False,0,"town",False,False,"", "the people of Sorlund bury their dead here...",[],[],[],[],[])

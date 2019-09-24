@@ -3375,6 +3375,7 @@ def player_east_check():
             del location_east[:]
             location_east.append(scene_type)
             break
+
     if location_found == False:
         if steps_z == 0:
             del location_east[:]

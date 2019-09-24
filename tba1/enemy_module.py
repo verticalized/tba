@@ -73,8 +73,20 @@ bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,
 legion_soldier = enemy_stats("legion soldier",28,500,10000,10000,100,100,10,14,20,1000,"air","earth",[],[],[],[],[],[],0)
 legion_spearman = enemy_stats("legion spearman",25,500,10500,10500,100,100,10,16,10,1050,"air","earth",[],[],[],[],[],[],0)
 legion_archer = enemy_stats("legion archer",23,500,8700,8700,100,100,10,11,22,654,"air","earth",[],[],[],[],[],[],0)
-legion_battle_mage = enemy_stats("legion battle mage",29,500,12400,12400,100,100,45,5,6,2245,"air","earth",[],[],[],[],[],[],0)
+legion_battle_mage = enemy_stats("legion battle mage",29,500,12400,12400,1000,1000,45,5,6,2245,"air","earth",[],[],[],[],[],[],0)
 
+elf_warrior = enemy_stats("elf warrior",32,100,15000,15000,2000,2000,10,20,22,100,"earth","fire",[],[],[],[],[],[],0)
+elf_mage = enemy_stats("elf mage",35,500,18400,18400,10000,10000,65,5,6,3245,"earth","fire",[],[],[],[],[],[],0)
+elf_thief = enemy_stats("elf thief",38,500,18800,18800,1000,1000,5,50,60,3245,"earth","fire",[],[],[],[],[],[],0)
+mossy_giant = enemy_stats("mossy giant",40,5000,22400,22400,10000,10000,65,80,10,3245,"earth","fire",[],[],[],[],[],[],0)
+
+
+giant_wasp = enemy_stats("giant wasp",42,500,12800,12800,1000,1000,5,50,60,3245,"earth","fire",[],[],[],[],[],[],0)
+fire_demon = enemy_stats("fire demon",45,500,14800,14800,1000,1000,50,50,60,3245,"fire","water",[],[],[],[],[],[],0)
+elf_ranger = enemy_stats("elf ranger",50,500,18800,18800,1000,1000,50,52,63,3245,"earth","fire",[],[],[],[],[],[],0)
+elf_necromancer = enemy_stats("elf necromancer",48,500,16200,16200,1000,1000,60,22,33,3245,"earth","holy",[],[],[],[],[],[],0)
+
+ice_golem = enemy_stats("ice golem",64,800,11230,11230,100,100,0,52,22,2230,"ice","fire",[],[],[],[],[],[],0)
 rock_golem = enemy_stats("rock golem",62,800,10520,10520,100,100,0,55,18,20230,"earth","water",[],[],[],[],[],[],0)
 mushroom_man = enemy_stats("mushroom man",67,800,10230,10230,100,100,0,50,20,10230,"earth","fire",[],[],[],[],[],[],0)
 magical_mushroom_man = enemy_stats("magic mushroom man",62,800,10230,10230,100,100,45,20,20,10230,"earth","fire",[],[],[],[],[],[],0)
