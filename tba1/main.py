@@ -879,6 +879,8 @@ def func_blit_enemy_HUD(hud_val):
         win_map.blit(blit_HUD_hp,(32+((hud_val+enemy_number-1)*200),(36*16)))
         win_map.blit(blit_HUD_mp,(32+((hud_val+enemy_number-1)*200),(37*16)))
         win_map.blit(blit_HUD_status,(32+((hud_val+enemy_number-1)*200),(38*16)))
+        win_map.blit(enemy_stats.enemy_sprite, ( ((cx-256) + ((enemy_number)*128)), ((cy) + ((1)*32)) )  )
+        # win_map.blit(enemy_stats.enemy_sprite,(32+(18(hud_val+enemy_number-1)*200),(18*16)))
 
 def func_blit_title(title_string,gui_val):
     blit_title = myfont.render(title_string, False, (0, 0, 0))
@@ -1052,6 +1054,7 @@ def func_refresh_pygame(battle_intro):
         func_blit_list(combat_option,combat_option_list,1)
         func_blit_combat_cursor(1)
         func_blit_title("Battle:",1)
+
 
 
         if in_submenu_cast_combat == True:
