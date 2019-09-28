@@ -75,7 +75,7 @@ class npc:
 
 #########   TWO NPCS CANNOT HAVE THE SAME FIRST NAME !!!!   #############
 
-npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","0")
+npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","I am a doctor and you are talking to me")
 
 npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","")
 npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","")
