@@ -53,7 +53,14 @@ class weapon:
 bird_sword = weapon(201,"bird sword",3,"sword",5,"air",5,9,15,12,10)
 super_bird_sword = weapon(202,"super bird sword",180,"sword",50,"air",0,500,500,500,0)
 
-iron_sword = weapon(203,"iron sword",5,"sword",5,"earth",0,10,10,10,1)
+wooden_staff = weapon(204,"wooden staff",80,"staff",5,"earth",20,2,2,20,0)
+tall_staff = weapon(204,"tall staff",80,"staff",5,"earth",22,4,4,25,0)
+iron_knife = weapon(203,"iron knife",1,"sword",2,"earth",0,8,8,1,1)
+iron_spear = weapon(203,"iron spear",2,"spear",2,"earth",0,14,2,12,1)
+iron_dagger = weapon(203,"iron dagger",2,"dagger",2,"earth",0,8,18,2,1)
+steel_spear = weapon(204,"steel spear",80,"spear",10,"earth",0,18,24,28,0)
+
+iron_sword = weapon(203,"iron sword",2,"sword",2,"earth",0,10,10,10,1)
 steel_sword = weapon(204,"steel sword",80,"sword",10,"earth",0,20,20,20,0)
 mithril_sword = weapon(204,"mithril sword",80,"sword",15,"water",0,30,30,30,0)
 adamantite_sword = weapon(204,"adamantite sword",80,"sword",20,"earth",0,40,40,40,0)
@@ -66,7 +73,7 @@ adamantite_axe = weapon(206,"adamantite axe",80,"axe",20,"earth",0,40,40,40,0)
 rune_axe = weapon(206,"rune axe",80,"axe",25,"holy",0,50,50,50,0)
 
 greatsword = weapon(207,"greatsword",800,"large sword",32,"water",0,40,40,40,0)
-ultra_greatsword = weapon(208,"ultra_greatsword",8000,"large sword",54,"water",0,60,60,60,0)
+ultra_greatsword = weapon(208,"ultra greatsword",8000,"large sword",54,"water",0,60,60,60,0)
 war_spear = weapon(209,"war spear",80,"spear",16,"fire",70,20,20,20,0)
 lance = weapon(210,"lance",80,"spear",28,"air",100,30,30,30,0)
 
@@ -84,21 +91,33 @@ class ground_weapon:
 
 ground_bird_sword = ground_weapon("bird sword")
 ground_super_bird_sword = ground_weapon("super bird sword")
+
+
+ground_wooden_staff = ground_weapon("wooden staff")
+ground_tall_staff = ground_weapon("tall staff")
+ground_iron_knife = ground_weapon("iron knife")
+ground_iron_spear = ground_weapon("iron spear")
+ground_iron_dagger = ground_weapon("iron dagger")
+ground_steel_spear = ground_weapon("steel spear")
+
 ground_iron_sword = ground_weapon("iron sword")
 ground_steel_sword = ground_weapon("steel sword")
 ground_iron_axe = ground_weapon("iron axe")
 ground_steel_axe = ground_weapon("steel axe")
+
 ground_greatsword = ground_weapon("greatsword")
-ground_ultra_greatsword = ground_weapon("ultra_greatsword")
+ground_ultra_greatsword = ground_weapon("ultra greatsword")
 ground_war_spear = ground_weapon("war spear")
 ground_lance = ground_weapon("lance")
 ground_bone_scimitar = ground_weapon("bone scimitar")
 ground_gladius = ground_weapon("gladius")
 ground_battle_axe = ground_weapon("battle axe")
 ground_warhammer = ground_weapon("warhammer")
+
 ground_mithril_sword  = ground_weapon("mithril sword" )
 ground_adamantite_sword = ground_weapon("adamantite sword")
 ground_rune_sword = ground_weapon("rune sword")
+
 ground_mithril_axe  = ground_weapon("mithril axe")
 ground_adamantite_axe = ground_weapon("adamantite axe")
 ground_rune_axe = ground_weapon("rune axe")
@@ -252,9 +271,12 @@ class shield:
         all_game_shields.append(self)
 
 bird_shield = shield(301,"bird shield",100,"light",99,"air",10,24,22,40,1100)
-iron_square_shield = shield(301,"iron square shield",100,"heavy",9,"air",1,2,2,10,100)
+iron_square_shield = shield(301,"iron square shield",100,"heavy",9,"air",1,2,2,10,200)
 steel_square_shield = shield(301,"steel square shield",100,"heavy",18,"air",1,4,2,20,500)
 mage_book = shield(301,"mage book",100,"light",99,"air",100,0,0,40,1000)
+
+wooden_round_shield = shield(301,"wooden round shield",100,"light",1,"air",0,0,0,40,100)
+magic_orb = shield(301,"magic orb",100,"light",1,"air",30,0,0,0,0)
 
 class ground_shield:
     def __init__(self, name):
@@ -267,3 +289,6 @@ ground_bird_shield = ground_shield("bird shield")
 ground_iron_square_shield = ground_shield("iron square shield")
 ground_steel_square_shield = ground_shield("steel square shield")
 ground_mage_book = ground_shield("mage book")
+
+ground_wooden_round_shield = ground_shield("wooden round shield")
+ground_magic_orb = ground_shield("magic orb")
