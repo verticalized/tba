@@ -67,13 +67,13 @@ class enemy_stats:
 # LIsts: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
 # Status: status_effect
 
-imp = enemy_stats("imp",2,2,400,400,100,100,1,6,6,100,"fire","holy",[],[],[],[],[],[],0,"")
-goon = enemy_stats("goon",2,3,550,550,100,100,1,6,4,100,"earth","fire",[],[],[],[],[],[],0,"")
-wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,7,6,100,"earth","water",[],[],[],[],[],[],0,"")
-ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,7,6,100,"ice","fire",[],[],[],[],[],[],0,"")
+imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"")
+goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"")
+wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"")
+ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"")
 
 
-goblin = enemy_stats("goblin",2,5,800,800,100,100,1,8,4,100,"earth","fire",[],[],[],[],[],[],0,"")
+goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"")
 hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"")
 hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"")
 bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0,"")
@@ -103,10 +103,10 @@ magical_mushroom_man = enemy_stats("magic mushroom man",62,800,10230,10230,100,1
 
 bird_warrior = enemy_stats("bird warrior",191,100000,2408070,2408070,1000000,1000000,100,300,220,1000,"air","water",[],[],[],[],[],[],0,"")#leg
 
-fire_elemental = enemy_stats("fire elemental",8,200,3200,3200,1000,1000,8,5,2,100,"fire","water",[],[],[],[],[],[],0,"")
-water_elemental = enemy_stats("water elemental",8,200,3800,3800,1000,1000,8,5,2,100,"water","earth",[],[],[],[],[],[],0,"")
-earth_elemental = enemy_stats("earth elemental",8,100,3200,3200,1000,1000,3,5,2,100,"earth","water",[],[],[],[],[],[],0,"")
-air_elemental = enemy_stats("air elemental",8,100,3000,3000,1000,1000,3,5,2,100,"air","earth",[],[],[],[],[],[],0,"")
+fire_elemental = enemy_stats("fire elemental",8,200,3200,3200,1000,1000,18,5,2,100,"fire","water",[],[],[],[],[],[],0,"")
+water_elemental = enemy_stats("water elemental",8,200,3800,3800,1000,1000,18,5,2,100,"water","earth",[],[],[],[],[],[],0,"")
+earth_elemental = enemy_stats("earth elemental",8,100,3200,3200,1000,1000,13,5,2,100,"earth","water",[],[],[],[],[],[],0,"")
+air_elemental = enemy_stats("air elemental",8,100,3000,3000,1000,1000,13,5,2,100,"air","earth",[],[],[],[],[],[],0,"")
 
 giant_snail = enemy_stats("giant snail",14,10,9300,9300,100,100,0,12,2,930,"earth","earth",[],[],[],[],[],[],0,"")
 giant_spider = enemy_stats("giant spider",33,64,23000,23000,100,100,0,50,2,2300,"earth","fire",[],[],[],[],[],[],0,"")
@@ -118,6 +118,6 @@ skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,2
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0,"")
 
 ## npc enemies
-cow = enemy_stats("cow",2,2,200,200,100,100,1,3,3,100,"fire","holy",[],[],[],[],[],[],0,"")
-sheep = enemy_stats("sheep",2,2,100,100,100,100,1,2,2,100,"fire","holy",[],[],[],[],[],[],0,"")
+cow = enemy_stats("cow",2,2,200,200,100,100,1,8,7,100,"fire","holy",[],[],[],[],[],[],0,"")
+sheep = enemy_stats("sheep",2,2,100,100,100,100,1,6,5,100,"fire","holy",[],[],[],[],[],[],0,"")
 town_guard = enemy_stats("town guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0,"")

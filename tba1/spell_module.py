@@ -47,24 +47,27 @@ class spell:
 #### status 0 spells DAMAGE - combat spells, also used for turns where enemy does nothing by doing 0 damage.
 slime = spell("slime",5,5,5,True,0,"slime",0,0,"slurms mackenzie")
 
+#low level damage spells
+fire_bolt = spell("fire bolt",4,25,50,False,80,"fire",100,0,"fire damage")
+ice_bolt = spell("ice bolt",4,25,50,False,80,"ice",100,0,"ice damage")
+
 # arrow spells
-fire_arrow = spell("fire arrow",18,5,5,False,80,"fire",100,0,"fire damage")
-ice_arrow = spell("ice arrow",18,5,5,False,80,"ice",100,0,"ice damage")
+fire_arrow = spell("fire arrow",18,50,500,False,80,"fire",100,0,"fire damage")
+ice_arrow = spell("ice arrow",18,50,500,False,80,"ice",100,0,"ice damage")
 
 # tier 1 damage spells
-fireball = spell("fireball",30,5,5,False,1000,"fire",200,0,"heavy fire damage")
-hydro_barrage = spell("hydro barrage",1000,5,5,False,100,"water",200,0,"heavy water damage")
-holy_surge = spell("holy surge",30,5,1000,False,100,"holy",200,0,"heavy holy damage")
-necro_surge = spell("necro surge",30,5,1000,False,100,"undead",200,0,"heavy undead damage")
+fireball = spell("fireball",30,75,5,False,1000,"fire",200,0,"heavy fire damage")
+hydro_barrage = spell("hydro barrage",30,75,1000,False,100,"water",200,0,"heavy water damage")
+holy_surge = spell("holy surge",30,75,1000,False,100,"holy",200,0,"heavy holy damage")
+necro_surge = spell("necro surge",30,75,1000,False,100,"undead",200,0,"heavy undead damage")
 
 # tier 2 damage spells
-hydroblast = spell("hydroblast",8,5,500,False,60,"water",100,0,"light water damage")
-fireblast = spell("fireblast",8,5,500,False,60,"fire",100,0,"light fire damage")
-windblast = spell("windblast",8,5,500,False,60,"air",100,0,"light air damage")
-earthblast = spell("earthblast",8,5,500,False,60,"earth",100,0,"light earth damage")
-necroblast = spell("necroblast",8,5,500,False,60,"undead",100,0,"light undead damage")
-holyblast = spell("holyblast",8,5,500,False,60,"holy",100,0,"light holy damage")
-
+hydroblast = spell("hydroblast",8,25,250,False,60,"water",100,0,"light water damage")
+fireblast = spell("fireblast",8,25,250,False,60,"fire",100,0,"light fire damage")
+windblast = spell("windblast",8,25,250,False,60,"air",100,0,"light air damage")
+earthblast = spell("earthblast",8,25,250,False,60,"earth",100,0,"light earth damage")
+necroblast = spell("necroblast",8,25,250,False,60,"undead",100,0,"light undead damage")
+holyblast = spell("holyblast",8,25,250,False,60,"holy",100,0,"light holy damage")
 
 #### status -1 spells HEAL AND DAMAGE
 life_drain = spell("life drain",5,5,5,True,100,"undead",50,1,"a life draining spell which heals the user")
@@ -95,9 +98,7 @@ mega_heal = spell("mega heal",15,5,1000,True,250,"holy",50,100,"a mega healing s
 
 super_heal = spell("super heal",5,5,500,True,100,"holy",50,100,"a super healing spell")
 
-prayer = spell("prayer",1,5,50,True,50,"holy",50,100,"a light healing spell")
-
-
+prayer = spell("prayer",1,50,250,True,50,"holy",50,100,"a light healing spell")
 
 class status_condition:
     def __init__(self, name, scalar, is_freeze, is_asleep, is_poisoned, is_poisoned_bad, is_burning, is_str_up, is_atk_up, is_mgk_up, is_def_up, is_str_down, is_atk_down, is_mgk_down, is_def_down):

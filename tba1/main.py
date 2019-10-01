@@ -31,7 +31,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 has_moved = False
 check_for_combat = True
@@ -452,14 +452,28 @@ npc_dismurth_smith.npc_armor_inventory.append(iron_chain_mail)
 npc_dismurth_smith.npc_armor_inventory.append(iron_plate_armor)
 npc_dismurth_smith.npc_armor_inventory.append(steel_chain_mail)
 
+
+npc_john_doe.npc_weapon_inventory.append(steel_spear)
+npc_john_doe.npc_weapon_inventory.append(iron_sword)
+npc_john_doe.npc_weapon_inventory.append(iron_spear)
 npc_john_doe.npc_weapon_inventory.append(steel_sword)
 npc_john_doe.npc_weapon_inventory.append(steel_axe)
+npc_john_doe.npc_weapon_inventory.append(greatsword)
+npc_john_doe.npc_weapon_inventory.append(wooden_staff)
+npc_john_doe.npc_weapon_inventory.append(tall_staff)
+npc_john_doe.npc_weapon_inventory.append(battle_axe)
+npc_john_doe.npc_weapon_inventory.append(warhammer)
+npc_john_doe.npc_weapon_inventory.append(war_spear)
 
-npc_john_doe.npc_armor_inventory.append(steel_chain_mail)
+npc_john_doe.npc_armor_inventory.append(leather_armor)
 
 npc_john_doe.npc_helmet_inventory.append(steel_helmet)
+npc_john_doe.npc_helmet_inventory.append(iron_helmet)
 
 npc_john_doe.npc_shield_inventory.append(iron_square_shield)
+npc_john_doe.npc_shield_inventory.append(wooden_round_shield)
+npc_john_doe.npc_shield_inventory.append(magic_orb)
+
 
 ########################################################
 
@@ -487,6 +501,8 @@ npc_jane_doe.npc_inventory.append(super_hp_potion)
 npc_jane_doe.npc_inventory.append(cup_of_tea)
 npc_jane_doe.npc_inventory.append(tea_bag)
 
+npc_wizard_jim.npc_spell_inventory.append(fire_bolt)
+npc_wizard_jim.npc_spell_inventory.append(ice_bolt)
 npc_wizard_jim.npc_spell_inventory.append(fire_arrow)
 npc_wizard_jim.npc_spell_inventory.append(fireball)
 npc_wizard_jim.npc_spell_inventory.append(hydro_barrage)
@@ -506,8 +522,8 @@ npc_wizard_tilly.npc_helmet_inventory.append(mage_hood)
 
 npc_wizard_tilly.npc_shield_inventory.append(mage_book)
 
-######################------ENEMY_SPELLBOOKS------########################
 
+######################------ENEMY_SPELLBOOKS------########################
 
 hobgoblin.spellbook.append(earthblast)
 hobgoblin.spellbook.append(hydroblast)
@@ -538,7 +554,6 @@ bandit_warlock.spellbook.append(necroblast)
 bandit_henchman.spellbook.append(burn)
 bandit_henchman.spellbook.append(fireblast)
 bandit_henchman.spellbook.append(prayer)
-
 
 legion_soldier.spellbook.append(prayer)
 
@@ -622,15 +637,6 @@ big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 
-
-# self.drop_table_items = drop_table_items
-# self.drop_table_weapons = drop_table_weapons
-# self.drop_table_armor = drop_table_armor
-# self.drop_table_helmets = drop_table_helmets
-# self.drop_table_shields = drop_table_shields
-
-
-
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
 forest_1.scene_inventory.append(ground_oak_key)
@@ -660,6 +666,7 @@ combat_option_list.append(combat_option_hit)
 combat_option_list.append(combat_option_spell)
 combat_option_list.append(combat_option_item)
 combat_option_list.append(combat_option_run)
+
 ##############
 
 inventory = []
@@ -669,22 +676,6 @@ armor_inventory = []
 helmet_inventory = []
 shield_inventory = []
 spell_inventory = []
-
-#
-# spell_inventory.append(fireblast)
-# spell_inventory.append(snare)
-#
-# weapon_inventory.append(super_bird_sword)
-# weapon_inventory.append(gladius)
-#
-# armor_inventory.append(iron_chain_mail)
-# armor_inventory.append(steel_chain_mail)
-#
-# helmet_inventory.append(iron_helmet)
-# helmet_inventory.append(steel_helmet)
-#
-# shield_inventory.append(iron_square_shield)
-# shield_inventory.append(steel_square_shield)
 
 ####################################################################
 
@@ -712,6 +703,21 @@ if dev_mode >= 1:
     equiped_spells.append(burn)
     equiped_spells.append(mega_burn)
 
+    spell_inventory.append(fireblast)
+    spell_inventory.append(snare)
+
+    weapon_inventory.append(super_bird_sword)
+    weapon_inventory.append(gladius)
+
+    armor_inventory.append(iron_chain_mail)
+    armor_inventory.append(steel_chain_mail)
+
+    helmet_inventory.append(iron_helmet)
+    helmet_inventory.append(steel_helmet)
+
+    shield_inventory.append(iron_square_shield)
+    shield_inventory.append(steel_square_shield)
+
     inventory.append(tent)
     inventory.append(rope)
     inventory.append(torch)
@@ -720,8 +726,6 @@ if dev_mode >= 1:
 else:
 
     equiped_armor.append(rags)
-
-
 
 ##########--PYGAME--############
 txt_1 = myfont.render('1', False, (0, 0, 0))
@@ -965,7 +969,6 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (182,0,0), ( ((cx+6) + ((scene_type.xpos - steps_x)*32)), ((cy+6) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
                 pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
 
-    # pygame.draw.rect(win_map, (255,0,0), (((steps_x)*32)+8, ((steps_y)*32)+8, char_width, char_height))
     pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
 
     if battle_intro == True:
@@ -1447,13 +1450,13 @@ def func_enemy_dead(enemy_stats):
 
             loot_quality = 0
 
-            loot_spawn_chance_item = random.randint(0,10)
-            loot_spawn_chance_weapon = random.randint(0,5)
-            loot_spawn_chance_armor = random.randint(0,5)
-            loot_spawn_chance_helmet = random.randint(0,2)
-            loot_spawn_chance_shield = random.randint(0,2)
+            loot_spawn_chance_item = random.randint(0,1)
+            loot_spawn_chance_weapon = random.randint(0,1)
+            loot_spawn_chance_armor = random.randint(0,1)
+            loot_spawn_chance_helmet = random.randint(0,1)
+            loot_spawn_chance_shield = random.randint(0,1)
 
-            if loot_spawn_chance_item != 0:
+            if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
                         loot_chance_item = random.randint(0,10)
@@ -2948,6 +2951,8 @@ def func_create_item(ing1_name,ing2_name,ingreq_1,ingreq_2,skill_lvl_req,made_it
 def func_equip(gear,player_gear_inv,current_gear):
     global menu_cursor_pos
     global in_submenu2
+    global in_submenu
+    global in_submenu_equip
     global in_submenu_equip2
     global in_menu_item
     global in_menu_weapon
@@ -3069,7 +3074,7 @@ def func_equip(gear,player_gear_inv,current_gear):
                             equiped_spells.append(gear)
 
                         print(gear.name + " equipped!")
-                        sleep(sleep_time_fast)
+
                         if current_gear != "0":
                             if gear in all_game_weapons:
                                 for weapon in all_game_weapons:
@@ -3094,7 +3099,8 @@ def func_equip(gear,player_gear_inv,current_gear):
                         print("\nYou are not high enough level to equip this!\n")
                     if has_level == False and has_space == True:
                         print("\nYou are not high enough level to equip this!\n")
-
+            in_submenu_equip == False
+            in_submenu = False
             in_submenu_equip2 == False
             in_submenu2 = False
             in_menu_item = False
@@ -3749,6 +3755,7 @@ while game_start == 1:
                 enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
                 enemy_stats.hp = (0 + enemy_stats.maxhp)
                 enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
+                enemy_stats.xp += ((random.randint(0,10) * enemy_stats.xp) // 10) * enemy_stats.level
                 if dev_mode >= 1:
                     print("enemy stats have been calculated")
             player_turns = 10
@@ -3886,8 +3893,10 @@ while game_start == 1:
         if in_fight == False:
             location_desc()
             func_HUD()
+
         has_moved = False
 
+    player1.status_effect_list.clear()
     func_check_stat_bonus()
     func_check_level()
     func_refresh_pygame(False)
@@ -4117,6 +4126,15 @@ while game_start == 1:
                             func_check_stat_bonus()
                             in_submenu = False
                             in_submenu_equip = False
+                            in_submenu2 = False
+                            in_submenu_equip2 = False
+                            in_menu_item = False
+                            in_menu_spell = False
+                            in_menu_weapon = False
+                            in_menu_armor = False
+                            in_menu_helmet = False
+                            in_menu_shield = False
+
 
                 elif menu_cursor_pos == 15:
                     for player1 in players:
@@ -4859,12 +4877,12 @@ while game_start == 1:
 
             ################################################
 
-                elif menu_cursor_pos == 100:
+                elif menu_cursor_pos == 19:
                     dev_mode += 1
                     if dev_mode >= 6:
                         dev_mode = 0
 
-                elif menu_cursor_pos == 102:
+                elif menu_cursor_pos == 20:
                     if dev_mode >= 1:
                         val_dev_xp = 0
                         dev_xp_input = input("\nhow much xp?\n")
@@ -4872,7 +4890,7 @@ while game_start == 1:
                             val_dev_xp = int(dev_xp_input)
                         player1.xp += val_dev_xp
 
-                elif menu_cursor_pos == 101:
+                elif menu_cursor_pos == 21:
                     if dev_mode >= 1:
                         val_dev_tpx = 0
                         val_dev_tpy = 0
