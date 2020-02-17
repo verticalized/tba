@@ -125,8 +125,6 @@ hills = scene_type(1,3,0,"the hills","","",True,False,False,False,False,True,Fal
 hills = scene_type(1,2,0,"the hills","","",True,False,False,False,False,True,False,0,"grassy",False,False,"","rolling green hills",[],[],[],[],[])
 hills = scene_type(1,1,0,"the hills","","",True,False,False,False,False,True,False,0,"grassy",False,False,"","rolling green hills",[],[],[],[],[])
 
-
-
 lakeside = scene_type(1,6,0,"lakeside","","",True,False,False,False,False,True,False,0,"forest",False,False,"","the shore of the lake",[],[],[],[],[])
 
 # large tree cave

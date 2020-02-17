@@ -11,7 +11,7 @@ import pygame
 
 pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('MS Gothic', 21) # you have to call this at the start if you want to use fonts
+myfont = pygame.font.SysFont('MS Comic Sans', 21) # you have to call this at the start if you want to use fonts
 
 pygame.key.set_repeat(1,1) # held key repeat timer
 
@@ -685,6 +685,8 @@ equiped_helmet = []
 equiped_shield = []
 equiped_spells = []
 
+####################################################################
+
 if dev_mode >= 1:
 
     equiped_helmet.append(bird_hat)
@@ -724,7 +726,6 @@ if dev_mode >= 1:
     inventory.append(hp_potion)
 
 else:
-
     equiped_armor.append(rags)
 
 ##########--PYGAME--############
@@ -1865,11 +1866,12 @@ def func_check_player_dead():
     if player1.hp <= 0:
         in_fight = False
         del current_enemies[:]
-        game_start = 0
         dead_timer = 10
         while dead_timer > 0:
             dead_timer -= 1
             print("YOU ARE DEAD!")
+        game_start = 0
+        exit()
 
 def func_enemy_status_check():
 
@@ -2394,18 +2396,8 @@ def func_use_combat(gear,player_gear_inv):
     global in_submenu_use_combat
     eaten_item = "0"
     for gear in player_gear_inv:
-        if gear in all_game_weapons:
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
-        if gear in all_game_armor:
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
-        if gear in all_game_helmets:
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
-        if gear in all_game_shields:
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_items:
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + str(gear.value) + " gp. ")
-        if gear in all_game_spells:
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
 
     in_submenu = True
     in_submenu_use_combat = True
