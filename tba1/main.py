@@ -314,31 +314,6 @@ class input_option:
         if is_default_option == True:
             input_option_list.append(self)
 
-        # input_option_talk = input_option("talk","t",True,True)
-        # input_option_equip = input_option("equip","e",True,True)
-        # input_option_gear = input_option("gear","w",True,True)
-        # input_option_stats = input_option("stats","q",True,True)
-        # input_option_skills = input_option("skills","Q",True,True)
-        # input_option_search = input_option("search","j",True,True)
-        # input_option_drop = input_option("drop","l",True,True)
-        # input_option_pickup = input_option("pickup","p",True,True)
-        # input_option_pickupall = input_option("pickupall","P",True,True)
-        # input_option_consume = input_option("consume","k",True,True)
-        # input_option_inv = input_option("inv","i",True,True)
-        # input_option_spellbook = input_option("spellbook","b",True,True)
-        # input_option_cast = input_option("cast","c",True,True)
-        # input_option_wait = input_option("wait","W",True,True)
-        #
-        # input_option_help = input_option("help","H",True,True)
-        # input_option_quit = input_option("quit","Z",True,True)
-        # input_option_camp = input_option("camp","u",False,True)
-        #
-        # input_option_dev = input_option("dev","dv",True,False)
-        # input_option_dev_xp = input_option("/xp","/xp",True,False)
-        # input_option_dev_tp = input_option("/tp","/tp",True,False)
-        # input_option_dev_gp = input_option("/gp","/gp",True,False)
-
-
 class combat_option:
     def __init__(self, name):
         self.name = name
@@ -760,7 +735,7 @@ txt_spellbook = myfont.render('spellbook', False, (0, 0, 0))
 txt_cast = myfont.render('cast', False, (0, 0, 0))
 txt_make = myfont.render('make', False, (0, 0, 0))
 txt_pickup = myfont.render('pickup', False, (0, 0, 0))
-txt_pickupall = myfont.render('pickupall', False, (0, 0, 0))
+txt_pickupall = myfont.render('pickup all', False, (0, 0, 0))
 txt_camp = myfont.render('camp', False, (0, 0, 0))
 txt_wait = myfont.render('wait', False, (0, 0, 0))
 txt_quit = myfont.render('quit', False, (0, 0, 0))
@@ -4021,7 +3996,6 @@ while game_start == 1:
                             print("there is nothing here...\n")
 
 
-
                 elif menu_cursor_pos == 3:
                     if len(equiped_weapon) != 0:
                         for weapon in equiped_weapon:
@@ -4497,6 +4471,7 @@ while game_start == 1:
                             time += 24
                             for player_stats in players:
                                 player_stats.hp = player_stats.maxhp
+                                player_stats.mp = player_stats.max_mp
                         else:
                             can_camp = False
 

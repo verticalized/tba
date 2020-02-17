@@ -64,14 +64,13 @@ class enemy_stats:
         all_game_enemies.append(self)
 
 # Attributes: name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness,
-# LIsts: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
+# Lists: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
 # Status: status_effect
 
 imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"")
 goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"")
 wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"")
 ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"")
-
 
 goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"")
 hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"")
@@ -89,7 +88,6 @@ elf_warrior = enemy_stats("elf warrior",32,100,15000,15000,2000,2000,10,20,22,10
 elf_mage = enemy_stats("elf mage",35,500,18400,18400,10000,10000,65,5,6,3245,"earth","fire",[],[],[],[],[],[],0,"")
 elf_thief = enemy_stats("elf thief",38,500,18800,18800,1000,1000,5,50,60,3245,"earth","fire",[],[],[],[],[],[],0,"")
 mossy_giant = enemy_stats("mossy giant",40,5000,22400,22400,10000,10000,65,80,10,3245,"earth","fire",[],[],[],[],[],[],0,"")
-
 
 giant_wasp = enemy_stats("giant wasp",42,500,12800,12800,1000,1000,5,50,60,3245,"earth","fire",[],[],[],[],[],[],0,"")
 fire_demon = enemy_stats("fire demon",45,500,14800,14800,1000,1000,50,50,60,3245,"fire","water",[],[],[],[],[],[],0,"")
