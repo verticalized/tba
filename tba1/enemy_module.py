@@ -10,10 +10,13 @@ init(autoreset=True)
 all_game_enemies = []
 
 spr_goblin = pygame.image.load("goblin1.png")
+spr_goblin2 = pygame.image.load("goblin2.png")
+spr_ghost = pygame.image.load("ghost1.png")
 spr_imp = pygame.image.load("imp1.png")
+spr_bandit = pygame.image.load("imp1.png")
 
 class enemy_stats:
-    def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect,sprite_variable):
+    def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect, sprite_variable):
         self.name =  name
         self.level = level
         self.xp = xp
@@ -58,24 +61,31 @@ class enemy_stats:
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.BRIGHT + attribute + Style.RESET_ALL)
 
+        if sprite_variable == "imp":
+            self.enemy_sprite = spr_imp
         if sprite_variable == "goblin":
             self.enemy_sprite = spr_goblin
+        if sprite_variable == "goblin2":
+            self.enemy_sprite = spr_goblin2
+        if sprite_variable == "ghost":
+            self.enemy_sprite = spr_ghost
 
         all_game_enemies.append(self)
 
 # Attributes: name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness,
-# LIsts: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
+# Lists: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
 # Status: status_effect
 
 imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"")
 goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"")
+
 wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"")
 ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"")
-
 
 goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"")
 hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"")
 hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"")
+
 bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0,"")
 bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0,"")
 bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,4,230,"fire","earth",[],[],[],[],[],[],0,"")
@@ -88,11 +98,12 @@ legion_battle_mage = enemy_stats("legion battle mage",29,500,12400,12400,1000,10
 elf_warrior = enemy_stats("elf warrior",32,100,15000,15000,2000,2000,10,20,22,100,"earth","fire",[],[],[],[],[],[],0,"")
 elf_mage = enemy_stats("elf mage",35,500,18400,18400,10000,10000,65,5,6,3245,"earth","fire",[],[],[],[],[],[],0,"")
 elf_thief = enemy_stats("elf thief",38,500,18800,18800,1000,1000,5,50,60,3245,"earth","fire",[],[],[],[],[],[],0,"")
-mossy_giant = enemy_stats("mossy giant",40,5000,22400,22400,10000,10000,65,80,10,3245,"earth","fire",[],[],[],[],[],[],0,"")
 
+mossy_giant = enemy_stats("mossy giant",40,5000,22400,22400,10000,10000,65,80,10,3245,"earth","fire",[],[],[],[],[],[],0,"")
 
 giant_wasp = enemy_stats("giant wasp",42,500,12800,12800,1000,1000,5,50,60,3245,"earth","fire",[],[],[],[],[],[],0,"")
 fire_demon = enemy_stats("fire demon",45,500,14800,14800,1000,1000,50,50,60,3245,"fire","water",[],[],[],[],[],[],0,"")
+
 elf_ranger = enemy_stats("elf ranger",50,500,18800,18800,1000,1000,50,52,63,3245,"earth","fire",[],[],[],[],[],[],0,"")
 elf_necromancer = enemy_stats("elf necromancer",48,500,16200,16200,1000,1000,60,22,33,3245,"earth","holy",[],[],[],[],[],[],0,"")
 
