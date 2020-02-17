@@ -13,7 +13,7 @@ spr_goblin = pygame.image.load("goblin1.png")
 spr_goblin2 = pygame.image.load("goblin2.png")
 spr_ghost = pygame.image.load("ghost1.png")
 spr_imp = pygame.image.load("imp1.png")
-spr_bandit = pygame.image.load("imp1.png")
+spr_imp2 = pygame.image.load("imp2.png")
 
 class enemy_stats:
     def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect, sprite_variable):
@@ -63,6 +63,8 @@ class enemy_stats:
 
         if sprite_variable == "imp":
             self.enemy_sprite = spr_imp
+        if sprite_variable == "imp2":
+            self.enemy_sprite = spr_imp2
         if sprite_variable == "goblin":
             self.enemy_sprite = spr_goblin
         if sprite_variable == "goblin2":
@@ -76,19 +78,19 @@ class enemy_stats:
 # Lists: spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields,
 # Status: status_effect
 
-imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"")
-goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"")
+imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"imp")
+goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"imp2")
 
-wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"")
+wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"imp2")
 ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"")
 
-goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"")
-hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"")
-hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"")
+goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"goblin")
+hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
+hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
 
-bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0,"")
-bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0,"")
-bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,4,230,"fire","earth",[],[],[],[],[],[],0,"")
+bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0,"goblin")
+bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0,"goblin")
+bandit_henchman = enemy_stats("bandit henchman",12,50,2000,2000,2200,2200,10,12,4,230,"fire","earth",[],[],[],[],[],[],0,"goblin2")
 
 legion_soldier = enemy_stats("legion soldier",28,500,10000,10000,100,100,10,14,20,1000,"air","earth",[],[],[],[],[],[],0,"")
 legion_spearman = enemy_stats("legion spearman",25,500,10500,10500,100,100,10,16,10,1050,"air","earth",[],[],[],[],[],[],0,"")
