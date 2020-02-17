@@ -13,7 +13,7 @@ pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
 myfont = pygame.font.SysFont('MS Gothic', 21) # you have to call this at the start if you want to use fonts
 
-# pygame.key.set_repeat(100000,100000) # held key repeat timer
+pygame.key.set_repeat(1,1) # held key repeat timer
 
 #################--IMPORT_GAME_MODULES--####################
 
@@ -3661,13 +3661,13 @@ def location_desc():
 
 for player_stats in players:
     player_stats.level = 1
-    player_stats.xp = 10
+    player_stats.xp = 100
     player_stats.strength = 1
     player_stats.attack = 1
     player_stats.magic = 1
-    player_stats.strength_xp = 10
-    player_stats.attack_xp = 10
-    player_stats.magic_xp = 10
+    player_stats.strength_xp = 100
+    player_stats.attack_xp = 100
+    player_stats.magic_xp = 100
 
 func_check_stat_bonus()
 func_check_level()
@@ -4505,6 +4505,7 @@ while game_start == 1:
                             time += 24
                             for player_stats in players:
                                 player_stats.hp = player_stats.maxhp
+                                player_stats.mp = player_stats.maxmp
                         else:
                             can_camp = False
 
