@@ -32,7 +32,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 0
+dev_mode = 1
 
 has_moved = False
 check_for_combat = True
@@ -1406,7 +1406,7 @@ def func_choose_enemy():
         for scene_type in location:
             scene_level = scene_type.difficulty
             for enemy_stats in all_game_enemies:
-                if enemy_stats.level <= scene_level and enemy_stats.level >= scene_level - 10:
+                if enemy_stats.level <= scene_level + 5 and enemy_stats.level >= scene_level - 15:
                     compatible_enemies_found = True
         if compatible_enemies_found == True:
             for enemy_stats in all_game_enemies:

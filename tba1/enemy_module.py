@@ -9,11 +9,22 @@ init(autoreset=True)
 
 all_game_enemies = []
 
+spr_no_sprite = pygame.image.load("no_sprite1.png")
+
 spr_goblin = pygame.image.load("goblin1.png")
 spr_goblin2 = pygame.image.load("goblin2.png")
 spr_ghost = pygame.image.load("ghost1.png")
 spr_imp = pygame.image.load("imp1.png")
 spr_imp2 = pygame.image.load("imp2.png")
+
+spr_cow = pygame.image.load("cow1.png")
+spr_sheep = pygame.image.load("sheep1.png")
+
+spr_fire_ele = pygame.image.load("fire_ele1.png")
+spr_air_ele = pygame.image.load("air_ele1.png")
+spr_water_ele = pygame.image.load("water_ele1.png")
+spr_earth_ele = pygame.image.load("earth_ele1.png")
+
 
 class enemy_stats:
     def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect, sprite_variable):
@@ -71,6 +82,19 @@ class enemy_stats:
             self.enemy_sprite = spr_goblin2
         if sprite_variable == "ghost":
             self.enemy_sprite = spr_ghost
+        if sprite_variable == "cow":
+            self.enemy_sprite = spr_cow
+        if sprite_variable == "sheep":
+            self.enemy_sprite = spr_sheep
+        if sprite_variable == "fire_ele":
+            self.enemy_sprite = spr_fire_ele
+        if sprite_variable == "air_ele":
+            self.enemy_sprite = spr_air_ele
+        if sprite_variable == "water_ele":
+            self.enemy_sprite = spr_water_ele
+        if sprite_variable == "earth_ele":
+            self.enemy_sprite = spr_earth_ele
+
 
         all_game_enemies.append(self)
 
@@ -116,10 +140,10 @@ magical_mushroom_man = enemy_stats("magic mushroom man",62,800,10230,10230,100,1
 
 bird_warrior = enemy_stats("bird warrior",191,100000,2408070,2408070,1000000,1000000,100,300,220,1000,"air","water",[],[],[],[],[],[],0,"")#leg
 
-fire_elemental = enemy_stats("fire elemental",8,200,3200,3200,1000,1000,18,5,2,100,"fire","water",[],[],[],[],[],[],0,"")
-water_elemental = enemy_stats("water elemental",8,200,3800,3800,1000,1000,18,5,2,100,"water","earth",[],[],[],[],[],[],0,"")
-earth_elemental = enemy_stats("earth elemental",8,100,3200,3200,1000,1000,13,5,2,100,"earth","water",[],[],[],[],[],[],0,"")
-air_elemental = enemy_stats("air elemental",8,100,3000,3000,1000,1000,13,5,2,100,"air","earth",[],[],[],[],[],[],0,"")
+fire_elemental = enemy_stats("fire elemental",8,200,3200,3200,1000,1000,18,5,2,100,"fire","water",[],[],[],[],[],[],0,"fire_ele")
+water_elemental = enemy_stats("water elemental",8,200,3800,3800,1000,1000,18,5,2,100,"water","earth",[],[],[],[],[],[],0,"water_ele")
+earth_elemental = enemy_stats("earth elemental",8,100,3200,3200,1000,1000,13,5,2,100,"earth","water",[],[],[],[],[],[],0,"earth_ele")
+air_elemental = enemy_stats("air elemental",8,100,3000,3000,1000,1000,13,5,2,100,"air","earth",[],[],[],[],[],[],0,"air_ele")
 
 giant_snail = enemy_stats("giant snail",14,10,9300,9300,100,100,0,12,2,930,"earth","earth",[],[],[],[],[],[],0,"")
 giant_spider = enemy_stats("giant spider",33,64,23000,23000,100,100,0,50,2,2300,"earth","fire",[],[],[],[],[],[],0,"")
@@ -131,6 +155,6 @@ skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,2
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0,"")
 
 ## npc enemies
-cow = enemy_stats("cow",2,2,200,200,100,100,1,8,7,100,"fire","holy",[],[],[],[],[],[],0,"")
-sheep = enemy_stats("sheep",2,2,100,100,100,100,1,6,5,100,"fire","holy",[],[],[],[],[],[],0,"")
+cow = enemy_stats("cow",2,2,200,200,100,100,1,8,7,100,"fire","holy",[],[],[],[],[],[],0,"cow")
+sheep = enemy_stats("sheep",2,2,100,100,100,100,1,6,5,100,"fire","holy",[],[],[],[],[],[],0,"sheep")
 town_guard = enemy_stats("town guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0,"")
