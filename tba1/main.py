@@ -776,7 +776,7 @@ txt_shields = myfont.render('shields', False, (0, 0, 0))
 txt_spells = myfont.render('spells', False, (0, 0, 0))
 
 spr_house = pygame.image.load("house1.png")
-
+spr_player = pygame.image.load("player1.png")
 
 win_map = pygame.display.set_mode((1024,768))
 
@@ -885,7 +885,7 @@ def func_blit_enemy_HUD(hud_val):
         win_map.blit(blit_HUD_hp,(32+((hud_val+enemy_number-1)*200),(36*16)))
         win_map.blit(blit_HUD_mp,(32+((hud_val+enemy_number-1)*200),(37*16)))
         win_map.blit(blit_HUD_status,(32+((hud_val+enemy_number-1)*200),(38*16)))
-        win_map.blit(enemy_stats.enemy_sprite, ( ((cx-256) + ((enemy_number)*128)), ((cy) + ((1)*32)) )  )
+        win_map.blit(enemy_stats.enemy_sprite, ( ((cx-256) + ((enemy_number+1)*128)), ((cy) + ((1)*32)) )  )
         # win_map.blit(enemy_stats.enemy_sprite,(32+(18(hud_val+enemy_number-1)*200),(18*16)))
 
 def func_blit_title(title_string,gui_val):
@@ -971,8 +971,10 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (182,0,0), ( ((cx+6) + ((scene_type.xpos - steps_x)*32)), ((cy+6) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
                 pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
 
-    pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
 
+    pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
+    win_map.blit(spr_player,(cx-16, cy-16,))
+    
     if battle_intro == True:
         battle_intro_ticks = 0
     while battle_intro == True:
@@ -2146,11 +2148,13 @@ def func_shop(gear,npc_gear_inv):
 
                 if keys[pygame.K_w]:
                     menu_cursor_pos -= 1
-                    if menu_cursor_pos < 1:
+                    if menu_cursor_pos <= 1:
                         menu_cursor_pos == 1
+
 
                 if keys[pygame.K_s]:
                     menu_cursor_pos += 1
+
 
                 if keys[pygame.K_e]:
                     val_bought_item = menu_cursor_pos
@@ -3675,7 +3679,7 @@ if dev_mode >= 1:
 ########## GAME START #########
 game_start = 1
 
-print(Fore.RED + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to Bill & Phoebe's Adventure! \n")
+print(Fore.RED + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to the land of Tonbale! \n")
 
 print("\nversion: " + version + " \n")
 
@@ -4004,12 +4008,20 @@ while game_start == 1:
             keys = pygame.key.get_pressed()
 
             if keys[pygame.K_w]:
-                menu_cursor_pos -= 1
-                if menu_cursor_pos < 1:
+                if menu_cursor_pos <= 1:
                     menu_cursor_pos == 1
+                else:
+                    menu_cursor_pos -= 1
+                if dev_mode >= 1:
+                    print(menu_cursor_pos)
 
             if keys[pygame.K_s]:
-                menu_cursor_pos += 1
+                if menu_cursor_pos >= 18:
+                    menu_cursor_pos == 18
+                else:
+                    menu_cursor_pos += 1
+                if dev_mode >= 1:
+                    print(menu_cursor_pos)
 
             if keys[pygame.K_e]:
 
