@@ -32,7 +32,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 has_moved = False
 check_for_combat = True
@@ -700,10 +700,8 @@ if dev_mode >= 1:
     equiped_spells.append(hydroblast)
     equiped_spells.append(earthblast)
     equiped_spells.append(windblast)
-    equiped_spells.append(snare)
     equiped_spells.append(blizzard)
     equiped_spells.append(poison)
-    equiped_spells.append(burn)
     equiped_spells.append(mega_burn)
 
     spell_inventory.append(fireblast)
@@ -730,6 +728,10 @@ else:
     equiped_armor.append(rags)
 
 ##########--PYGAME--############
+
+sfx_cursor_move = pygame.mixer.Sound('sfx_cursor_move.wav')
+sfx_cursor_select = pygame.mixer.Sound('sfx_cursor_select.wav')
+
 txt_1 = myfont.render('1', False, (0, 0, 0))
 txt_2 = myfont.render('2', False, (0, 0, 0))
 txt_3 = myfont.render('3', False, (0, 0, 0))
@@ -972,9 +974,9 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
 
 
-    pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
+    # pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
     win_map.blit(spr_player,(cx-16, cy-16,))
-    
+
     if battle_intro == True:
         battle_intro_ticks = 0
     while battle_intro == True:
@@ -1537,7 +1539,7 @@ def func_get_target():
     global in_submenu_target_combat2
 
     target = "0"
-    if len(current_enemies) > 1:
+    if len(current_enemies) > 0:
         print("")
         for enemy_stats in current_enemies:
             print("|| " + str((current_enemies.index(enemy_stats)+1)) + " || LVL: " + str(enemy_stats.level) + " || " + enemy_stats.name + " || ATR: " + enemy_stats.print_attribute)
@@ -1565,14 +1567,26 @@ def func_get_target():
                 in_submenu_target_combat2 = False
 
             if keys[pygame.K_w]:
-                combat_cursor_pos -= 1
-                if combat_cursor_pos < 1:
+                if combat_cursor_pos <= 1:
                     combat_cursor_pos == 1
+                else:
+                    sfx_cursor_move.play()
+                    combat_cursor_pos -= 1
+                if dev_mode >= 2:
+                    print(combat_cursor_pos)
 
             if keys[pygame.K_s]:
-                combat_cursor_pos += 1
+                if combat_cursor_pos >= 18:
+                    combat_cursor_pos == 18
+                else:
+                    sfx_cursor_move.play()
+                    combat_cursor_pos += 1
+                if dev_mode >= 2:
+                    print(combat_cursor_pos)
+
 
             if keys[pygame.K_e]:
+                sfx_cursor_select.play()
                 val_target_input = combat_cursor_pos
                 val_enemy = val_target_input - 1
                 for enemy_stats in current_enemies:
@@ -1581,11 +1595,9 @@ def func_get_target():
                 in_submenu2 = False
                 in_submenu_target_combat2 = False
                 break
-
-
-    else:
-        for enemy_stats in current_enemies:
-            target = enemy_stats.name
+    # else:
+    #     for enemy_stats in current_enemies:
+    #         target = enemy_stats.name
     return target
 
 def func_player_melee(status_str,status_atk):
@@ -1607,8 +1619,11 @@ def func_player_melee(status_str,status_atk):
 
 def func_player_spell(status_mgk):
     global menu_cursor_pos
+    global combat_cursor_pos
     global in_submenu2
     global in_submenu_spell_target_combat2
+    global in_submenu
+    global in_submenu_cast_combat
     spell_damage = 0
     for spell in equiped_spells:
         spell_found = False
@@ -1653,6 +1668,7 @@ def func_player_spell(status_mgk):
                                         print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
                                     sleep(sleep_time)
                                     player1.magic_xp += (player1.magic + spell.xp + spell.damage + (player_damage // 100))
+                    break
                 if spell.effect == 100:
                     spell_healing = spell.damage
                     print("you cast " + spell.print_name)
@@ -1665,6 +1681,7 @@ def func_player_spell(status_mgk):
                     print("\nyou heal for:" + Fore.GREEN + Style.BRIGHT + str(player_healing))
                     sleep(sleep_time)
                     player1.magic_xp += (player1.magic + spell.xp + spell.damage)
+                    break
                 if spell.effect == 2:
                     target = func_get_target()
                     for enemy_stats in current_enemies:
@@ -1699,6 +1716,7 @@ def func_player_spell(status_mgk):
                                         sleep(sleep_time)
 
                             sleep(sleep_time)
+                    break
                 if spell.effect == 3:
                     target = func_get_target()
                     for enemy_stats in current_enemies:
@@ -1733,6 +1751,7 @@ def func_player_spell(status_mgk):
                                             print("\n" + player_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(player_healing))
                                         sleep(sleep_time)
                             sleep(sleep_time)
+                    break
                 if spell.effect == 4:
                     target = func_get_target()
                     for enemy_stats in current_enemies:
@@ -1768,9 +1787,16 @@ def func_player_spell(status_mgk):
                                         sleep(sleep_time)
 
                             sleep(sleep_time)
+                    break
             else:
                 print(Fore.RED + "\nNOT ENOUGH MANA!\n")
+                break
     func_check_level()
+    in_submenu = False
+    in_submenu_cast_combat = False
+    in_submenu2 = False
+    in_submenu_spell_target_combat2 = False
+
 
 def func_player_spell_non_combat(cast_spell):
     for spell in equiped_spells:
@@ -1839,7 +1865,7 @@ def func_player_status_check(is_attack_type_hit):
                         func_check_player_dead()
                         player_can_attack = True
                     else:
-                        print("\n" +player_stats.name + " is no longer burning")
+                        print("\n" + player_stats.name + " is no longer burning")
                         player_stats.status_effect_list.remove(status_condition)
                         player_can_attack = True
 
@@ -1905,7 +1931,7 @@ def func_enemy_status_check():
                     if poison_chance != 1:
                         enemy_poison_damage = (enemy_stats.hp // 100) + (status_condition.scalar * 10)
                         enemy_stats.hp -= enemy_poison_damage
-                        print(enemy_stats.name + " takes" + str(enemy_poison_damage) + " poison damage!\n")
+                        print(enemy_stats.name + " takes " + str(enemy_poison_damage) + " poison damage!\n")
                         func_check_enemy_dead()
                         enemy_can_attack = True
                     else:
@@ -2147,16 +2173,27 @@ def func_shop(gear,npc_gear_inv):
 
 
                 if keys[pygame.K_w]:
-                    menu_cursor_pos -= 1
                     if menu_cursor_pos <= 1:
                         menu_cursor_pos == 1
-
+                    else:
+                        sfx_cursor_move.play()
+                        menu_cursor_pos -= 1
+                    if dev_mode >= 1:
+                        print(menu_cursor_pos)
 
                 if keys[pygame.K_s]:
-                    menu_cursor_pos += 1
+                    if menu_cursor_pos >= 18:
+                        menu_cursor_pos == 18
+                    else:
+                        sfx_cursor_move.play()
+                        menu_cursor_pos += 1
+                    if dev_mode >= 1:
+                        print(menu_cursor_pos)
+
 
 
                 if keys[pygame.K_e]:
+                    sfx_cursor_select.play()
                     val_bought_item = menu_cursor_pos
                     val_shop = val_bought_item - 1
                     for gear in npc_gear_inv:
@@ -2269,14 +2306,26 @@ def func_sell(gear,player_gear_inv):
 
 
         if keys[pygame.K_w]:
-            menu_cursor_pos -= 1
-            if menu_cursor_pos < 1:
+            if menu_cursor_pos <= 1:
                 menu_cursor_pos == 1
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos -= 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
-            menu_cursor_pos += 1
+            if menu_cursor_pos >= 18:
+                menu_cursor_pos == 18
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos += 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
+
 
         if keys[pygame.K_e]:
+            sfx_cursor_select.play()
             has_item = False
             val_sold_item = menu_cursor_pos
             val_sell = val_sold_item - 1
@@ -2344,14 +2393,26 @@ def func_use(gear,player_gear_inv):
             in_submenu_use = False
 
         if keys[pygame.K_w]:
-            menu_cursor_pos -= 1
-            if menu_cursor_pos < 1:
+            if menu_cursor_pos <= 1:
                 menu_cursor_pos == 1
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos -= 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
-            menu_cursor_pos += 1
+            if menu_cursor_pos >= 18:
+                menu_cursor_pos == 18
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos += 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
+
 
         if keys[pygame.K_e]:
+            sfx_cursor_select.play()
             has_item = False
             val_used_item = menu_cursor_pos
             val_use = val_used_item - 1
@@ -2426,14 +2487,26 @@ def func_use_combat(gear,player_gear_inv):
             in_submenu_use_combat = False
 
         if keys[pygame.K_w]:
-            combat_cursor_pos -= 1
-            if combat_cursor_pos < 1:
+            if combat_cursor_pos <= 1:
                 combat_cursor_pos == 1
+            else:
+                sfx_cursor_move.play()
+                combat_cursor_pos -= 1
+            if dev_mode >= 2:
+                print(combat_cursor_pos)
 
         if keys[pygame.K_s]:
-            combat_cursor_pos += 1
+            if combat_cursor_pos >= 18:
+                combat_cursor_pos == 18
+            else:
+                sfx_cursor_move.play()
+                combat_cursor_pos += 1
+            if dev_mode >= 2:
+                print(combat_cursor_pos)
+
 
         if keys[pygame.K_e]:
+            sfx_cursor_select.play()
             has_item = False
             val_used_item = combat_cursor_pos
             val_use = val_used_item - 1
@@ -2508,14 +2581,26 @@ def func_cast(gear,player_gear_inv):
             in_submenu_cast = False
 
         if keys[pygame.K_w]:
-            menu_cursor_pos -= 1
-            if menu_cursor_pos < 1:
+            if menu_cursor_pos <= 1:
                 menu_cursor_pos == 1
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos -= 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
-            menu_cursor_pos += 1
+            if menu_cursor_pos >= 18:
+                menu_cursor_pos == 18
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos += 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
+
 
         if keys[pygame.K_e]:
+            sfx_cursor_select.play()
             has_item = False
             val_used_item = menu_cursor_pos
             val_use = val_used_item - 1
@@ -2606,14 +2691,26 @@ def func_drop(gear,player_gear_inv):
             in_submenu_drop2 = False
 
         if keys[pygame.K_w]:
-            menu_cursor_pos -= 1
-            if menu_cursor_pos < 1:
+            if menu_cursor_pos <= 1:
                 menu_cursor_pos == 1
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos -= 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
-            menu_cursor_pos += 1
+            if menu_cursor_pos >= 18:
+                menu_cursor_pos == 18
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos += 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
+
 
         if keys[pygame.K_e]:
+            sfx_cursor_select.play()
 
             has_item = False
             has_item_multiple = False
@@ -2657,13 +2754,13 @@ def func_drop(gear,player_gear_inv):
                                     scene_type.scene_inventory.append(ground_item)
                                     break
                     if gear in all_game_weapons:
-                        pass # WEAPONS AND ARMOR WILL BE REMOVED FORM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
+                        pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
                     if gear in all_game_armor:
-                        pass # WEAPONS AND ARMOR WILL BE REMOVED FORM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
+                        pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
                     if gear in all_game_helmets:
-                        pass # WEAPONS AND ARMOR WILL BE REMOVED FORM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
+                        pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
                     if gear in all_game_shields:
-                        pass # WEAPONS AND ARMOR WILL BE REMOVED FORM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
+                        pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
             in_submenu2 = False
             in_submenu_drop2 = False
             in_menu_item = False
@@ -3001,19 +3098,32 @@ def func_equip(gear,player_gear_inv,current_gear):
         func_refresh_pygame(False)
 
         if keys[pygame.K_q]:
+            in_submenu_equip == False
             in_submenu_equip2 == False
             in_submenu2 = False
             break
 
         if keys[pygame.K_w]:
-            menu_cursor_pos -= 1
-            if menu_cursor_pos < 1:
+            if menu_cursor_pos <= 1:
                 menu_cursor_pos == 1
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos -= 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
-            menu_cursor_pos += 1
+            if menu_cursor_pos >= 18:
+                menu_cursor_pos == 18
+            else:
+                sfx_cursor_move.play()
+                menu_cursor_pos += 1
+            if dev_mode >= 1:
+                print(menu_cursor_pos)
+
 
         if keys[pygame.K_e]:
+            sfx_cursor_select.play()
 
             has_gear = False
 
@@ -3730,7 +3840,7 @@ while game_start == 1:
                 if dev_mode >= 1:
                     print("enemies chosen")
 
-            for enemy_stats in current_enemies:
+            for enemy_stats in current_enemies: #build drop tables
                 if dev_mode >= 1:
                     print("building drop tables")
                 enemy_stats.drop_table_items.extend(all_game_items)
@@ -3767,20 +3877,22 @@ while game_start == 1:
                 print("battle intro finished")
             print(Fore.RED + "\n//////////// YOU ARE NOW IN COMBAT //////////// \n")
             print("\nLocation: " + scene_type.name)
-            print("\nEnemy stats:")
-            for enemy_stats in current_enemies:
-                status_list = []
-                for status_condition in enemy_stats.status_effect_list:
-                    status_list.append(status_condition.name)
-                print("Name: " + enemy_stats.name)
-                print("LVL: " + str(enemy_stats.level))
-                print("ATT.: " + enemy_stats.print_attribute)
-                print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
-                print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
-                if len(enemy_stats.status_effect_list) != 0:
-                    print("Status: " + str(status_list) + " \n")
-                else:
-                    print("Status: ['N0NE'] \n")
+
+            if dev_mode >= 2:
+                print("\nEnemy stats:")
+                for enemy_stats in current_enemies:
+                    status_list = []
+                    for status_condition in enemy_stats.status_effect_list:
+                        status_list.append(status_condition.name)
+                    print("Name: " + enemy_stats.name)
+                    print("LVL: " + str(enemy_stats.level))
+                    print("ATT.: " + enemy_stats.print_attribute)
+                    print("HP:" + Fore.RED + str(enemy_stats.hp) + Style.RESET_ALL + "/" + Fore.RED + str(enemy_stats.maxhp))
+                    print("MP:" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.mp) + Style.RESET_ALL + "/" + Fore.BLUE + Style.BRIGHT + str(enemy_stats.maxmp))
+                    if len(enemy_stats.status_effect_list) != 0:
+                        print("Status: " + str(status_list) + " \n")
+                    else:
+                        print("Status: ['N0NE'] \n")
 
             func_HUD()
 
@@ -3796,14 +3908,25 @@ while game_start == 1:
                 keys = pygame.key.get_pressed()
 
                 if keys[pygame.K_w]:
-                    combat_cursor_pos -= 1
-                    if combat_cursor_pos < 1:
+                    if combat_cursor_pos <= 1:
                         combat_cursor_pos == 1
+                    else:
+                        sfx_cursor_move.play()
+                        combat_cursor_pos -= 1
+                    if dev_mode >= 2:
+                        print(combat_cursor_pos)
 
                 if keys[pygame.K_s]:
-                    combat_cursor_pos += 1
+                    if combat_cursor_pos >= 18:
+                        combat_cursor_pos == 18
+                    else:
+                        sfx_cursor_move.play()
+                        combat_cursor_pos += 1
+                    if dev_mode >= 2:
+                        print(combat_cursor_pos)
 
                 if keys[pygame.K_e]:
+                    sfx_cursor_select.play()
                     if combat_cursor_pos == 4:
                         in_fight = False
                         print("you ran away! \n")
@@ -3819,7 +3942,6 @@ while game_start == 1:
                         for spell in equiped_spells:
                             print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
                         print("")
-
                         print("which spell will you cast? \n")
 
                         in_submenu = True
@@ -3843,14 +3965,25 @@ while game_start == 1:
                                 in_submenu_cast_combat = False
 
                             if keys[pygame.K_w]:
-                                combat_cursor_pos -= 1
-                                if combat_cursor_pos < 1:
+                                if combat_cursor_pos <= 1:
                                     combat_cursor_pos == 1
+                                else:
+                                    sfx_cursor_move.play()
+                                    combat_cursor_pos -= 1
+                                if dev_mode >= 2:
+                                    print(combat_cursor_pos)
 
                             if keys[pygame.K_s]:
-                                combat_cursor_pos += 1
+                                if combat_cursor_pos >= 18:
+                                    combat_cursor_pos == 18
+                                else:
+                                    sfx_cursor_move.play()
+                                    combat_cursor_pos += 1
+                                if dev_mode >= 2:
+                                    print(combat_cursor_pos)
 
                             if keys[pygame.K_e]:
+                                sfx_cursor_select.play()
 
                                 val_combat_spell = combat_cursor_pos
                                 val = val_combat_spell - 1
@@ -3864,6 +3997,7 @@ while game_start == 1:
                                     if spell.name == combat_cast_spell:
                                         has_spell = 1
 
+                                player_turns -= 1
                                 func_enemy_status_check()
                                 func_player_status_check(False)
                                 func_check_enemy_dead()
@@ -3872,6 +4006,7 @@ while game_start == 1:
                                 break
 
                     elif combat_cursor_pos == 3:
+                        player_turns -= 1
                         func_use_combat(item,inventory)
                         func_enemy_status_check()
                         func_check_enemy_dead()
@@ -4011,6 +4146,7 @@ while game_start == 1:
                 if menu_cursor_pos <= 1:
                     menu_cursor_pos == 1
                 else:
+                    sfx_cursor_move.play()
                     menu_cursor_pos -= 1
                 if dev_mode >= 1:
                     print(menu_cursor_pos)
@@ -4019,11 +4155,13 @@ while game_start == 1:
                 if menu_cursor_pos >= 18:
                     menu_cursor_pos == 18
                 else:
+                    sfx_cursor_move.play()
                     menu_cursor_pos += 1
                 if dev_mode >= 1:
                     print(menu_cursor_pos)
 
             if keys[pygame.K_e]:
+                sfx_cursor_select.play()
 
                 if menu_cursor_pos == 13:
                     for scene_type in location:
@@ -4063,12 +4201,12 @@ while game_start == 1:
                     current_spell = "0"
 
                     print("your gear:\n")
-
-                    print("|| 1 || Weapon")
-                    print("|| 2 || Armor")
-                    print("|| 3 || Helmet")
-                    print("|| 4 || Shield")
-                    print("|| 5 || Spell")
+                    if dev_mode >= 2:
+                        print("|| 1 || Weapon")
+                        print("|| 2 || Armor")
+                        print("|| 3 || Helmet")
+                        print("|| 4 || Shield")
+                        print("|| 5 || Spell")
 
                     in_submenu = True
                     in_submenu_equip = True
@@ -4092,39 +4230,51 @@ while game_start == 1:
                         func_refresh_pygame(False)
                         keys = pygame.key.get_pressed()
                         if keys[pygame.K_w]:
-                            menu_cursor_pos -= 1
-                            if menu_cursor_pos < 1:
+                            if menu_cursor_pos <= 1:
                                 menu_cursor_pos == 1
+                            else:
+                                sfx_cursor_move.play()
+                                menu_cursor_pos -= 1
+                            if dev_mode >= 1:
+                                print(menu_cursor_pos)
 
                         if keys[pygame.K_s]:
-                            menu_cursor_pos += 1
+                            if menu_cursor_pos >= 18:
+                                menu_cursor_pos == 18
+                            else:
+                                sfx_cursor_move.play()
+                                menu_cursor_pos += 1
+                            if dev_mode >= 1:
+                                print(menu_cursor_pos)
+
 
                         if keys[pygame.K_e]:
+                            sfx_cursor_select.play()
                             if menu_cursor_pos == 1:
                                 if len(weapon_inventory) != 0:
                                     func_equip(weapon,weapon_inventory,current_weapon)
                                 else:
-                                    print("you have no weapons...")
+                                    print("you have no weapons in your inventory...")
                             elif menu_cursor_pos == 2:
                                 if len(armor_inventory) != 0:
                                     func_equip(armor,armor_inventory,current_armor)
                                 else:
-                                    print("you have no armor...")
+                                    print("you have no armor in your inventory...")
                             elif menu_cursor_pos == 3:
                                 if len(helmet_inventory) != 0:
                                     func_equip(helmet,helmet_inventory,current_helmet)
                                 else:
-                                    print("you have no helmets...")
+                                    print("you have no helmets in your inventory...")
                             elif menu_cursor_pos == 4:
                                 if len(shield_inventory) != 0:
                                     func_equip(shield,shield_inventory,current_shield)
                                 else:
-                                    print("you have no shields...")
+                                    print("you have no shields in your inventory...")
                             elif menu_cursor_pos == 5:
                                 if len(spell_inventory) != 0:
                                     func_equip(spell,spell_inventory,current_spell)
                                 else:
-                                    print("you have no spell scrolls...")
+                                    print("you have no spell scrolls in your inventory...")
                             else:
                                 print("\ninvalid choice!\n")
 
@@ -4219,12 +4369,13 @@ while game_start == 1:
 
                 elif menu_cursor_pos == 12:
                     print("")
-                    print("|| 1 || Items")
-                    print("|| 2 || Weapons")
-                    print("|| 3 || Armor")
-                    print("|| 4 || Helmets")
-                    print("|| 5 || Shields")
-                    print("|| 6 || Spells")
+                    if dev_mode >= 2:
+                        print("|| 1 || Items")
+                        print("|| 2 || Weapons")
+                        print("|| 3 || Armor")
+                        print("|| 4 || Helmets")
+                        print("|| 5 || Shields")
+                        print("|| 6 || Spells")
 
                     print("\nwhich bag to drop from?\n")
                     in_submenu = True
@@ -4249,44 +4400,56 @@ while game_start == 1:
                             in_submenu_drop = False
 
                         if keys[pygame.K_w]:
-                            menu_cursor_pos -= 1
-                            if menu_cursor_pos < 1:
+                            if menu_cursor_pos <= 1:
                                 menu_cursor_pos == 1
+                            else:
+                                sfx_cursor_move.play()
+                                menu_cursor_pos -= 1
+                            if dev_mode >= 1:
+                                print(menu_cursor_pos)
 
                         if keys[pygame.K_s]:
-                            menu_cursor_pos += 1
+                            if menu_cursor_pos >= 18:
+                                menu_cursor_pos == 18
+                            else:
+                                sfx_cursor_move.play()
+                                menu_cursor_pos += 1
+                            if dev_mode >= 1:
+                                print(menu_cursor_pos)
+
 
                         if keys[pygame.K_e]:
+                            sfx_cursor_select.play()
                             if menu_cursor_pos == 1:
                                 if len(inventory) != 0:
                                     func_drop(item,inventory)
                                 else:
-                                    print("you have no weapons...")
+                                    print("you have no items in your inventory...")
                             elif menu_cursor_pos == 2:
                                 if len(weapon_inventory) != 0:
                                     func_drop(weapon,weapon_inventory)
                                 else:
-                                    print("you have no weapons...")
+                                    print("you have no weapons in your inventory...")
                             elif menu_cursor_pos == 3:
                                 if len(armor_inventory) != 0:
                                     func_drop(armor,armor_inventory)
                                 else:
-                                    print("you have no armor...")
+                                    print("you have no armor in your inventory...")
                             elif menu_cursor_pos == 4:
                                 if len(helmet_inventory) != 0:
                                     func_drop(helmet,helmet_inventory)
                                 else:
-                                    print("you have no helmets...")
+                                    print("you have no helmets in your inventory...")
                             elif menu_cursor_pos == 5:
                                 if len(shield_inventory) != 0:
                                     func_drop(shield,shield_inventory)
                                 else:
-                                    print("you have no shields...")
+                                    print("you have no shields in your inventory...")
                             elif menu_cursor_pos == 6:
                                 if len(spell_inventory) != 0:
                                     func_drop(spell,spell_inventory)
                                 else:
-                                    print("you have no spell scrolls...")
+                                    print("you have no spell scrolls in your inventory...")
                             else:
                                 print("\ninvalid choice!\n")
                             in_submenu = False
@@ -4566,14 +4729,26 @@ while game_start == 1:
 
 
                                         if keys[pygame.K_w]:
-                                            menu_cursor_pos -= 1
-                                            if menu_cursor_pos < 1:
+                                            if menu_cursor_pos <= 1:
                                                 menu_cursor_pos == 1
+                                            else:
+                                                sfx_cursor_move.play()
+                                                menu_cursor_pos -= 1
+                                            if dev_mode >= 1:
+                                                print(menu_cursor_pos)
 
                                         if keys[pygame.K_s]:
-                                            menu_cursor_pos += 1
+                                            if menu_cursor_pos >= 18:
+                                                menu_cursor_pos == 18
+                                            else:
+                                                sfx_cursor_move.play()
+                                                menu_cursor_pos += 1
+                                            if dev_mode >= 1:
+                                                print(menu_cursor_pos)
+
 
                                         if keys[pygame.K_e]:
+                                            sfx_cursor_select.play()
                                             val_dropped_item = menu_cursor_pos
                                             val_drop = val_dropped_item - 1
                                             for npc in scene_type.npc_list:
@@ -4628,14 +4803,26 @@ while game_start == 1:
 
 
                                                                 if keys[pygame.K_w]:
-                                                                    menu_cursor_pos -= 1
-                                                                    if menu_cursor_pos < 1:
+                                                                    if menu_cursor_pos <= 1:
                                                                         menu_cursor_pos == 1
+                                                                    else:
+                                                                        sfx_cursor_move.play()
+                                                                        menu_cursor_pos -= 1
+                                                                    if dev_mode >= 1:
+                                                                        print(menu_cursor_pos)
 
                                                                 if keys[pygame.K_s]:
-                                                                    menu_cursor_pos += 1
+                                                                    if menu_cursor_pos >= 18:
+                                                                        menu_cursor_pos == 18
+                                                                    else:
+                                                                        sfx_cursor_move.play()
+                                                                        menu_cursor_pos += 1
+                                                                    if dev_mode >= 1:
+                                                                        print(menu_cursor_pos)
+
 
                                                                 if keys[pygame.K_e]:
+                                                                    sfx_cursor_select.play()
                                                                     if len(npc.dialouge_options_list) > 1:
                                                                         val_target_input = menu_cursor_pos
                                                                         val_dialouge = val_target_input - 1
@@ -4724,14 +4911,26 @@ while game_start == 1:
 
 
                                                                                                 if keys[pygame.K_w]:
-                                                                                                    menu_cursor_pos -= 1
-                                                                                                    if menu_cursor_pos < 1:
+                                                                                                    if menu_cursor_pos <= 1:
                                                                                                         menu_cursor_pos == 1
+                                                                                                    else:
+                                                                                                        sfx_cursor_move.play()
+                                                                                                        menu_cursor_pos -= 1
+                                                                                                    if dev_mode >= 1:
+                                                                                                        print(menu_cursor_pos)
 
                                                                                                 if keys[pygame.K_s]:
-                                                                                                    menu_cursor_pos += 1
+                                                                                                    if menu_cursor_pos >= 18:
+                                                                                                        menu_cursor_pos == 18
+                                                                                                    else:
+                                                                                                        sfx_cursor_move.play()
+                                                                                                        menu_cursor_pos += 1
+                                                                                                    if dev_mode >= 1:
+                                                                                                        print(menu_cursor_pos)
+
 
                                                                                                 if keys[pygame.K_e]:
+                                                                                                    sfx_cursor_select.play()
                                                                                                     if menu_cursor_pos == 1:
                                                                                                         func_sell(item,inventory)
                                                                                                         in_submenu3 = False
