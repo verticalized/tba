@@ -16,6 +16,8 @@ spr_goblin2 = pygame.image.load("goblin2.png")
 spr_ghost = pygame.image.load("ghost1.png")
 spr_imp = pygame.image.load("imp1.png")
 spr_imp2 = pygame.image.load("imp2.png")
+spr_wolf = pygame.image.load("wolf1.png")
+spr_ice_wolf = pygame.image.load("ice_wolf1.png")
 
 spr_cow = pygame.image.load("cow1.png")
 spr_sheep = pygame.image.load("sheep1.png")
@@ -94,6 +96,10 @@ class enemy_stats:
             self.enemy_sprite = spr_water_ele
         if sprite_variable == "earth_ele":
             self.enemy_sprite = spr_earth_ele
+        if sprite_variable == "wolf":
+            self.enemy_sprite = spr_wolf
+        if sprite_variable == "ice_wolf":
+            self.enemy_sprite = spr_ice_wolf
 
 
         all_game_enemies.append(self)
@@ -105,12 +111,12 @@ class enemy_stats:
 imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"imp")
 goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"imp2")
 
-wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"")
-ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"")
+wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"wolf")
+ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"ice_wolf")
 
 goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"goblin")
 hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
-hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"")
+hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
 
 bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0,"")
 bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0,"")

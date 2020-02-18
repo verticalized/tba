@@ -1634,9 +1634,6 @@ def func_player_spell(status_mgk):
         if val == equiped_spells.index(spell):
             spell_found = True
 
-        # if spell.name == combat_cast_spell:
-        #     spell_found = True
-
         if spell_found == True:
             if player1.mp >= spell.mp_cost:
                 func_player_mp_change(spell.mp_cost,False)
@@ -4030,6 +4027,8 @@ while game_start == 1:
 
                     else:
                         print("invalid combat command \n")
+                        
+                    print("\n///////////////////////////////  end of turn  ///////////////////////////\n")
 
         if in_fight == False:
             location_desc()
