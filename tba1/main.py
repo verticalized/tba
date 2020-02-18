@@ -1540,10 +1540,11 @@ def func_get_target():
 
     target = "0"
     if len(current_enemies) > 0:
-        print("")
-        for enemy_stats in current_enemies:
-            print("|| " + str((current_enemies.index(enemy_stats)+1)) + " || LVL: " + str(enemy_stats.level) + " || " + enemy_stats.name + " || ATR: " + enemy_stats.print_attribute)
-        print("\nWho will you attack? \n")
+        if dev_mode >=2:
+            print("")
+            for enemy_stats in current_enemies:
+                print("|| " + str((current_enemies.index(enemy_stats)+1)) + " || LVL: " + str(enemy_stats.level) + " || " + enemy_stats.name + " || ATR: " + enemy_stats.print_attribute)
+            print("\nWho will you attack? \n")
 
         in_submenu2 = True
         in_submenu_target_combat2 = True
@@ -3938,11 +3939,13 @@ while game_start == 1:
                         func_player_status_check(True)
                         func_check_enemy_dead()
                     elif combat_cursor_pos == 2:
-                        print("\nYour equipped spells: \n")
-                        for spell in equiped_spells:
-                            print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
-                        print("")
-                        print("which spell will you cast? \n")
+
+                        if dev_mode >= 2:
+                            print("\nYour equipped spells: \n")
+                            for spell in equiped_spells:
+                                print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
+                            print("")
+                            print("which spell will you cast? \n")
 
                         in_submenu = True
                         in_submenu_cast_combat = True
