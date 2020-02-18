@@ -32,7 +32,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 0
+dev_mode = 1
 
 has_moved = False
 check_for_combat = True
@@ -1619,6 +1619,8 @@ def func_player_melee(status_str,status_atk):
             break
 
 def func_player_spell(status_mgk):
+    global val
+    global combat_cast_spell
     global menu_cursor_pos
     global combat_cursor_pos
     global in_submenu2
@@ -1632,8 +1634,8 @@ def func_player_spell(status_mgk):
         if val == equiped_spells.index(spell):
             spell_found = True
 
-        if spell.name == combat_cast_spell:
-            spell_found = True
+        # if spell.name == combat_cast_spell:
+        #     spell_found = True
 
         if spell_found == True:
             if player1.mp >= spell.mp_cost:
@@ -2019,7 +2021,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                     enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
                     enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
                     player1.hp = player1.hp - (enemy_spell_damage)
-                    print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                    print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!\n")
                     if spell.effect == 1:
                         enemy_healing = enemy_spell_damage // 2
                         enemy_stats.hp = enemy_stats.hp + enemy_healing
@@ -2556,9 +2558,10 @@ def func_cast(gear,player_gear_inv):
     global in_submenu
     global in_submenu_cast
     cast_spell = "0"
-    for gear in player_gear_inv:
-        if gear in all_game_spells:
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
+    if dev_mode >= 2:
+        for gear in player_gear_inv:
+            if gear in all_game_spells:
+                print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
 
     in_submenu = True
     in_submenu_cast = True
@@ -3309,27 +3312,27 @@ def func_check_level():
     for player_stats in players:
         if player_stats.magic_xp >= (player_stats.magic ** 4):
             player_stats.magic += 1
-            print("your magic level is now: ", player_stats.magic)
+            print("\nyour magic level is now: ", player_stats.magic)
             func_check_level()
 
         if player_stats.strength_xp >= (player_stats.strength ** 4):
             player_stats.strength += 1
-            print("your strength level is now: ", player_stats.strength)
+            print("\nyour strength level is now: ", player_stats.strength)
             func_check_level()
 
         if player_stats.attack_xp >= (player_stats.attack ** 4):
             player_stats.attack += 1
-            print("your attack level is now: ", player_stats.attack)
+            print("\nyour attack level is now: ", player_stats.attack)
             func_check_level()
 
         if player_stats.defence_xp >= (player_stats.defence ** 4):
             player_stats.defence += 1
-            print("your defence level is now: ", player_stats.defence)
+            print("\nyour defence level is now: ", player_stats.defence)
             func_check_level()
 
         if player_stats.xp >= (player_stats.level ** 2):
             player_stats.level += 1
-            print("you are now level: ", player_stats.level)
+            print("\nLEVELED UP \nyou are now level: ", player_stats.level)
             func_check_level()
 
         player_stats.nobonus_maxhp = (player_stats.level * 100) + (player_stats.defence * 25) + (player_stats.strength * 10) + (player_stats.attack * 10) + (player_stats.magic * 10)
@@ -3895,7 +3898,7 @@ while game_start == 1:
                     else:
                         print("Status: ['N0NE'] \n")
 
-            func_HUD()
+                    func_HUD()
 
             while in_fight == True:
                 pygame.time.delay(100)
@@ -3935,8 +3938,9 @@ while game_start == 1:
                         location_desc()
                     elif combat_cursor_pos == 1:
                         player_turns -= 1
-                        func_enemy_status_check()
                         func_player_status_check(True)
+                        func_check_enemy_dead()
+                        func_enemy_status_check()
                         func_check_enemy_dead()
                     elif combat_cursor_pos == 2:
 
@@ -4001,8 +4005,9 @@ while game_start == 1:
                                         has_spell = 1
 
                                 player_turns -= 1
-                                func_enemy_status_check()
                                 func_player_status_check(False)
+                                func_check_enemy_dead()
+                                func_enemy_status_check()
                                 func_check_enemy_dead()
                                 in_submenu = False
                                 in_submenu_cast_combat = False
@@ -4011,6 +4016,7 @@ while game_start == 1:
                     elif combat_cursor_pos == 3:
                         player_turns -= 1
                         func_use_combat(item,inventory)
+                        func_check_enemy_dead()
                         func_enemy_status_check()
                         func_check_enemy_dead()
 
@@ -4027,7 +4033,8 @@ while game_start == 1:
 
         if in_fight == False:
             location_desc()
-            func_HUD()
+            if dev_mode >=2:
+                func_HUD()
 
         has_moved = False
 
