@@ -32,7 +32,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 has_moved = False
 check_for_combat = True
@@ -4027,7 +4027,7 @@ while game_start == 1:
 
                     else:
                         print("invalid combat command \n")
-                        
+
                     print("\n///////////////////////////////  end of turn  ///////////////////////////\n")
 
         if in_fight == False:
