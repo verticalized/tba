@@ -50,7 +50,7 @@ class enemy_stats:
         self.drop_table_shields = drop_table_shields
         self.status_effect = status_effect
         self.sprite_variable = sprite_variable
-        self.enemy_sprite = spr_imp
+        self.enemy_sprite = spr_no_sprite
         self.status_effect_list = []
 
         self.print_name = (Fore.RED + Style.DIM + self.name + Style.RESET_ALL)
