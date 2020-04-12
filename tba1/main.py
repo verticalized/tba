@@ -3,6 +3,7 @@ import random # default python module
 from time import sleep # default python module
 
 ##########--3RD PARTY MODULES--###############
+from tkinter import *
 
 from colorama import init
 from colorama import Fore, Back, Style
@@ -2209,21 +2210,27 @@ def func_shop(gear,npc_gear_inv):
                                 player1.gp -= gear.value
                                 if gear in all_game_weapons:
                                     weapon_inventory.append(gear)
+                                    break
                                 if gear in all_game_armor:
                                     armor_inventory.append(gear)
+                                    break
                                 if gear in all_game_helmets:
                                     helmet_inventory.append(gear)
+                                    break
                                 if gear in all_game_shields:
                                     shield_inventory.append(gear)
+                                    break
                                 if gear in all_game_items:
                                     for item in inventory:
                                         if item.name == target_gear:
                                             has_item_multiple = True
                                             item.item_amount += 1
+                                            break
                                     if has_item_multiple == False:
                                         for item in all_game_items:
                                             if item.name == target_gear:
                                                 inventory.append(item)
+                                                break
                                 if gear in all_game_spells:
                                     spell_inventory.append(gear)
                                 print("\nthanks, enjoy your " + gear.name + "\n")
@@ -3188,18 +3195,22 @@ def func_equip(gear,player_gear_inv,current_gear):
                                 for weapon in all_game_weapons:
                                     if weapon.name == current_gear:
                                         weapon_inventory.append(weapon)
+                                        break
                             if gear in all_game_armor:
                                 for armor in all_game_armor:
                                     if armor.name == current_gear:
                                         armor_inventory.append(armor)
+                                        break
                             if gear in all_game_helmets:
                                 for helmet in all_game_helmets:
                                     if helmet.name == current_gear:
                                         helmet_inventory.append(helmet)
+                                        break
                             if gear in all_game_shields:
                                 for shield in all_game_shields:
                                     if shield.name == current_gear:
                                         shield_inventory.append(shield)
+                                        break
 
                     if has_level == True and has_space == False:
                         print("\nYou already have this spell in your spellbook!\n")
@@ -3789,6 +3800,9 @@ if dev_mode >= 1:
 
 ########## GAME START #########
 game_start = 1
+
+for item in all_game_items:
+    print(item.print_name)
 
 print(Fore.RED + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to the land of Tonbale! \n")
 
@@ -5084,7 +5098,56 @@ while game_start == 1:
             ################################################
 
                 elif menu_cursor_pos == 17:
-                    print("help menu is empty")
+                    print("dev menu open")
+                    root = Tk()
+
+                    def func_click_xp():
+                        player1.xp += int(xp_entry.get())
+
+
+                    xp_entry = Entry(root, width = 20)
+                    xp_entry.pack()
+
+                    xp_button = Button(root, text=" + xp", command=func_click_xp)
+                    xp_button.pack()
+
+                    #####################################
+
+                    def func_click_gp():
+                        player1.gp += int(gp_entry.get())
+
+
+                    gp_entry = Entry(root, width = 20)
+                    gp_entry.pack()
+
+                    gp_button = Button(root, text=" + gp", command=func_click_gp)
+                    gp_button.pack()
+
+                    #####################################
+
+                    item_name_list = []
+                    dev_item = StringVar()
+                    name_string = "0"
+
+                    def func_click_item():
+                        for item in all_game_items:
+                            if item.name == dev_item.get():
+                                inventory.append(item)
+                                break
+
+                    for item in all_game_items:
+                        name_string = item.name
+                        item_name_list.append(name_string)
+
+                    item_choice = OptionMenu(root, dev_item, *item_name_list)
+                    item_choice.pack()
+                    item_button = Button(root, text=" + item", command=func_click_item)
+                    item_button.pack()
+
+                    #####################################
+
+                    root.mainloop()
+
 
                 elif menu_cursor_pos == 18:
                     game_start = 0
