@@ -3801,8 +3801,7 @@ if dev_mode >= 1:
 ########## GAME START #########
 game_start = 1
 
-for item in all_game_items:
-    print(item.print_name)
+
 
 print(Fore.RED + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to the land of Tonbale! \n")
 
@@ -5098,55 +5097,105 @@ while game_start == 1:
             ################################################
 
                 elif menu_cursor_pos == 17:
-                    print("dev menu open")
-                    root = Tk()
+                    if dev_mode >= 1:
+                        print("dev menu open")
 
-                    def func_click_xp():
-                        player1.xp += int(xp_entry.get())
+                        root = Tk()
 
+                        dw_p1_xp = IntVar()
+                        dw_p1_xp.set(player1.xp)
 
-                    xp_entry = Entry(root, width = 20)
-                    xp_entry.pack()
+                        dw_player_xp = Label(root, textvariable=dw_p1_xp)
+                        dw_player_xp.pack()
 
-                    xp_button = Button(root, text=" + xp", command=func_click_xp)
-                    xp_button.pack()
+                        dw_p1_gp = IntVar()
+                        dw_p1_gp.set(player1.gp)
 
-                    #####################################
-
-                    def func_click_gp():
-                        player1.gp += int(gp_entry.get())
+                        dw_player_gp = Label(root, textvariable=dw_p1_gp)
 
 
-                    gp_entry = Entry(root, width = 20)
-                    gp_entry.pack()
+                        #####################################
 
-                    gp_button = Button(root, text=" + gp", command=func_click_gp)
-                    gp_button.pack()
+                        def func_click_xp():
+                            player1.xp += int(xp_entry.get())
+                            dw_p1_xp.set(player1.xp)
+                            xp_entry.delete(0, 'end')
 
-                    #####################################
 
-                    item_name_list = []
-                    dev_item = StringVar()
-                    name_string = "0"
+                        xp_entry = Entry(root, width = 20)
+                        xp_entry.pack()
 
-                    def func_click_item():
+                        xp_button = Button(root, text=" + xp", command=func_click_xp)
+                        xp_button.pack()
+
+                        #####################################
+
+                        dw_player_gp.pack()
+
+                        def func_click_gp():
+                            player1.gp += int(gp_entry.get())
+                            dw_p1_gp.set(player1.gp)
+                            gp_entry.delete(0, 'end')
+
+
+                        gp_entry = Entry(root, width = 20)
+                        gp_entry.pack()
+
+                        gp_button = Button(root, text=" + gp", command=func_click_gp)
+                        gp_button.pack()
+
+                        #####################################
+
+                        item_name_list = []
+                        dev_item = StringVar()
+
+                        name_string = "0"
+
+                        def func_click_item():
+                            for item in all_game_items:
+                                if item.name == dev_item.get():
+                                    inventory.append(item)
+                                    break
+
                         for item in all_game_items:
-                            if item.name == dev_item.get():
-                                inventory.append(item)
-                                break
+                            name_string = item.name
+                            item_name_list.append(name_string)
 
-                    for item in all_game_items:
-                        name_string = item.name
-                        item_name_list.append(name_string)
+                        dev_item.set(item_name_list[0])
 
-                    item_choice = OptionMenu(root, dev_item, *item_name_list)
-                    item_choice.pack()
-                    item_button = Button(root, text=" + item", command=func_click_item)
-                    item_button.pack()
+                        item_choice = OptionMenu(root, dev_item, *item_name_list)
+                        item_choice.pack()
+                        item_button = Button(root, text=" + item", command=func_click_item)
+                        item_button.pack()
 
-                    #####################################
+                        #####################################
 
-                    root.mainloop()
+                        spell_name_list = []
+                        dev_spell = StringVar()
+
+                        name_string = "0"
+
+                        def func_click_spell():
+                            for spell in all_game_spells:
+                                if spell.name == dev_spell.get():
+                                    spell_inventory.append(spell)
+                                    break
+
+                        for spell in all_game_spells:
+                            spell_name_string = spell.name
+                            spell_name_list.append(spell_name_string)
+
+                        dev_spell.set(spell_name_list[0])
+
+                        spell_choice = OptionMenu(root, dev_spell, *spell_name_list)
+                        spell_choice.pack()
+                        spell_button = Button(root, text=" + spell", command=func_click_spell)
+                        spell_button.pack()
+
+                        #####################################
+
+
+                        root.mainloop()
 
 
                 elif menu_cursor_pos == 18:
