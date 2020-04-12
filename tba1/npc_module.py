@@ -22,7 +22,7 @@ class dialouge_option:
         self.is_quest = is_quest #interprets dialouge option as player wanting to give the npc an item
         self.is_heal = is_heal #etc...
 
-dialouge_buy_item = dialouge_option("buy ite,",False,True,False,False,False,False,False,False,False,False,False,False,False)
+dialouge_buy_item = dialouge_option("buy item",False,True,False,False,False,False,False,False,False,False,False,False,False)
 dialouge_buy_weapon = dialouge_option("buy weapons",False,False,True,False,False,False,False,False,False,False,False,False,False)
 dialouge_buy_armor = dialouge_option("buy armor",False,False,False,True,False,False,False,False,False,False,False,False,False)
 dialouge_buy_helmet = dialouge_option("buy helmets",False,False,False,False,True,False,False,False,False,False,False,False,False)
@@ -31,9 +31,9 @@ dialouge_buy_spell = dialouge_option("buy spells",False,False,False,False,False,
 
 dialouge_heal = dialouge_option("ask for healing",False,False,False,False,False,False,False,False,False,False,False,False,True)
 
-dialouge_sell = dialouge_option("can I sell something?",False,False,False,False,False,False,False,True,False,False,False,False,False)
-dialouge_talk = dialouge_option("have you heard any interesting news?",False,False,False,False,False,False,False,False,True,False,False,False,False)
-dialouge_gf = dialouge_option("get fucked mate!",False,False,False,False,False,False,False,False,False,True,False,False,False)
+dialouge_sell = dialouge_option("can I sell",False,False,False,False,False,False,False,True,False,False,False,False,False)
+dialouge_talk = dialouge_option("heard any news?",False,False,False,False,False,False,False,False,True,False,False,False,False)
+dialouge_gf = dialouge_option("prepare to die!",False,False,False,False,False,False,False,False,False,True,False,False,False)
 dialouge_attack = dialouge_option("attack",False,False,False,False,False,False,False,False,False,True,False,False,False)
 dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,False,True,False,False)
 dialouge_quest = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,False)
