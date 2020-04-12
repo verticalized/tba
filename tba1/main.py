@@ -32,7 +32,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 0
+dev_mode = 1
 
 has_moved = False
 check_for_combat = True
