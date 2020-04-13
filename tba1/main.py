@@ -10,7 +10,7 @@ from colorama import Fore, Back, Style
 init(autoreset=True)
 
 import pygame
-
+pygame.mixer.pre_init() #44100, 16, 2, 4096
 pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
 myfont = pygame.font.SysFont('MS Comic Sans', 21) # you have to call this at the start if you want to use fonts
@@ -730,8 +730,8 @@ else:
 
 ##########--PYGAME--############
 
-sfx_cursor_move = pygame.mixer.Sound('sfx_cursor_move.wav')
-sfx_cursor_select = pygame.mixer.Sound('sfx_cursor_select.wav')
+sfx_cursor_move = pygame.mixer.Sound('sfx_cursor_move16.wav')
+sfx_cursor_select = pygame.mixer.Sound('sfx_cursor_select16.wav')
 
 txt_1 = myfont.render('1', False, (0, 0, 0))
 txt_2 = myfont.render('2', False, (0, 0, 0))
@@ -2681,7 +2681,7 @@ def func_drop(gear,player_gear_inv):
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_items:
             in_menu_item = True
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + str(gear.value) + " gp. ")
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || x " + str(gear.item_amount) + " || " + str(gear.value * gear.item_amount) + " gp. " )
         if gear in all_game_spells:
             in_menu_spell = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
@@ -2751,26 +2751,33 @@ def func_drop(gear,player_gear_inv):
                                 has_item_multiple = True
                                 item.item_amount -= 1
                         if has_item_multiple == False:
-                            for item in all_game_items:
+                            for item in inventory:
                                 if item.name == target_gear:
                                     inventory.remove(item)
                     else:
-                        print("you drop " + gear.print_name + "\n")
+                        print("was not an item " + gear.print_name + "\n")
                         player_gear_inv.remove(gear)
                     break
             if has_item == True:
                 for scene_type in location:
                     if gear in all_game_items:
+                        end_drop = False
                         for ground_item in scene_type.scene_inventory:
-                            if ground_item.name == target_gear and ground_item.item_amount > 0:
+                            if end_drop == False and ground_item.name == target_gear and ground_item.item_amount >= 1:
                                 ground_has_item_multiple = True
                                 ground_item.item_amount += 1
+                                end_drop = True
+                                break
 
-                        if ground_has_item_multiple == False:
+                        if end_drop == False and ground_has_item_multiple == False:
                             for ground_item in all_ground_game_items:
                                 if ground_item.name == target_gear:
                                     scene_type.scene_inventory.append(ground_item)
-                                    break
+                            for ground_item in scene_type.scene_inventory:
+                                if ground_item.name == target_gear:
+                                    ground_item.item_amount = 1
+                            end_drop = True
+
                     if gear in all_game_weapons:
                         pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
                     if gear in all_game_armor:
@@ -4573,6 +4580,7 @@ while game_start == 1:
                                 break
 
                 elif menu_cursor_pos == 11:
+                    print("")
                     while len(scene_type.scene_inventory) != 0 or len(scene_type.scene_weapon_inventory) != 0 or len(scene_type.scene_armor_inventory) != 0 or len(scene_type.scene_helmet_inventory) != 0 or len(scene_type.scene_shield_inventory) != 0:
                         has_item = False
                         has_item_multiple = False
@@ -4583,7 +4591,7 @@ while game_start == 1:
                                     pickedup_item = "0"
                                     pickedup_item = ground_item.name
                                     has_item = True
-                                    print("you pickup " + ground_item.print_name + " x " + str(ground_item.item_amount) + "\n")
+                                    print("you pickup " + ground_item.print_name + " x " + str(ground_item.item_amount))
                                     sleep(sleep_time_fast)
                                     for item in inventory:
                                         if item.name == pickedup_item:
@@ -4605,7 +4613,7 @@ while game_start == 1:
                                     pickedup_item = "0"
                                     pickedup_item = ground_weapon.name
                                     has_item = True
-                                    print("you pickup " + ground_weapon.print_name + "\n")
+                                    print("you pickup " + ground_weapon.print_name)
                                     sleep(sleep_time_fast)
                                     scene_type.scene_weapon_inventory.remove(ground_weapon)
                                     for weapon in all_game_weapons:
@@ -4618,7 +4626,7 @@ while game_start == 1:
                                     pickedup_item = "0"
                                     pickedup_item = ground_armor.name
                                     has_item = True
-                                    print("you pickup " + ground_armor.print_name + "\n")
+                                    print("you pickup " + ground_armor.print_name)
                                     sleep(sleep_time_fast)
                                     scene_type.scene_armor_inventory.remove(ground_armor)
                                     for armor in all_game_armor:
@@ -4631,7 +4639,7 @@ while game_start == 1:
                                     pickedup_item = "0"
                                     pickedup_item = ground_helmet.name
                                     has_item = True
-                                    print("you pickup " + ground_helmet.print_name + "\n")
+                                    print("you pickup " + ground_helmet.print_name)
                                     sleep(sleep_time_fast)
                                     scene_type.scene_helmet_inventory.remove(ground_helmet)
                                     for helmet in all_game_helmets:
@@ -4644,7 +4652,7 @@ while game_start == 1:
                                     pickedup_item = "0"
                                     pickedup_item = ground_shield.name
                                     has_item = True
-                                    print("you pickup " + ground_shield.print_name + "\n")
+                                    print("you pickup " + ground_shield.print_name)
                                     sleep(sleep_time_fast)
                                     scene_type.scene_shield_inventory.remove(ground_shield)
                                     for shield in all_game_shields:
@@ -4702,6 +4710,7 @@ while game_start == 1:
                 elif menu_cursor_pos == 16:
                     for scene_type in location:
                         print("you wait in " + scene_type.name + " ...\n")
+                    location_desc()
 
                 elif menu_cursor_pos == 6:
                     can_camp = False
@@ -5171,11 +5180,22 @@ while game_start == 1:
 
                         name_string = "0"
 
+
                         def func_click_item():
+                            has_item_multiple = False
                             for item in all_game_items:
                                 if item.name == dev_item.get():
-                                    inventory.append(item)
-                                    break
+                                    for item in inventory:
+                                        if item.name == dev_item.get():
+                                            has_item_multiple = True
+                                            item.item_amount += 1
+                                            break
+                                    if has_item_multiple == False:
+                                        for item in all_game_items:
+                                            if item.name == dev_item.get():
+                                                inventory.append(item)
+                                                break
+                                    # break
 
                         for item in all_game_items:
                             name_string = item.name
