@@ -71,6 +71,11 @@ tea_bag = item(107,"tea bag",1,False,False,0,"")
 all_game_items.append(tea_bag)
 cup_of_tea = item(108,"cup of tea",2,True,False,800,"")
 all_game_items.append(cup_of_tea)
+
+
+meat = item(111,"meat",5,True,False,500,"")
+all_game_items.append(meat)
+
 hp_potion = item(111,"hp potion",20,True,False,1000,"")
 all_game_items.append(hp_potion)
 super_hp_potion = item(111,"super hp potion",20,True,False,10000,"")
@@ -166,6 +171,14 @@ ground_tea_bag = ground_item(107,"tea bag",1,False,False,0,"")
 all_ground_game_items.append(ground_tea_bag)
 ground_cup_of_tea = ground_item(108,"cup of tea",2,True,False,800,"")
 all_ground_game_items.append(ground_cup_of_tea)
+
+
+ground_meat = item(111,"meat",20,True,False,1000,"")
+all_ground_game_items.append(ground_meat)
+
+ground_hp_potion = ground_item(111,"hp potion",20,True,False,1000,"")
+all_ground_game_items.append(ground_hp_potion)
+
 ground_hp_potion = ground_item(111,"hp potion",20,True,False,1000,"")
 all_ground_game_items.append(ground_hp_potion)
 ground_super_hp_potion = ground_item(111,"super hp potion",20,True,False,10000,"")

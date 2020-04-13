@@ -1457,7 +1457,7 @@ def func_enemy_dead(enemy_stats):
 
             loot_quality = 0
 
-            loot_spawn_chance_item = random.randint(0,1)
+            loot_spawn_chance_item = 1
             loot_spawn_chance_weapon = random.randint(0,1)
             loot_spawn_chance_armor = random.randint(0,1)
             loot_spawn_chance_helmet = random.randint(0,1)
@@ -1466,12 +1466,22 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
-                        loot_chance_item = random.randint(0,10)
+                        loot_chance_item = 1
                         if loot_chance_item == 1:
                             for ground_item in all_ground_game_items:
-                                if ground_item.name == item.name:
+                                item_dropped = False
+                                if ground_item.name == item.name and ground_item not in scene_type.scene_inventory:
                                     scene_type.scene_inventory.append(ground_item)
                                     print(enemy_stats.name + " dropped " + item.print_name + " \n")
+                                    item_dropped = True
+
+                                if item_dropped == False and ground_item.name == item.name and ground_item in scene_type.scene_inventory:
+                                    for ground_item in scene_type.scene_inventory:
+                                        if ground_item.name == item.name:
+                                            ground_item.item_amount += 1
+                                    print(item.name + ' is already on the ground!')
+                                    item_dropped = True
+
                             loot_amount_item = random.randint(0,10)
                             if loot_amount_item == 10:
                                 break
@@ -2179,7 +2189,7 @@ def func_shop(gear,npc_gear_inv):
                     else:
                         sfx_cursor_move.play()
                         menu_cursor_pos -= 1
-                    if dev_mode >= 1:
+                    if dev_mode >= 2:
                         print(menu_cursor_pos)
 
                 if keys[pygame.K_s]:
@@ -2188,7 +2198,7 @@ def func_shop(gear,npc_gear_inv):
                     else:
                         sfx_cursor_move.play()
                         menu_cursor_pos += 1
-                    if dev_mode >= 1:
+                    if dev_mode >= 2:
                         print(menu_cursor_pos)
 
 
@@ -2318,7 +2328,7 @@ def func_sell(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos -= 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
@@ -2327,7 +2337,7 @@ def func_sell(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos += 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
 
@@ -2405,7 +2415,7 @@ def func_use(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos -= 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
@@ -2414,7 +2424,7 @@ def func_use(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos += 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
 
@@ -2594,7 +2604,7 @@ def func_cast(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos -= 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
@@ -2603,7 +2613,7 @@ def func_cast(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos += 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
 
@@ -2704,7 +2714,7 @@ def func_drop(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos -= 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
@@ -2713,7 +2723,7 @@ def func_drop(gear,player_gear_inv):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos += 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
 
@@ -2737,7 +2747,7 @@ def func_drop(gear,player_gear_inv):
                     if gear in all_game_items:
                         print("you drop " + gear.print_name + " x 1" + "\n")
                         for item in inventory:
-                            if item.name == target_gear and item.item_amount > 0:
+                            if item.name == target_gear and item.item_amount > 1:
                                 has_item_multiple = True
                                 item.item_amount -= 1
                         if has_item_multiple == False:
@@ -3117,7 +3127,7 @@ def func_equip(gear,player_gear_inv,current_gear):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos -= 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
         if keys[pygame.K_s]:
@@ -3126,7 +3136,7 @@ def func_equip(gear,player_gear_inv,current_gear):
             else:
                 sfx_cursor_move.play()
                 menu_cursor_pos += 1
-            if dev_mode >= 1:
+            if dev_mode >= 2:
                 print(menu_cursor_pos)
 
 
@@ -3796,7 +3806,7 @@ player1.hp = player1.maxhp # has to be last as max hp is calculated from all oth
 player1.mp = player1.maxmp
 
 if dev_mode >= 1:
-    player1.gp = 10923
+    player1.gp = 10000
 
 ########## GAME START #########
 game_start = 1
@@ -3857,7 +3867,12 @@ while game_start == 1:
             for enemy_stats in current_enemies: #build drop tables
                 if dev_mode >= 1:
                     print("building drop tables")
-                enemy_stats.drop_table_items.extend(all_game_items)
+                for item in all_game_items:
+                    if item not in enemy_stats.drop_table_items:
+                        enemy_stats.drop_table_items.append(item)
+                if dev_mode >= 1:
+                    for item in enemy_stats.drop_table_items:
+                        print(item.print_name)
                 for weapon in all_game_weapons:
                     if weapon.level <= enemy_stats.level:
                         enemy_stats.drop_table_weapons.append(weapon)
@@ -4170,7 +4185,7 @@ while game_start == 1:
                 else:
                     sfx_cursor_move.play()
                     menu_cursor_pos -= 1
-                if dev_mode >= 1:
+                if dev_mode >= 2:
                     print(menu_cursor_pos)
 
             if keys[pygame.K_s]:
@@ -4179,7 +4194,7 @@ while game_start == 1:
                 else:
                     sfx_cursor_move.play()
                     menu_cursor_pos += 1
-                if dev_mode >= 1:
+                if dev_mode >= 2:
                     print(menu_cursor_pos)
 
             if keys[pygame.K_e]:
@@ -4257,7 +4272,7 @@ while game_start == 1:
                             else:
                                 sfx_cursor_move.play()
                                 menu_cursor_pos -= 1
-                            if dev_mode >= 1:
+                            if dev_mode >= 2:
                                 print(menu_cursor_pos)
 
                         if keys[pygame.K_s]:
@@ -4266,7 +4281,7 @@ while game_start == 1:
                             else:
                                 sfx_cursor_move.play()
                                 menu_cursor_pos += 1
-                            if dev_mode >= 1:
+                            if dev_mode >= 2:
                                 print(menu_cursor_pos)
 
 
@@ -4427,7 +4442,7 @@ while game_start == 1:
                             else:
                                 sfx_cursor_move.play()
                                 menu_cursor_pos -= 1
-                            if dev_mode >= 1:
+                            if dev_mode >= 2:
                                 print(menu_cursor_pos)
 
                         if keys[pygame.K_s]:
@@ -4436,7 +4451,7 @@ while game_start == 1:
                             else:
                                 sfx_cursor_move.play()
                                 menu_cursor_pos += 1
-                            if dev_mode >= 1:
+                            if dev_mode >= 2:
                                 print(menu_cursor_pos)
 
 
@@ -4564,6 +4579,7 @@ while game_start == 1:
                         while has_item == False:
                             for scene_type in location:
                                 for ground_item in scene_type.scene_inventory:
+                                    pickedup_item_amount = ground_item.item_amount
                                     pickedup_item = "0"
                                     pickedup_item = ground_item.name
                                     has_item = True
@@ -4572,11 +4588,15 @@ while game_start == 1:
                                     for item in inventory:
                                         if item.name == pickedup_item:
                                             has_item_multiple = True
-                                            item.item_amount += ground_item.item_amount
+                                            item.item_amount += pickedup_item_amount
+
                                     if has_item_multiple == False:
                                         for item in all_game_items:
                                             if item.name == pickedup_item:
                                                 inventory.append(item)
+                                                for item in inventory:
+                                                    if item.name == pickedup_item:
+                                                        item.item_amount = pickedup_item_amount
                                                 break
                                     scene_type.scene_inventory.remove(ground_item)
                                     break
@@ -4756,7 +4776,7 @@ while game_start == 1:
                                             else:
                                                 sfx_cursor_move.play()
                                                 menu_cursor_pos -= 1
-                                            if dev_mode >= 1:
+                                            if dev_mode >= 2:
                                                 print(menu_cursor_pos)
 
                                         if keys[pygame.K_s]:
@@ -4765,7 +4785,7 @@ while game_start == 1:
                                             else:
                                                 sfx_cursor_move.play()
                                                 menu_cursor_pos += 1
-                                            if dev_mode >= 1:
+                                            if dev_mode >= 2:
                                                 print(menu_cursor_pos)
 
 
@@ -4830,7 +4850,7 @@ while game_start == 1:
                                                                     else:
                                                                         sfx_cursor_move.play()
                                                                         menu_cursor_pos -= 1
-                                                                    if dev_mode >= 1:
+                                                                    if dev_mode >= 2:
                                                                         print(menu_cursor_pos)
 
                                                                 if keys[pygame.K_s]:
@@ -4839,7 +4859,7 @@ while game_start == 1:
                                                                     else:
                                                                         sfx_cursor_move.play()
                                                                         menu_cursor_pos += 1
-                                                                    if dev_mode >= 1:
+                                                                    if dev_mode >= 2:
                                                                         print(menu_cursor_pos)
 
 
@@ -4938,7 +4958,7 @@ while game_start == 1:
                                                                                                     else:
                                                                                                         sfx_cursor_move.play()
                                                                                                         menu_cursor_pos -= 1
-                                                                                                    if dev_mode >= 1:
+                                                                                                    if dev_mode >= 2:
                                                                                                         print(menu_cursor_pos)
 
                                                                                                 if keys[pygame.K_s]:
@@ -4947,7 +4967,7 @@ while game_start == 1:
                                                                                                     else:
                                                                                                         sfx_cursor_move.play()
                                                                                                         menu_cursor_pos += 1
-                                                                                                    if dev_mode >= 1:
+                                                                                                    if dev_mode >= 2:
                                                                                                         print(menu_cursor_pos)
 
 

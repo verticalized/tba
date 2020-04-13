@@ -7,6 +7,8 @@ import pygame
 pygame.init()
 init(autoreset=True)
 
+from item_module import *
+
 all_game_enemies = []
 
 spr_no_sprite = pygame.image.load("no_sprite1.png")
@@ -109,14 +111,14 @@ class enemy_stats:
 # Status: status_effect
 
 imp = enemy_stats("imp",2,2,400,400,100,100,1,16,16,100,"fire","holy",[],[],[],[],[],[],0,"imp")
-goon = enemy_stats("goon",2,3,550,550,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"imp2")
+goon = enemy_stats("goon",2,3,300,300,100,100,1,16,14,100,"earth","fire",[],[],[],[],[],[],0,"imp2")
 
-wolf = enemy_stats("mangy wolf",2,4,578,578,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"wolf")
-ice_wolf = enemy_stats("ice wolf",2,4,578,578,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"ice_wolf")
+wolf = enemy_stats("mangy wolf",2,4,150,150,100,100,1,17,16,100,"earth","water",[],[],[],[],[],[],0,"wolf")
+ice_wolf = enemy_stats("ice wolf",2,4,200,200,100,100,1,17,16,100,"ice","fire",[],[],[],[],[],[],0,"ice_wolf")
 
-goblin = enemy_stats("goblin",2,5,800,800,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"goblin")
-hobgoblin = enemy_stats("hobgoblin",7,12,5000,5000,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
-hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,5000,5000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
+goblin = enemy_stats("goblin",2,5,80,80,100,100,11,12,10,100,"earth","fire",[],[],[],[],[],[],0,"goblin")
+hobgoblin = enemy_stats("hobgoblin",4,12,100,100,100,100,8,10,5,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
+hobgoblin_berzerker = enemy_stats("hobgoblin berzerker",9,22,1000,1000,100,100,1,12,10,300,"earth","fire",[],[],[],[],[],[],0,"goblin2")
 
 bandit = enemy_stats("bandit",5,10,2000,2000,1000,1000,1,12,6,100,"fire","earth",[],[],[],[],[],[],0,"")
 bandit_warlock = enemy_stats("bandit warlock",8,28,2000,2000,5000,5000,18,5,2,70,"fire","earth",[],[],[],[],[],[],0,"")
@@ -161,6 +163,6 @@ skeleton_mage = enemy_stats("skeleton mage",101,4202,60070,60070,100,100,53,30,2
 skeleton_warrior = enemy_stats("skeleton warrior",101,50922,92070,92070,100,100,0,63,42,100,"undead","holy",[],[],[],[],[],[],0,"")
 
 ## npc enemies
-cow = enemy_stats("cow",2,2,200,200,100,100,1,8,7,100,"fire","holy",[],[],[],[],[],[],0,"cow")
-sheep = enemy_stats("sheep",2,2,100,100,100,100,1,6,5,100,"fire","holy",[],[],[],[],[],[],0,"sheep")
+cow = enemy_stats("cow",2,2,200,200,100,100,1,8,7,100,"fire","holy",[],[meat],[],[],[],[],0,"cow")
+sheep = enemy_stats("sheep",2,2,100,100,100,100,1,6,5,100,"fire","holy",[],[meat],[],[],[],[],0,"sheep")
 town_guard = enemy_stats("town guard",20,20,8000,8000,100,100,1,60,40,100,"holy","fire",[],[],[],[],[],[],0,"")
