@@ -83,7 +83,7 @@ poison = spell("poison",5,5,50,True,5,"earth",70,3,"poisons the enemy")
 
 #### status 4 spells BURN
 burn = spell("burn",5,5,50,True,5,"fire",70,4,"burns the enemy")
-mega_burn = spell("burn",30,5,5000,False,500,"fire",70,4,"MFB")
+mega_burn = spell("mega burn",30,5,5000,False,500,"fire",70,4,"MFB")
 
 #### status 5 spells SLEEP
 hypnosis = spell("hypnosis",50,5,50,True,5,"water",70,5,"puts the enemy to sleep")

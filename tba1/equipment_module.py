@@ -20,7 +20,7 @@ class weapon:
     def __init__(self, id, name, value, type, level, attribute, magic_bonus, strength_bonus, attack_bonus, defence_bonus, maxhp_bonus):
         self.id = id
         self.name = name
-        self.print_name = (Fore.BLACK + Style.BRIGHT + name + Style.RESET_ALL)
+
         self.value = value
         self.type = type
         self.level = level
@@ -30,6 +30,7 @@ class weapon:
         self.attack_bonus = attack_bonus
         self.defence_bonus = defence_bonus
         self.maxhp_bonus = maxhp_bonus
+        self.print_attribute = ""
 
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
@@ -47,6 +48,8 @@ class weapon:
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+
+        self.print_name = (Fore.BLACK + Style.BRIGHT + name + Style.RESET_ALL)
 
         all_game_weapons.append(self)
 
