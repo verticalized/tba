@@ -18,8 +18,8 @@ class item:
         self.poisonous = poisonous
         self.hp = hp
         self.item_desc = item_desc
-        self.item_amount = 1
-        self.item_weight = 1 * self.item_amount
+        self.amount = 1
+        self.item_weight = 1 * self.amount
 
 #ITEM IDS SERVE NO PURPOSE!
 

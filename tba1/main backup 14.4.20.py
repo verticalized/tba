@@ -33,7 +33,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 3
+dev_mode = 1
 
 has_moved = False
 check_for_combat = True
@@ -355,14 +355,14 @@ combat_option_run = combat_option("run")
 ############################################--NPCS/DIALOUGE/QUESTS--#########################################
 
 class quest:
-    def __init__(self, name, quest_desc, xp, gp, reward_list, quest_collect_items, amount, quest_kill_enemies, kill_amount):
+    def __init__(self, name, quest_desc, xp, gp, reward_list, quest_collect_items, item_amount, quest_kill_enemies, kill_amount):
         self.name = name
         self.quest_desc = quest_desc
         self.xp = xp
         self.gp = gp
         self.reward_list = reward_list
         self.quest_collect_items = quest_collect_items
-        self.amount = amount
+        self.item_amount = item_amount
         self.quest_kill_enemies = quest_kill_enemies
         self.kill_amount = kill_amount
 
@@ -727,7 +727,7 @@ if dev_mode >= 1:
     inventory.append(meat)
 
     for item in inventory:
-        item.amount = 10
+        item.item_amount = 10
 
     inventory.append(tent)
     inventory.append(rope)
@@ -815,14 +815,11 @@ vel = 16
 
 ##############################--GUI / GRAPHICS FUNCTIONS--#################################
 
-def func_blit_list(list_object,list,gui_val,is_stackable):
+def func_blit_list(list_object,list,gui_val):
     list_object_number = 0
     for list_object in list:
         list_object_number += 1
-        if is_stackable == True:
-            blit_text = myfont.render(list_object.name + " x " + str(list_object.amount), False, (0, 0, 0))
-        else:
-            blit_text = myfont.render(list_object.name, False, (0, 0, 0))
+        blit_text = myfont.render(list_object.name + " x " + list_object.amount, False, (0, 0, 0))
         win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
 
 def func_blit_npc_list(list_object,list,gui_val):
@@ -912,7 +909,7 @@ def func_blit_title(title_string,gui_val):
 
 def func_refresh_pygame(battle_intro):
     battle_intro_ticks = 0
-    if dev_mode >= 4:
+    if dev_mode >= 2:
         print("\nrefreshing pygame window//\n")
 
     if steps_z >= 0:
@@ -1072,7 +1069,7 @@ def func_refresh_pygame(battle_intro):
         pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
         pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-        func_blit_list(combat_option,combat_option_list,1,False)
+        func_blit_list(combat_option,combat_option_list,1)
         func_blit_combat_cursor(1)
         func_blit_title("Battle:",1)
 
@@ -1083,7 +1080,7 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            func_blit_list(spell,equiped_spells,1,False)
+            func_blit_list(spell,equiped_spells,1)
 
             func_blit_combat_cursor(1)
             func_blit_title("Cast:",1)
@@ -1094,7 +1091,7 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            func_blit_list(item,inventory,1,True)
+            func_blit_list(item,inventory,1)
 
             func_blit_combat_cursor(1)
             func_blit_title("Use item:",1)
@@ -1104,13 +1101,13 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            func_blit_list(combat_option,combat_option_list,1,False)
+            func_blit_list(combat_option,combat_option_list,1)
             func_blit_title("Battle:",1)
 
             pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
-            func_blit_list(enemy_stats,current_enemies,2,False)
+            func_blit_list(enemy_stats,current_enemies,2)
 
             func_blit_combat_cursor(2)
             func_blit_title("Target:",2)
@@ -1148,7 +1145,7 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            func_blit_list(item,inventory,1,True)
+            func_blit_list(item,inventory,1)
             func_blit_menu_cursor(1)
 
 
@@ -1157,7 +1154,7 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (10,10, 180, 480))
 
-            func_blit_list(spell,equiped_spells,1,False)
+            func_blit_list(spell,equiped_spells,1)
             func_blit_menu_cursor(1)
 
 
@@ -1185,15 +1182,15 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
                 if in_menu_weapon == True:
-                    func_blit_list(weapon,weapon_inventory,2,True)
+                    func_blit_list(weapon,weapon_inventory,2)
                 if in_menu_armor == True:
-                    func_blit_list(armor,armor_inventory,2,True)
+                    func_blit_list(armor,armor_inventory,2)
                 if in_menu_helmet == True:
-                    func_blit_list(helmet,helmet_inventory,2,True)
+                    func_blit_list(helmet,helmet_inventory,2)
                 if in_menu_shield == True:
-                    func_blit_list(shield,shield_inventory,2,True)
+                    func_blit_list(shield,shield_inventory,2)
                 if in_menu_spell == True:
-                    func_blit_list(spell,spell_inventory,2,True)
+                    func_blit_list(spell,spell_inventory,2)
 
                 func_blit_menu_cursor(2)
                 func_blit_title("Equip 2:",2)
@@ -1255,17 +1252,17 @@ def func_refresh_pygame(battle_intro):
                         pygame.draw.rect(win_map, (125,125,125), (610,10, 180, 480))
 
                         if in_menu_item == True:
-                            func_blit_list(item,inventory,4,True)
+                            func_blit_list(item,inventory,4)
                         if in_menu_weapon == True:
-                            func_blit_list(weapon,weapon_inventory,4,True)
+                            func_blit_list(weapon,weapon_inventory,4)
                         if in_menu_armor == True:
-                            func_blit_list(armor,armor_inventory,4,True)
+                            func_blit_list(armor,armor_inventory,4)
                         if in_menu_helmet == True:
-                            func_blit_list(helmet,helmet_inventory,4,True)
+                            func_blit_list(helmet,helmet_inventory,4)
                         if in_menu_shield == True:
-                            func_blit_list(shield,shield_inventory,4,True)
+                            func_blit_list(shield,shield_inventory,4)
                         if in_menu_spell == True:
-                            func_blit_list(spell,spell_inventory,4,True)
+                            func_blit_list(spell,spell_inventory,4)
 
                         func_blit_menu_cursor(4)
                         func_blit_title("Sell 4:",4)
@@ -1280,17 +1277,17 @@ def func_refresh_pygame(battle_intro):
 
                     for npc in current_npc:
                         if in_menu_item == True:
-                            func_blit_list(item,npc.npc_inventory,3,False)
+                            func_blit_list(item,npc.npc_inventory,3)
                         if in_menu_weapon == True:
-                            func_blit_list(weapon,npc.npc_weapon_inventory,3,False)
+                            func_blit_list(weapon,npc.npc_weapon_inventory,3)
                         if in_menu_armor == True:
-                            func_blit_list(armor,npc.npc_armor_inventory,3,False)
+                            func_blit_list(armor,npc.npc_armor_inventory,3)
                         if in_menu_helmet == True:
-                            func_blit_list(helmet,npc.npc_helmet_inventory,3,False)
+                            func_blit_list(helmet,npc.npc_helmet_inventory,3)
                         if in_menu_shield == True:
-                            func_blit_list(shield,npc.npc_shield_inventory,3,False)
+                            func_blit_list(shield,npc.npc_shield_inventory,3)
                         if in_menu_spell == True:
-                            func_blit_list(spell,npc.npc_spell_inventory,3,False)
+                            func_blit_list(spell,npc.npc_spell_inventory,3)
 
                     func_blit_menu_cursor(3)
                     func_blit_title("Buy 3:",3)
@@ -1319,17 +1316,17 @@ def func_refresh_pygame(battle_intro):
                 pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
                 if in_menu_item == True:
-                    func_blit_list(item,inventory,2,True)
+                    func_blit_list(item,inventory,2)
                 if in_menu_weapon == True:
-                    func_blit_list(weapon,weapon_inventory,2,True)
+                    func_blit_list(weapon,weapon_inventory,2)
                 if in_menu_armor == True:
-                    func_blit_list(armor,armor_inventory,2,True)
+                    func_blit_list(armor,armor_inventory,2)
                 if in_menu_helmet == True:
-                    func_blit_list(helmet,helmet_inventory,2,True)
+                    func_blit_list(helmet,helmet_inventory,2)
                 if in_menu_shield == True:
-                    func_blit_list(shield,shield_inventory,2,True)
+                    func_blit_list(shield,shield_inventory,2)
                 if in_menu_spell == True:
-                    func_blit_list(spell,spell_inventory,2,True)
+                    func_blit_list(spell,spell_inventory,2)
 
                 func_blit_menu_cursor(2)
                 func_blit_title("Drop 2:",2)
@@ -1450,7 +1447,6 @@ def func_enemy_dead(enemy_stats):
             loot_spawn_chance_item = 0
             loot_chance_item = 0
             loot_amount_item = 0
-
             loot_spawn_chance_weapon = 0
             loot_chance_weapon = 0
             loot_amount_weapon = 0
@@ -1470,10 +1466,10 @@ def func_enemy_dead(enemy_stats):
             loot_quality = 0
 
             loot_spawn_chance_item = 1
-            loot_spawn_chance_weapon = 1
-            loot_spawn_chance_armor = 1
-            loot_spawn_chance_helmet = 1
-            loot_spawn_chance_shield = 1
+            loot_spawn_chance_weapon = random.randint(0,1)
+            loot_spawn_chance_armor = random.randint(0,1)
+            loot_spawn_chance_helmet = random.randint(0,1)
+            loot_spawn_chance_shield = random.randint(0,1)
 
             if len(enemy_stats.drop_table_items_always) != 0:
                 for item in enemy_stats.drop_table_items_always:
@@ -1489,10 +1485,13 @@ def func_enemy_dead(enemy_stats):
                             if item_dropped == False and ground_item.name == item.name and ground_item in scene_type.scene_inventory:
                                 for ground_item in scene_type.scene_inventory:
                                     if ground_item.name == item.name:
-                                        ground_item.amount += 1
-                                print(enemy_stats.name + " dropped " + item.print_name)
+                                        ground_item.item_amount += 1
+                                print(item.name + ' is already on the ground!')
                                 item_dropped = True
 
+                        loot_amount_item = random.randint(0,10)
+                        if loot_amount_item == 10:
+                            break
 
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
@@ -1509,28 +1508,26 @@ def func_enemy_dead(enemy_stats):
                                 if item_dropped == False and ground_item.name == item.name and ground_item in scene_type.scene_inventory:
                                     for ground_item in scene_type.scene_inventory:
                                         if ground_item.name == item.name:
-                                            ground_item.amount += 1
-                                    print(enemy_stats.name + " dropped " + item.print_name)
+                                            ground_item.item_amount += 1
+                                    print(item.name + ' is already on the ground!')
                                     item_dropped = True
 
+                            loot_amount_item = random.randint(0,10)
+                            if loot_amount_item == 10:
+                                break
 
             if len(enemy_stats.drop_table_weapons_always) != 0:
                 for weapon in enemy_stats.drop_table_weapons_always:
                     loot_chance_weapon = 1
                     if loot_chance_weapon == 1:
                         for ground_weapon in all_ground_game_weapons:
-                            weapon_dropped = False
-                            if weapon_dropped == False and ground_weapon.name == weapon.name and ground_weapon not in scene_type.scene_weapon_inventory:
+                            if ground_weapon.name == weapon.name:
                                 scene_type.scene_weapon_inventory.append(ground_weapon)
-                                print(enemy_stats.name + " dropped " + weapon.print_name)
-                                weapon_dropped = True
-
-                            if weapon_dropped == False and ground_weapon.name == weapon.name and ground_weapon in scene_type.scene_weapon_inventory:
-                                for ground_weapon in scene_type.scene_weapon_inventory:
-                                    if ground_weapon.name == weapon.name:
-                                        ground_weapon.amount += 1
-                                print(enemy_stats.name + " dropped " + weapon.print_name)
-                                weapon_dropped = True
+                                print(enemy_stats.name + " dropped " + weapon.print_name + " \n" )
+                                sleep(sleep_time_fast)
+                        loot_amount_weapon = random.randint(0,1)
+                        if loot_amount_weapon != 1:
+                            break
 
             if loot_spawn_chance_weapon == 1:
                 if len(enemy_stats.drop_table_weapons) != 0:
@@ -1538,36 +1535,26 @@ def func_enemy_dead(enemy_stats):
                         loot_chance_weapon = random.randint(0,1)
                         if loot_chance_weapon == 1:
                             for ground_weapon in all_ground_game_weapons:
-                                weapon_dropped = False
-                                if weapon_dropped == False and ground_weapon.name == weapon.name and ground_weapon not in scene_type.scene_weapon_inventory:
+                                if ground_weapon.name == weapon.name:
                                     scene_type.scene_weapon_inventory.append(ground_weapon)
-                                    print(enemy_stats.name + " dropped " + weapon.print_name)
-                                    weapon_dropped = True
-
-                                if weapon_dropped == False and ground_weapon.name == weapon.name and ground_weapon in scene_type.scene_weapon_inventory:
-                                    for ground_weapon in scene_type.scene_weapon_inventory:
-                                        if ground_weapon.name == weapon.name:
-                                            ground_weapon.amount += 1
-                                    print(enemy_stats.name + " dropped " + weapon.print_name)
-                                    weapon_dropped = True
+                                    print(enemy_stats.name + " dropped " + weapon.print_name + " \n" )
+                                    sleep(sleep_time_fast)
+                            loot_amount_weapon = random.randint(0,10)
+                            if loot_amount_weapon != 10:
+                                break
 
             if len(enemy_stats.drop_table_armor_always) != 0:
                 for armor in enemy_stats.drop_table_armor_always:
-                    loot_chance_armor = 1
+                    loot_chance_armor = random.randint(0,1)
                     if loot_chance_armor == 1:
                         for ground_armor in all_ground_game_armor:
-                            armor_dropped = False
-                            if armor_dropped == False and ground_armor.name == armor.name and ground_armor not in scene_type.scene_armor_inventory:
+                            if ground_armor.name == armor.name:
                                 scene_type.scene_armor_inventory.append(ground_armor)
-                                print(enemy_stats.name + " dropped " + armor.print_name)
-                                armor_dropped = True
-
-                            if armor_dropped == False and ground_armor.name == armor.name and ground_armor in scene_type.scene_armor_inventory:
-                                for ground_armor in scene_type.scene_armor_inventory:
-                                    if ground_armor.name == armor.name:
-                                        ground_armor.amount += 1
-                                print(enemy_stats.name + " dropped " + armor.print_name)
-                                armor_dropped = True
+                                print(enemy_stats.name + " dropped " + armor.print_name + " \n" )
+                                sleep(sleep_time_fast)
+                        loot_amount_armor = random.randint(0,1)
+                        if loot_amount_armor != 1:
+                            break
 
             if loot_spawn_chance_armor == 1:
                 if len(enemy_stats.drop_table_armor) != 0:
@@ -1575,37 +1562,26 @@ def func_enemy_dead(enemy_stats):
                         loot_chance_armor = random.randint(0,1)
                         if loot_chance_armor == 1:
                             for ground_armor in all_ground_game_armor:
-                                armor_dropped = False
-                                if armor_dropped == False and ground_armor.name == armor.name and ground_armor not in scene_type.scene_armor_inventory:
+                                if ground_armor.name == armor.name:
                                     scene_type.scene_armor_inventory.append(ground_armor)
-                                    print(enemy_stats.name + " dropped " + armor.print_name)
-                                    armor_dropped = True
-
-                                if armor_dropped == False and ground_armor.name == armor.name and ground_armor in scene_type.scene_armor_inventory:
-                                    for ground_armor in scene_type.scene_armor_inventory:
-                                        if ground_armor.name == armor.name:
-                                            ground_armor.amount += 1
-                                    print(enemy_stats.name + " dropped " + armor.print_name)
-                                    armor_dropped = True
-
+                                    print(enemy_stats.name + " dropped " + armor.print_name + " \n" )
+                                    sleep(sleep_time_fast)
+                            loot_amount_armor = random.randint(0,10)
+                            if loot_amount_armor != 10:
+                                break
 
             if len(enemy_stats.drop_table_helmets_always) != 0:
                 for helmet in enemy_stats.drop_table_helmets_always:
-                    loot_chance_helmet = 1
+                    loot_chance_helmet = random.randint(0,1)
                     if loot_chance_helmet == 1:
                         for ground_helmet in all_ground_game_helmets:
-                            helmet_dropped = False
-                            if helmet_dropped == False and ground_helmet.name == helmet.name and ground_helmet not in scene_type.scene_helmet_inventory:
+                            if ground_helmet.name == helmet.name:
                                 scene_type.scene_helmet_inventory.append(ground_helmet)
-                                print(enemy_stats.name + " dropped " + helmet.print_name)
-                                helmet_dropped = True
-
-                            if helmet_dropped == False and ground_helmet.name == helmet.name and ground_helmet in scene_type.scene_helmet_inventory:
-                                for ground_helmet in scene_type.scene_helmet_inventory:
-                                    if ground_helmet.name == helmet.name:
-                                        ground_helmet.amount += 1
-                                print(enemy_stats.name + " dropped " + helmet.print_name)
-                                helmet_dropped = True
+                                print(enemy_stats.name + " dropped " + helmet.print_name + " \n" )
+                                sleep(sleep_time_fast)
+                        loot_amount_helmet = random.randint(0,1)
+                        if loot_amount_helmet != 1:
+                            break
 
             if loot_spawn_chance_helmet == 1:
                 if len(enemy_stats.drop_table_helmets) != 0:
@@ -1613,57 +1589,40 @@ def func_enemy_dead(enemy_stats):
                         loot_chance_helmet = random.randint(0,1)
                         if loot_chance_helmet == 1:
                             for ground_helmet in all_ground_game_helmets:
-                                helmet_dropped = False
-                                if helmet_dropped == False and ground_helmet.name == helmet.name and ground_helmet not in scene_type.scene_helmet_inventory:
+                                if ground_helmet.name == helmet.name:
                                     scene_type.scene_helmet_inventory.append(ground_helmet)
-                                    print(enemy_stats.name + " dropped " + helmet.print_name)
-                                    helmet_dropped = True
-
-                                if helmet_dropped == False and ground_helmet.name == helmet.name and ground_helmet in scene_type.scene_helmet_inventory:
-                                    for ground_helmet in scene_type.scene_helmet_inventory:
-                                        if ground_helmet.name == helmet.name:
-                                            ground_helmet.amount += 1
-                                    print(enemy_stats.name + " dropped " + helmet.print_name)
-                                    helmet_dropped = True
+                                    print(enemy_stats.name + " dropped " + helmet.print_name + " \n" )
+                                    sleep(sleep_time_fast)
+                            loot_amount_helmet = random.randint(0,10)
+                            if loot_amount_helmet != 10:
+                                break
 
             if len(enemy_stats.drop_table_shields_always) != 0:
                 for shield in enemy_stats.drop_table_shields_always:
-                    loot_chance_shield = 1
+                    loot_chance_shield = random.randint(0,1)
                     if loot_chance_shield == 1:
                         for ground_shield in all_ground_game_shields:
-                            shield_dropped = False
-                            if shield_dropped == False and ground_shield.name == shield.name and ground_shield not in scene_type.scene_shield_inventory:
+                            if ground_shield.name == shield.name:
                                 scene_type.scene_shield_inventory.append(ground_shield)
-                                print(enemy_stats.name + " dropped " + shield.print_name)
-                                shield_dropped = True
-
-                            if shield_dropped == False and ground_shield.name == shield.name and ground_shield in scene_type.scene_shield_inventory:
-                                for ground_shield in scene_type.scene_shield_inventory:
-                                    if ground_shield.name == shield.name:
-                                        ground_shield.amount += 1
-                                print(shield.name + ' is already on the ground!')
-                                shield_dropped = True
-
+                                print(enemy_stats.name + " dropped " + shield.print_name + " \n" )
+                                sleep(sleep_time_fast)
+                        loot_amount_shield = random.randint(0,1)
+                        if loot_amount_shield != 1:
+                            break
 
             if loot_spawn_chance_shield == 1:
                 if len(enemy_stats.drop_table_shields) != 0:
                     for shield in enemy_stats.drop_table_shields:
-                        loot_chance_shield = 1
+                        loot_chance_shield = random.randint(0,1)
                         if loot_chance_shield == 1:
                             for ground_shield in all_ground_game_shields:
-                                shield_dropped = False
-                                if shield_dropped == False and ground_shield.name == shield.name and ground_shield not in scene_type.scene_shield_inventory:
+                                if ground_shield.name == shield.name:
                                     scene_type.scene_shield_inventory.append(ground_shield)
-                                    print(enemy_stats.name + " dropped " + shield.print_name)
-                                    shield_dropped = True
-
-                                if shield_dropped == False and ground_shield.name == shield.name and ground_shield in scene_type.scene_shield_inventory:
-                                    for ground_shield in scene_type.scene_shield_inventory:
-                                        if ground_shield.name == shield.name:
-                                            ground_shield.amount += 1
-                                    print(shield.name + ' is already on the ground!')
-                                    shield_dropped = True
-
+                                    print(enemy_stats.name + " dropped " + shield.print_name + " \n" )
+                                    sleep(sleep_time_fast)
+                            loot_amount_shield = random.randint(0,10)
+                            if loot_amount_shield != 10:
+                                break
 
             func_check_level()
 
@@ -1683,13 +1642,23 @@ def func_get_target():
         in_submenu2 = True
         in_submenu_target_combat2 = True
         while in_submenu_target_combat2 == True:
-
             pygame.time.delay(100)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_start = 0
+                    in_fight = False
+                    in_submenu2 = False
+                    in_submenu_target_combat2 = False
+                    in_menu = False
 
             func_check_level()
             func_refresh_pygame(False)
 
             keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_q]:
+                in_submenu2 = False
+                in_submenu_target_combat2 = False
 
             if keys[pygame.K_w]:
                 if combat_cursor_pos <= 1:
@@ -1709,31 +1678,17 @@ def func_get_target():
                 if dev_mode >= 2:
                     print(combat_cursor_pos)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    game_start = 0
-                    in_fight = False
-                    in_submenu2 = False
-                    in_submenu_target_combat2 = False
-                    in_menu = False
 
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        in_submenu2 = False
-                        in_submenu_target_combat2 = False
-
-                    if event.key == pygame.K_e:
-                        sfx_cursor_select.play()
-                        val_target_input = combat_cursor_pos
-                        val_enemy = val_target_input - 1
-                        for enemy_stats in current_enemies:
-                            if val_enemy == current_enemies.index(enemy_stats):
-                                target = enemy_stats.name
-                        in_submenu2 = False
-                        in_submenu_target_combat2 = False
-                        break
-
-
+            if keys[pygame.K_e]:
+                sfx_cursor_select.play()
+                val_target_input = combat_cursor_pos
+                val_enemy = val_target_input - 1
+                for enemy_stats in current_enemies:
+                    if val_enemy == current_enemies.index(enemy_stats):
+                        target = enemy_stats.name
+                in_submenu2 = False
+                in_submenu_target_combat2 = False
+                break
     # else:
     #     for enemy_stats in current_enemies:
     #         target = enemy_stats.name
@@ -2268,13 +2223,23 @@ def func_use_combat(gear,player_gear_inv):
     in_submenu = True
     in_submenu_use_combat = True
     while in_submenu_use_combat == True:
-
         pygame.time.delay(100)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_start = 0
+                in_fight = False
+                in_submenu = False
+                in_submenu_use_combat = False
+                in_menu = False
 
         func_check_level()
         func_refresh_pygame(False)
 
         keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            in_submenu = False
+            in_submenu_use_combat = False
 
         if keys[pygame.K_w]:
             if combat_cursor_pos <= 1:
@@ -2294,72 +2259,60 @@ def func_use_combat(gear,player_gear_inv):
             if dev_mode >= 2:
                 print(combat_cursor_pos)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_start = 0
-                in_fight = False
-                in_submenu = False
-                in_submenu_use_combat = False
-                in_menu = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    in_submenu = False
-                    in_submenu_use_combat = False
-                if event.key == pygame.K_e:
-                    sfx_cursor_select.play()
-                    has_item = False
-                    val_used_item = combat_cursor_pos
-                    val_use = val_used_item - 1
-                    for gear in player_gear_inv:
-                        if val_use == player_gear_inv.index(gear):
-                            eaten_item = gear.name
 
-                    for item in inventory:
-                        has_item = False
-                        can_use = False
-                        for item in inventory:
-                            if eaten_item == item.name:
-                                has_item = True
-                                player_turns -= 1
-                                if item.edible == True:
-                                    if item.poisonous == False:
-                                        print("you consume " + item.print_name)
-                                        can_use = True
-                                        player1.hp = player1.hp + item.hp
-                                        if player1.hp > player1.maxhp:
-                                            player1.hp = player1.maxhp
-                                    else:
-                                        print("\nyou consume " + item.print_name + " !\n")
-                                        can_use = True
-                                        player1.hp = player1.hp - item.hp
-                                        print("you feel sick...")
+        if keys[pygame.K_e]:
+            sfx_cursor_select.play()
+            has_item = False
+            val_used_item = combat_cursor_pos
+            val_use = val_used_item - 1
+            for gear in player_gear_inv:
+                if val_use == player_gear_inv.index(gear):
+                    eaten_item = gear.name
 
-                                        if player1.hp <= 0:
-                                            print("\nYOU ARE DEAD \n")
-                                            game_start = 0
+            for item in inventory:
+                has_item = False
+                can_use = False
+                for item in inventory:
+                    if eaten_item == item.name:
+                        has_item = True
+                        player_turns -= 1
+                        if item.edible == True:
+                            if item.poisonous == False:
+                                print("you consume " + item.print_name)
+                                can_use = True
+                                player1.hp = player1.hp + item.hp
+                                if player1.hp > player1.maxhp:
+                                    player1.hp = player1.maxhp
+                            else:
+                                print("\nyou consume " + item.print_name + " !\n")
+                                can_use = True
+                                player1.hp = player1.hp - item.hp
+                                print("you feel sick...")
 
-                                    if item.name == eaten_item and item.amount > 1:
-                                        has_item_multiple = True
-                                        item.amount -= 1
-                                    if has_item_multiple == False:
-                                        for item in inventory:
-                                            if item.name == eaten_item:
-                                                inventory.remove(item)
-                                    break
+                                if player1.hp <= 0:
+                                    print("\nYOU ARE DEAD \n")
+                                    game_start = 0
 
-                                if can_use == False:
-                                    print("you try to use " + item.print_name + ", but nothing interesting happens")
+                            if item.name == eaten_item and item.item_amount > 1:
+                                has_item_multiple = True
+                                item.item_amount -= 1
+                            if has_item_multiple == False:
+                                for item in inventory:
+                                    if item.name == eaten_item:
+                                        inventory.remove(item)
+                            break
 
-                        break
+                        if can_use == False:
+                            print("you try to use " + item.print_name + ", but nothing interesting happens")
 
-                    # if has_item == False:
-                    #     print("you don't have " + eaten_item)
+                break
+
+            # if has_item == False:
+            #     print("you don't have " + eaten_item)
 
 
-                    in_submenu = False
-                    in_submenu_use_combat = False
-
-
+            in_submenu = False
+            in_submenu_use_combat = False
 
 #############################--DIALOUGE FUNCTIONS--#######################
 
@@ -2440,6 +2393,8 @@ def func_shop(gear,npc_gear_inv):
                     if dev_mode >= 2:
                         print(menu_cursor_pos)
 
+
+
                 if keys[pygame.K_e]:
                     sfx_cursor_select.play()
                     val_bought_item = menu_cursor_pos
@@ -2450,70 +2405,28 @@ def func_shop(gear,npc_gear_inv):
 
                     has_item = False
                     has_item_multiple = False
-
-                    has_weapon_multiple = False
-                    has_armor_multiple = False
-                    has_helmet_multiple = False
-                    has_shield_multiple = False
-
                     for gear in npc_gear_inv:
                         if target_gear == gear.name:
                             has_item = True
                             if player1.gp >= gear.value:
                                 player1.gp -= gear.value
                                 if gear in all_game_weapons:
-                                    for weapon in weapon_inventory:
-                                        if weapon.name == target_gear:
-                                            has_weapon_multiple = True
-                                            weapon.amount += 1
-                                            break
-                                    if has_weapon_multiple == False:
-                                        for weapon in all_game_weapons:
-                                            if weapon.name == target_gear:
-                                                weapon_inventory.append(weapon)
-                                                break
-
+                                    weapon_inventory.append(gear)
+                                    break
                                 if gear in all_game_armor:
-                                    for armor in armor_inventory:
-                                        if armor.name == target_gear:
-                                            has_armor_multiple = True
-                                            armor.amount += 1
-                                            break
-                                    if has_armor_multiple == False:
-                                        for armor in all_game_armor:
-                                            if armor.name == target_gear:
-                                                armor_inventory.append(armor)
-                                                break
-
+                                    armor_inventory.append(gear)
+                                    break
                                 if gear in all_game_helmets:
-                                    for helmet in helmet_inventory:
-                                        if helmet.name == target_gear:
-                                            has_helmet_multiple = True
-                                            helmet.amount += 1
-                                            break
-                                    if has_helmet_multiple == False:
-                                        for helmet in all_game_helmets:
-                                            if helmet.name == target_gear:
-                                                helmet_inventory.append(helmet)
-                                                break
-
+                                    helmet_inventory.append(gear)
+                                    break
                                 if gear in all_game_shields:
-                                    for shield in shield_inventory:
-                                        if shield.name == target_gear:
-                                            has_shield_multiple = True
-                                            shield.amount += 1
-                                            break
-                                    if has_shield_multiple == False:
-                                        for shield in all_game_shields:
-                                            if shield.name == target_gear:
-                                                shield_inventory.append(shield)
-                                                break
-
+                                    shield_inventory.append(gear)
+                                    break
                                 if gear in all_game_items:
                                     for item in inventory:
                                         if item.name == target_gear:
                                             has_item_multiple = True
-                                            item.amount += 1
+                                            item.item_amount += 1
                                             break
                                     if has_item_multiple == False:
                                         for item in all_game_items:
@@ -2634,9 +2547,7 @@ def func_sell(gear,player_gear_inv):
                     has_item = True
                     print("you sold " + gear.print_name + " for " + str(gear.value) + " gp.\n")
                     player1.gp += gear.value
-                    gear.amount -= 1
-                    if gear.amount <= 0:
-                        player_gear_inv.remove(gear)
+                    player_gear_inv.remove(gear)
                     in_submenu4 = False
                     in_submenu_sell4 = False
                     break
@@ -2662,13 +2573,23 @@ def func_use(gear,player_gear_inv):
     in_submenu = True
     in_submenu_use = True
     while in_submenu_use == True:
-
         pygame.time.delay(100)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_start = 0
+                in_fight = False
+                in_submenu = False
+                in_submenu_use = False
+                in_menu = False
 
         func_check_level()
         func_refresh_pygame(False)
 
         keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            in_submenu = False
+            in_submenu_use = False
 
         if keys[pygame.K_w]:
             if menu_cursor_pos <= 1:
@@ -2689,69 +2610,57 @@ def func_use(gear,player_gear_inv):
                 print(menu_cursor_pos)
 
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_start = 0
-                in_fight = False
-                in_submenu = False
-                in_submenu_use = False
-                in_menu = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    in_submenu = False
-                    in_submenu_use = False
+        if keys[pygame.K_e]:
+            sfx_cursor_select.play()
+            has_item = False
+            val_used_item = menu_cursor_pos
+            val_use = val_used_item - 1
+            for gear in player_gear_inv:
+                if val_use == player_gear_inv.index(gear):
+                    eaten_item = gear.name
 
-                if event.key == pygame.K_e:
-                    sfx_cursor_select.play()
-                    has_item = False
-                    val_used_item = menu_cursor_pos
-                    val_use = val_used_item - 1
-                    for gear in player_gear_inv:
-                        if val_use == player_gear_inv.index(gear):
-                            eaten_item = gear.name
+            for item in inventory:
+                has_item = False
+                can_use = False
+                for item in inventory:
+                    if eaten_item == item.name:
+                        has_item = True
+                        if item.edible == True:
+                            if item.poisonous == False:
+                                print("you consume " + item.print_name)
+                                can_use = True
+                                player1.hp = player1.hp + item.hp
+                                if player1.hp > player1.maxhp:
+                                    player1.hp = player1.maxhp
+                            else:
+                                print("\nyou consume " + item.print_name + " !\n")
+                                can_use = True
+                                player1.hp = player1.hp - item.hp
+                                print("you feel sick...")
 
-                    for item in inventory:
-                        has_item = False
-                        can_use = False
-                        for item in inventory:
-                            if eaten_item == item.name:
-                                has_item = True
-                                if item.edible == True:
-                                    if item.poisonous == False:
-                                        print("you consume " + item.print_name)
-                                        can_use = True
-                                        player1.hp = player1.hp + item.hp
-                                        if player1.hp > player1.maxhp:
-                                            player1.hp = player1.maxhp
-                                    else:
-                                        print("\nyou consume " + item.print_name + " !\n")
-                                        can_use = True
-                                        player1.hp = player1.hp - item.hp
-                                        print("you feel sick...")
+                                if player1.hp <= 0:
+                                    print("\nYOU ARE DEAD \n")
+                                    game_start = 0
 
-                                        if player1.hp <= 0:
-                                            print("\nYOU ARE DEAD \n")
-                                            game_start = 0
+                            if item.name == eaten_item and item.item_amount > 1:
+                                has_item_multiple = True
+                                item.item_amount -= 1
+                            if has_item_multiple == False:
+                                for item in inventory:
+                                    if item.name == eaten_item:
+                                        inventory.remove(item)
+                            break
+                        if can_use == False:
+                            "you try to use " + item.print_name + ", but nothing interesting happens"
 
-                                    if item.name == eaten_item and item.amount > 1:
-                                        has_item_multiple = True
-                                        item.amount -= 1
-                                    if has_item_multiple == False:
-                                        for item in inventory:
-                                            if item.name == eaten_item:
-                                                inventory.remove(item)
-                                    break
-                                if can_use == False:
-                                    "you try to use " + item.print_name + ", but nothing interesting happens"
+                break
 
-                        break
-
-                    # if has_item == False:
-                    #     print("you don't have " + eaten_item)
+            # if has_item == False:
+            #     print("you don't have " + eaten_item)
 
 
-                    in_submenu = False
-                    in_submenu_use = False
+            in_submenu = False
+            in_submenu_use = False
 
 def func_cast(gear,player_gear_inv):
     global menu_cursor_pos
@@ -2867,7 +2776,7 @@ def func_drop(gear,player_gear_inv):
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || lvl: " + str(gear.level) + " || " + str(gear.value) + " gp. ")
         if gear in all_game_items:
             in_menu_item = True
-            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || x " + str(gear.amount) + " || " + str(gear.value * gear.amount) + " gp. " )
+            print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || x " + str(gear.item_amount) + " || " + str(gear.value * gear.item_amount) + " gp. " )
         if gear in all_game_spells:
             in_menu_spell = True
             print("|| " + str((player_gear_inv.index(gear)+1)) + " || " + gear.print_name + " || " + gear.print_attribute + " || " + str(gear.value) + " gp. ")
@@ -2933,9 +2842,9 @@ def func_drop(gear,player_gear_inv):
                     if gear in all_game_items:
                         print("you drop " + gear.print_name + " x 1" + "\n")
                         for item in inventory:
-                            if item.name == target_gear and item.amount > 1:
+                            if item.name == target_gear and item.item_amount > 1:
                                 has_item_multiple = True
-                                item.amount -= 1
+                                item.item_amount -= 1
                         if has_item_multiple == False:
                             for item in inventory:
                                 if item.name == target_gear:
@@ -2949,9 +2858,9 @@ def func_drop(gear,player_gear_inv):
                     if gear in all_game_items:
                         end_drop = False
                         for ground_item in scene_type.scene_inventory:
-                            if end_drop == False and ground_item.name == target_gear and ground_item.amount >= 1:
+                            if end_drop == False and ground_item.name == target_gear and ground_item.item_amount >= 1:
                                 ground_has_item_multiple = True
-                                ground_item.amount += 1
+                                ground_item.item_amount += 1
                                 end_drop = True
                                 break
 
@@ -2961,7 +2870,7 @@ def func_drop(gear,player_gear_inv):
                                     scene_type.scene_inventory.append(ground_item)
                             for ground_item in scene_type.scene_inventory:
                                 if ground_item.name == target_gear:
-                                    ground_item.amount = 1
+                                    ground_item.item_amount = 1
                             end_drop = True
 
                     if gear in all_game_weapons:
@@ -3362,42 +3271,33 @@ def func_equip(gear,player_gear_inv,current_gear):
                         if player_gear_inv.index(gear) == (menu_cursor_pos - 1):
                             has_gear = True #player has the selected gear in their inv
 
-
                             if player1.level < gear.level:
                                 print("You are not high enough level to equip " + gear.print_name + " ...")
                                 has_level = False
                             else:
                                 has_level = True
 
-                            if gear in equiped_weapon:
-                                has_space = False
-                            elif gear in equiped_armor:
-                                has_space = False
-                            elif gear in equiped_helmet:
-                                has_space = False
-                            elif gear in equiped_shield:
-                                has_space = False
-                            elif gear in equiped_spells:
+                            if gear in equiped_spells:
                                 has_space = False
                             else:
                                 has_space = True
 
                             if has_level == True and has_space == True:
                                 if gear in all_game_weapons:
-                                    gear.amount -= 1
-                                    if gear.amount == 0:
+                                    gear.weapon_amount -= 1
+                                    if gear.weapon_amount == 0:
                                         weapon_inventory.remove(gear)
                                 if gear in all_game_armor:
-                                    gear.amount -= 1
-                                    if gear.amount == 0:
+                                    gear.armor_amount -= 1
+                                    if gear.armor_amount == 0:
                                         armor_inventory.remove(gear)
                                 if gear in all_game_helmets:
-                                    gear.amount -= 1
-                                    if gear.amount == 0:
+                                    gear.helmet_amount -= 1
+                                    if gear.helmet_amount == 0:
                                         helmet_inventory.remove(gear)
                                 if gear in all_game_shields:
-                                    gear.amount -= 1
-                                    if gear.amount == 0:
+                                    gear.shield_amount -= 1
+                                    if gear.shield_amount == 0:
                                         shield_inventory.remove(gear)
                                 if gear in all_game_spells:
                                     spell_inventory.remove(gear)
@@ -3433,7 +3333,7 @@ def func_equip(gear,player_gear_inv,current_gear):
                                                 else:
                                                     for weapon in weapon_inventory:
                                                         if weapon.name == current_gear:
-                                                            weapon.amount += 1
+                                                            weapon.weapon_amount += 1
                                                 break
 
                                     if gear in all_game_armor:
@@ -3444,7 +3344,7 @@ def func_equip(gear,player_gear_inv,current_gear):
                                                 else:
                                                     for armor in armor_inventory:
                                                         if armor.name == current_gear:
-                                                            armor.amount += 1
+                                                            armor.armor_amount += 1
                                                 break
 
                                     if gear in all_game_helmets:
@@ -3455,7 +3355,7 @@ def func_equip(gear,player_gear_inv,current_gear):
                                                 else:
                                                     for helmet in helmet_inventory:
                                                         if helmet.name == current_gear:
-                                                            helmet.amount += 1
+                                                            helmet.helmet_amount += 1
                                                 break
 
                                     if gear in all_game_shields:
@@ -3466,14 +3366,14 @@ def func_equip(gear,player_gear_inv,current_gear):
                                                 else:
                                                     for shield in shield_inventory:
                                                         if shield.name == current_gear:
-                                                            shield.amount += 1
+                                                            shield.shield_amount += 1
                                                 break
 
 
                                 current_gear = gear.name
 
                             if has_level == True and has_space == False:
-                                print("You already have " + gear.print_name + " equiped!")
+                                print("\nYou already have this spell in your spellbook!\n")
                             if has_level == False and has_space == False:
                                 # print("\nYou are not high enough level to equip this!\n")
                                 pass
@@ -3988,19 +3888,19 @@ def location_desc():
             sleep(sleep_time_fast)
 
         for ground_item in scene_type.scene_inventory:
-            print(ground_item.print_name + " x " + str(ground_item.amount))
+            print(ground_item.print_name + " x " + str(ground_item.item_amount))
             sleep(sleep_time_fast)
         for ground_weapon in scene_type.scene_weapon_inventory:
-            print(ground_weapon.print_name + " x " + str(ground_weapon.amount))
+            print(ground_weapon.print_name)
             sleep(sleep_time_fast)
         for ground_armor in scene_type.scene_armor_inventory:
-            print(ground_armor.print_name + " x " + str(ground_armor.amount))
+            print(ground_armor.print_name)
             sleep(sleep_time_fast)
         for ground_helmet in scene_type.scene_helmet_inventory:
-            print(ground_helmet.print_name + " x " + str(ground_helmet.amount))
+            print(ground_helmet.print_name)
             sleep(sleep_time_fast)
         for ground_shield in scene_type.scene_shield_inventory:
-            print(ground_shield.print_name + " x " + str(ground_shield.amount))
+            print(ground_shield.print_name)
             sleep(sleep_time_fast)
 
 
@@ -4032,15 +3932,13 @@ def location_desc():
 
 for player_stats in players:
     player_stats.level = 1
-    player_stats.xp = 10
+    player_stats.xp = 100
     player_stats.strength = 1
     player_stats.attack = 1
     player_stats.magic = 1
-    player_stats.defence = 1
-    player_stats.strength_xp = 10
-    player_stats.attack_xp = 10
-    player_stats.magic_xp = 10
-    player_stats.defence_xp = 10
+    player_stats.strength_xp = 100
+    player_stats.attack_xp = 100
+    player_stats.magic_xp = 100
 
 func_check_stat_bonus()
 func_check_level()
@@ -4115,8 +4013,7 @@ while game_start == 1:
                 for item in enemy_stats.drop_table_items:
                     enemy_stats.drop_table_items_always.append(item)
                 for item in all_game_items:
-                    add_to_table = random.randint(0,2)
-                    if add_to_table == 2 and item not in enemy_stats.drop_table_items and item.value >= (enemy_stats.level * 2) and item.value <= (enemy_stats.level * 100):
+                    if item not in enemy_stats.drop_table_items and item.value >= (enemy_stats.level * 5) and item.value <= (enemy_stats.level * 20):
                         enemy_stats.drop_table_items.append(item)
                 if dev_mode >= 1:
                     for item in enemy_stats.drop_table_items:
@@ -4126,41 +4023,29 @@ while game_start == 1:
                     enemy_stats.drop_table_weapons_always.append(weapon)
                 for weapon in all_game_weapons:
                     if weapon not in enemy_stats.drop_table_weapons:
-                        if weapon.level <= (enemy_stats.level + 10) and weapon.level >= (enemy_stats.level - 30) and enemy_stats.attribute == weapon.attribute:
+                        if weapon.level <= (enemy_stats.level + 2) and weapon.level >= (enemy_stats.level - 6) and enemy_stats.attribute == weapon.attribute:
                             enemy_stats.drop_table_weapons.append(weapon)
-                if dev_mode >= 1:
-                    for weapon in enemy_stats.drop_table_weapons:
-                        print(weapon.print_name)
 
                 for armor in enemy_stats.drop_table_armor:
                     enemy_stats.drop_table_armor_always.append(armor)
                 for armor in all_game_armor:
                     if armor not in enemy_stats.drop_table_armor:
-                        if armor.level <= (enemy_stats.level + 10) and armor.level >= (enemy_stats.level - 30) and enemy_stats.attribute == armor.attribute:
+                        if armor.level <= (enemy_stats.level + 2) and armor.level >= (enemy_stats.level - 6) and enemy_stats.attribute == armor.attribute:
                             enemy_stats.drop_table_armor.append(armor)
-                if dev_mode >= 1:
-                    for armor in enemy_stats.drop_table_armor:
-                        print(armor.print_name)
 
                 for helmet in enemy_stats.drop_table_helmets:
                     enemy_stats.drop_table_helmets_always.append(helmet)
                 for helmet in all_game_helmets:
                     if helmet not in enemy_stats.drop_table_helmets:
-                        if helmet.level <= (enemy_stats.level + 10)and helmet.level >= (enemy_stats.level - 30) and enemy_stats.attribute == helmet.attribute:
+                        if helmet.level <= (enemy_stats.level + 2)and helmet.level >= (enemy_stats.level - 6) and enemy_stats.attribute == helmet.attribute:
                             enemy_stats.drop_table_helmets.append(helmet)
-                if dev_mode >= 1:
-                    for helmet in enemy_stats.drop_table_helmets:
-                        print(helmet.print_name)
 
                 for shield in enemy_stats.drop_table_shields:
                     enemy_stats.drop_table_shields_always.append(shield)
                 for shield in all_game_shields:
                     if shield not in enemy_stats.drop_table_shields:
-                        if shield.level <= (enemy_stats.level + 10) and shield.level >= (enemy_stats.level - 30) and enemy_stats.attribute == shield.attribute:
+                        if shield.level <= (enemy_stats.level + 2) and shield.level >= (enemy_stats.level - 6) and enemy_stats.attribute == shield.attribute:
                             enemy_stats.drop_table_shields.append(shield)
-                if dev_mode >= 1:
-                    for shield in enemy_stats.drop_table_shields:
-                        print(shield.print_name)
 
                 if dev_mode >= 1:
                     print("modifying enemy stats")
@@ -4205,12 +4090,14 @@ while game_start == 1:
                     func_HUD()
 
             while in_fight == True:
-
                 pygame.time.delay(100)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        game_start = 0
+                        in_fight = False
 
                 func_check_level()
                 func_refresh_pygame(False)
-
                 keys = pygame.key.get_pressed()
 
                 if keys[pygame.K_w]:
@@ -4231,127 +4118,120 @@ while game_start == 1:
                     if dev_mode >= 2:
                         print(combat_cursor_pos)
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        game_start = 0
+                if keys[pygame.K_e]:
+                    sfx_cursor_select.play()
+                    if combat_cursor_pos == 4: #run option
                         in_fight = False
-                    elif event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_e:
-                            sfx_cursor_select.play()
-                            if combat_cursor_pos == 4: #run option
-                                in_fight = False
-                                print("you ran away! \n")
-                                del current_enemies[:]
-                                location_desc()
-                            elif combat_cursor_pos == 1: #hit option
-                                func_player_status_check(True,False)
-                                func_check_enemy_dead()
-                                func_check_level()
+                        print("you ran away! \n")
+                        del current_enemies[:]
+                        location_desc()
+                    elif combat_cursor_pos == 1: #hit option
+                        func_player_status_check(True,False)
+                        func_check_enemy_dead()
+                        func_check_level()
+                        # func_enemy_status_check()
+                        # func_check_enemy_dead()
+                    elif combat_cursor_pos == 2: #spell option
 
-                            elif combat_cursor_pos == 2: #spell option
+                        if dev_mode >= 2:
+                            print("\nYour equipped spells: \n")
+                            for spell in equiped_spells:
+                                print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
+                            print("")
+                            print("which spell will you cast? \n")
 
+                        in_submenu = True
+                        in_submenu_cast_combat = True
+                        while in_submenu_cast_combat == True:
+                            pygame.time.delay(100)
+                            for event in pygame.event.get():
+                                if event.type == pygame.QUIT:
+                                    game_start = 0
+                                    in_fight = False
+                                    in_submenu = False
+                                    in_submenu_cast_combat = False
+
+                            func_check_level()
+                            func_refresh_pygame(False)
+
+                            keys = pygame.key.get_pressed()
+
+                            if keys[pygame.K_q]:
+                                in_submenu = False
+                                in_submenu_cast_combat = False
+
+                            if keys[pygame.K_w]:
+                                if combat_cursor_pos <= 1:
+                                    combat_cursor_pos == 1
+                                else:
+                                    sfx_cursor_move.play()
+                                    combat_cursor_pos -= 1
                                 if dev_mode >= 2:
-                                    print("\nYour equipped spells: \n")
-                                    for spell in equiped_spells:
-                                        print(str((equiped_spells.index(spell) + 1)) + " || " + spell.print_name + " || " + spell.print_attribute)
-                                    print("")
-                                    print("which spell will you cast? \n")
+                                    print(combat_cursor_pos)
 
-                                in_submenu = True
-                                in_submenu_cast_combat = True
-                                while in_submenu_cast_combat == True:
+                            if keys[pygame.K_s]:
+                                if combat_cursor_pos >= 18:
+                                    combat_cursor_pos == 18
+                                else:
+                                    sfx_cursor_move.play()
+                                    combat_cursor_pos += 1
+                                if dev_mode >= 2:
+                                    print(combat_cursor_pos)
 
-                                    pygame.time.delay(100)
+                            if keys[pygame.K_e]:
+                                sfx_cursor_select.play()
 
-                                    func_check_level()
-                                    func_refresh_pygame(False)
+                                val_combat_spell = combat_cursor_pos
+                                val = val_combat_spell - 1
+                                for spell in spell_inventory:
+                                    if val == spell_inventory.index(spell):
+                                        combat_cast_spell = spell.name
 
-                                    keys = pygame.key.get_pressed()
+                                has_spell = 0
 
-                                    if keys[pygame.K_w]:
-                                        if combat_cursor_pos <= 1:
-                                            combat_cursor_pos == 1
-                                        else:
-                                            sfx_cursor_move.play()
-                                            combat_cursor_pos -= 1
-                                        if dev_mode >= 2:
-                                            print(combat_cursor_pos)
+                                for spell in equiped_spells:
+                                    if spell.name == combat_cast_spell:
+                                        has_spell = 1
 
-                                    if keys[pygame.K_s]:
-                                        if combat_cursor_pos >= 18:
-                                            combat_cursor_pos == 18
-                                        else:
-                                            sfx_cursor_move.play()
-                                            combat_cursor_pos += 1
-                                        if dev_mode >= 2:
-                                            print(combat_cursor_pos)
-
-
-                                    for event in pygame.event.get():
-                                        if event.type == pygame.QUIT:
-                                            game_start = 0
-                                            in_fight = False
-                                            in_submenu = False
-                                            in_submenu_cast_combat = False
-
-                                        elif event.type == pygame.KEYDOWN:
-                                            if event.key == pygame.K_q:
-                                                in_submenu = False
-                                                in_submenu_cast_combat = False
-                                            if event.key == pygame.K_e:
-                                                sfx_cursor_select.play()
-
-                                                val_combat_spell = combat_cursor_pos
-                                                val = val_combat_spell - 1
-                                                for spell in spell_inventory:
-                                                    if val == spell_inventory.index(spell):
-                                                        combat_cast_spell = spell.name
-
-                                                has_spell = 0
-
-                                                for spell in equiped_spells:
-                                                    if spell.name == combat_cast_spell:
-                                                        has_spell = 1
-
-                                                player_turns -= 1
-                                                func_player_status_check(False,False)
-                                                func_check_enemy_dead()
-                                                func_check_level()
-
-                                                in_submenu = False
-                                                in_submenu_cast_combat = False
-                                                break
-
-
-
-                            elif combat_cursor_pos == 3: #use option
-                                func_player_status_check(False,True)
-                                func_use_combat(item,inventory)
+                                player_turns -= 1
+                                func_player_status_check(False,False)
                                 func_check_enemy_dead()
                                 func_check_level()
+                                # func_enemy_status_check()
+                                # func_check_enemy_dead()
+                                in_submenu = False
+                                in_submenu_cast_combat = False
+                                break
 
-                            elif combat_cursor_pos == 5:
-                                in_fight = False
-                                game_start = 0
+                    elif combat_cursor_pos == 3: #use option
+                        func_player_status_check(False,True)
+                        func_use_combat(item,inventory)
+                        func_check_enemy_dead()
+                        func_check_level()
+                        # func_enemy_status_check()
+                        # func_check_enemy_dead()
 
-                            elif combat_cursor_pos == 10:
-                                in_fight = False
-                                game_start = 0
+                    elif combat_cursor_pos == 5:
+                        in_fight = False
+                        game_start = 0
 
-                            else:
-                                print("invalid combat command \n")
+                    elif combat_cursor_pos == 10:
+                        in_fight = False
+                        game_start = 0
 
-                            print("turns left: " + str(player_turns))
-                            if player_turns == 0:
+                    else:
+                        print("invalid combat command \n")
 
-                                print("\n///////////////////////////////  end of player turn  ///////////////////////////\n")
-                                func_enemy_status_check()
-                                func_check_enemy_dead()
-                                print("\n///////////////////////////////  end of enemy turn  ///////////////////////////\n")
+                    print("turns left: " + str(player_turns))
+                    if player_turns == 0:
 
-                                player_turns = 3
-                                print("\nturns left: " + str(player_turns))
+                        print("\n///////////////////////////////  end of player turn  ///////////////////////////\n")
+                        func_enemy_status_check()
+                        func_check_enemy_dead()
+                        print("\n///////////////////////////////  end of enemy turn  ///////////////////////////\n")
 
+                        player_turns = 3
+                        print("\nturns left: " + str(player_turns))
 
         if in_fight == False:
             location_desc()
@@ -4795,13 +4675,13 @@ while game_start == 1:
                                     for ground_item in scene_type.scene_inventory:
                                         if ground_item.name == pickedup_item:
                                             has_item = True
-                                            print("you pickup " + ground_item.print_name + " x " + str(ground_item.amount) + "\n")
+                                            print("you pickup " + ground_item.print_name + " x " + str(ground_item.item_amount) + "\n")
                                             sleep(sleep_time_fast)
 
                                             for item in inventory:
                                                 if item.name == pickedup_item:
                                                     has_item_multiple = True
-                                                    item.amount += ground_item.amount
+                                                    item.item_amount += ground_item.item_amount
                                             if has_item_multiple == False:
                                                 for item in all_game_items:
                                                     if item.name == pickedup_item:
@@ -4871,18 +4751,17 @@ while game_start == 1:
                                 has_item_multiple = False
                                 while has_item == False:
                                     for scene_type in location:
-
                                         for ground_item in scene_type.scene_inventory:
-                                            pickedup_amount = ground_item.amount
+                                            pickedup_item_amount = ground_item.item_amount
                                             pickedup_item = "0"
                                             pickedup_item = ground_item.name
                                             has_item = True
-                                            print("you pickup " + ground_item.print_name + " x " + str(ground_item.amount))
+                                            print("you pickup " + ground_item.print_name + " x " + str(ground_item.item_amount))
                                             sleep(sleep_time_fast)
                                             for item in inventory:
                                                 if item.name == pickedup_item:
                                                     has_item_multiple = True
-                                                    item.amount += pickedup_amount
+                                                    item.item_amount += pickedup_item_amount
 
                                             if has_item_multiple == False:
                                                 for item in all_game_items:
@@ -4890,101 +4769,61 @@ while game_start == 1:
                                                         inventory.append(item)
                                                         for item in inventory:
                                                             if item.name == pickedup_item:
-                                                                item.amount = pickedup_amount
+                                                                item.item_amount = pickedup_item_amount
                                                         break
                                             scene_type.scene_inventory.remove(ground_item)
                                             break
 
                                         for ground_weapon in scene_type.scene_weapon_inventory:
-                                            pickedup_amount = ground_weapon.amount
-                                            pickedup_weapon = "0"
-                                            pickedup_weapon = ground_weapon.name
-                                            has_weapon = True
-                                            print("you pickup " + ground_weapon.print_name + " x " + str(ground_weapon.amount))
+                                            pickedup_item = "0"
+                                            pickedup_item = ground_weapon.name
+                                            has_item = True
+                                            print("you pickup " + ground_weapon.print_name)
                                             sleep(sleep_time_fast)
-                                            for weapon in weapon_inventory:
-                                                if weapon.name == pickedup_weapon:
-                                                    has_weapon_multiple = True
-                                                    weapon.amount += pickedup_amount
-
-                                            if has_weapon_multiple == False:
-                                                for weapon in all_game_weapons:
-                                                    if weapon.name == pickedup_weapon:
-                                                        inventory.append(weapon)
-                                                        for weapon in inventory:
-                                                            if weapon.name == pickedup_weapon:
-                                                                weapon.amount = pickedup_amount
-                                                        break
                                             scene_type.scene_weapon_inventory.remove(ground_weapon)
+                                            for weapon in all_game_weapons:
+                                                if weapon.name == pickedup_item:
+                                                    weapon_inventory.append(weapon)
+                                                    break
                                             break
 
                                         for ground_armor in scene_type.scene_armor_inventory:
-                                            pickedup_amount = ground_armor.amount
-                                            pickedup_armor = "0"
-                                            pickedup_armor = ground_armor.name
-                                            has_armor = True
-                                            print("you pickup " + ground_armor.print_name + " x " + str(ground_armor.amount))
+                                            pickedup_item = "0"
+                                            pickedup_item = ground_armor.name
+                                            has_item = True
+                                            print("you pickup " + ground_armor.print_name)
                                             sleep(sleep_time_fast)
-                                            for armor in armor_inventory:
-                                                if armor.name == pickedup_armor:
-                                                    has_armor_multiple = True
-                                                    armor.amount += pickedup_amount
-
-                                            if has_armor_multiple == False:
-                                                for armor in all_game_armor:
-                                                    if armor.name == pickedup_armor:
-                                                        inventory.append(armor)
-                                                        for armor in inventory:
-                                                            if armor.name == pickedup_armor:
-                                                                armor.amount = pickedup_amount
-                                                        break
                                             scene_type.scene_armor_inventory.remove(ground_armor)
+                                            for armor in all_game_armor:
+                                                if armor.name == pickedup_item:
+                                                    armor_inventory.append(armor)
+                                                    break
                                             break
 
                                         for ground_helmet in scene_type.scene_helmet_inventory:
-                                            pickedup_amount = ground_helmet.amount
-                                            pickedup_helmet = "0"
-                                            pickedup_helmet = ground_helmet.name
-                                            has_helmet = True
-                                            print("you pickup " + ground_helmet.print_name + " x " + str(ground_helmet.amount))
+                                            pickedup_item = "0"
+                                            pickedup_item = ground_helmet.name
+                                            has_item = True
+                                            print("you pickup " + ground_helmet.print_name)
                                             sleep(sleep_time_fast)
-                                            for helmet in helmet_inventory:
-                                                if helmet.name == pickedup_helmet:
-                                                    has_helmet_multiple = True
-                                                    helmet.amount += pickedup_amount
-
-                                            if has_helmet_multiple == False:
-                                                for helmet in all_game_helmets:
-                                                    if helmet.name == pickedup_helmet:
-                                                        inventory.append(helmet)
-                                                        for helmet in inventory:
-                                                            if helmet.name == pickedup_helmet:
-                                                                helmet.amount = pickedup_amount
-                                                        break
                                             scene_type.scene_helmet_inventory.remove(ground_helmet)
+                                            for helmet in all_game_helmets:
+                                                if helmet.name == pickedup_item:
+                                                    helmet_inventory.append(helmet)
+                                                    break
                                             break
 
                                         for ground_shield in scene_type.scene_shield_inventory:
-                                            pickedup_amount = ground_shield.amount
-                                            pickedup_shield = "0"
-                                            pickedup_shield = ground_shield.name
-                                            has_shield = True
-                                            print("you pickup " + ground_shield.print_name + " x " + str(ground_shield.amount))
+                                            pickedup_item = "0"
+                                            pickedup_item = ground_shield.name
+                                            has_item = True
+                                            print("you pickup " + ground_shield.print_name)
                                             sleep(sleep_time_fast)
-                                            for shield in shield_inventory:
-                                                if shield.name == pickedup_shield:
-                                                    has_shield_multiple = True
-                                                    shield.amount += pickedup_amount
-
-                                            if has_shield_multiple == False:
-                                                for shield in all_game_shields:
-                                                    if shield.name == pickedup_shield:
-                                                        inventory.append(shield)
-                                                        for shield in inventory:
-                                                            if shield.name == pickedup_shield:
-                                                                shield.amount = pickedup_amount
-                                                        break
                                             scene_type.scene_shield_inventory.remove(ground_shield)
+                                            for shield in all_game_shields:
+                                                if shield.name == pickedup_item:
+                                                    shield_inventory.append(shield)
+                                                    break
                                             break
 
                                         if has_item == False:
@@ -5004,7 +4843,7 @@ while game_start == 1:
                                 if len(inventory) != 0:
                                     for item in inventory:
 
-                                        print("|| " + item.print_name + " x " + str(item.amount))
+                                        print("|| " + item.print_name + " x " + str(item.item_amount))
 
                                 if len(spell_inventory) != 0:
                                     for spell in spell_inventory:
@@ -5014,22 +4853,22 @@ while game_start == 1:
                                 if len(helmet_inventory) != 0:
                                     for helmet in helmet_inventory:
 
-                                        print("|| " + helmet.print_name + " x " + str(helmet.amount) + " || attribute: " + helmet.print_attribute + " || type: " + helmet.type + " || lvl: " + str(helmet.level))
+                                        print("|| " + helmet.print_name + " x " + str(helmet.helmet_amount) + " || attribute: " + helmet.print_attribute + " || type: " + helmet.type + " || lvl: " + str(helmet.level))
 
                                 if len(armor_inventory) != 0:
                                     for armor in armor_inventory:
 
-                                        print("|| " + armor.print_name + " x " + str(armor.amount) + " || attribute: " + armor.print_attribute + " || type: " + armor.type + " || lvl: " + str(armor.level))
+                                        print("|| " + armor.print_name + " x " + str(armor.armor_amount) + " || attribute: " + armor.print_attribute + " || type: " + armor.type + " || lvl: " + str(armor.level))
 
                                 if len(shield_inventory) != 0:
                                     for shield in shield_inventory:
 
-                                        print("|| " + shield.print_name + " x " + str(shield.amount) + " || attribute: " + shield.print_attribute + " || type: " + shield.type + " || lvl: " + str(shield.level))
+                                        print("|| " + shield.print_name + " x " + str(shield.shield_amount) + " || attribute: " + shield.print_attribute + " || type: " + shield.type + " || lvl: " + str(shield.level))
 
                                 if len(weapon_inventory) != 0:
                                     for weapon in weapon_inventory:
 
-                                        print("|| " + weapon.print_name + " x " + str(weapon.amount) + " || attribute: " + weapon.print_attribute + " || type: " + weapon.type + " || lvl: " + str(weapon.level))
+                                        print("|| " + weapon.print_name + " x " + str(weapon.weapon_amount) + " || attribute: " + weapon.print_attribute + " || type: " + weapon.type + " || lvl: " + str(weapon.level))
 
                                 print("")
 
@@ -5539,7 +5378,7 @@ while game_start == 1:
                                             for item in inventory:
                                                 if item.name == dev_item.get():
                                                     has_item_multiple = True
-                                                    item.amount += 1
+                                                    item.item_amount += 1
                                                     break
                                             if has_item_multiple == False:
                                                 for item in all_game_items:
@@ -5573,7 +5412,7 @@ while game_start == 1:
                                             for weapon in weapon_inventory:
                                                 if weapon.name == dev_weapon.get():
                                                     has_weapon_multiple = True
-                                                    weapon.amount += 1
+                                                    weapon.weapon_amount += 1
                                                     break
                                             if has_weapon_multiple == False:
                                                 for weapon in all_game_weapons:
@@ -5607,7 +5446,7 @@ while game_start == 1:
                                             for armor in armor_inventory:
                                                 if armor.name == dev_armor.get():
                                                     has_armor_multiple = True
-                                                    armor.amount += 1
+                                                    armor.armor_amount += 1
                                                     break
                                             if has_armor_multiple == False:
                                                 for armor in all_game_armor:
@@ -5641,7 +5480,7 @@ while game_start == 1:
                                             for helmet in helmet_inventory:
                                                 if helmet.name == dev_helmet.get():
                                                     has_helmet_multiple = True
-                                                    helmet.amount += 1
+                                                    helmet.helmet_amount += 1
                                                     break
                                             if has_helmet_multiple == False:
                                                 for helmet in all_game_helmets:
@@ -5673,7 +5512,7 @@ while game_start == 1:
                                             for shield in shield_inventory:
                                                 if shield.name == dev_shield.get():
                                                     has_shield_multiple = True
-                                                    shield.amount += 1
+                                                    shield.shield_amount += 1
                                                     break
                                             if has_shield_multiple == False:
                                                 for shield in all_game_shields:

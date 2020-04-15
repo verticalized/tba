@@ -30,6 +30,7 @@ class weapon:
         self.attack_bonus = attack_bonus
         self.defence_bonus = defence_bonus
         self.maxhp_bonus = maxhp_bonus
+        self.amount = 1
         self.print_attribute = ""
 
         if self.attribute == "fire":
@@ -53,14 +54,22 @@ class weapon:
 
         all_game_weapons.append(self)
 
-bird_sword = weapon(201,"bird sword",3,"sword",5,"air",5,9,15,12,10)
-super_bird_sword = weapon(202,"super bird sword",180,"sword",50,"air",0,500,500,500,0)
+bird_sword = weapon(201,"bird sword",3,"sword",5,"air",5,9,15,12,1000)
+super_bird_sword = weapon(202,"super bird sword",180,"sword",50,"air",0,500,500,500,1000)
 
-wooden_staff = weapon(204,"wooden staff",80,"staff",5,"earth",20,2,2,20,0)
-tall_staff = weapon(204,"tall staff",80,"staff",5,"earth",22,4,4,25,0)
-iron_knife = weapon(203,"iron knife",1,"sword",2,"earth",0,8,8,1,1)
+wooden_staff = weapon(204,"wooden staff",80,"staff",3,"earth",10,2,2,20,0)
+tall_staff = weapon(204,"tall staff",80,"staff",5,"fire",22,4,4,25,100)
+iron_knife = weapon(203,"iron knife",1,"sword",2,"water",0,8,8,1,1)
 iron_spear = weapon(203,"iron spear",2,"spear",2,"earth",0,14,2,12,1)
-iron_dagger = weapon(203,"iron dagger",2,"dagger",2,"earth",0,8,18,2,1)
+iron_dagger = weapon(203,"iron dagger",2,"dagger",2,"air",0,8,18,2,1)
+
+long_spear = weapon(203,"long spear",2,"spear",2,"water",0,14,2,12,1)
+short_dagger = weapon(203,"short dagger",2,"dagger",2,"fire",0,8,18,2,1)
+staff_of_air = weapon(204,"staff of air",80,"staff",5,"air",20,2,2,20,0)
+staff_of_fire = weapon(204,"staff of fire",80,"staff",5,"fire",20,2,2,20,0)
+staff_of_earth = weapon(204,"staff of earth",80,"staff",5,"earth",20,2,2,20,0)
+staff_of_ice = weapon(204,"staff of ice",80,"staff",5,"ice",20,2,2,20,0)
+
 steel_spear = weapon(204,"steel spear",80,"spear",10,"earth",0,18,24,28,0)
 
 iron_sword = weapon(203,"iron sword",2,"sword",2,"earth",0,10,10,10,1)
@@ -89,7 +98,7 @@ class ground_weapon:
     def __init__(self, name):
         self.name = name
         self.print_name = (Fore.BLACK + Style.BRIGHT + self.name + Style.RESET_ALL)
-
+        self.amount = 1
         all_ground_game_weapons.append(self)
 
 ground_bird_sword = ground_weapon("bird sword")
@@ -101,6 +110,14 @@ ground_tall_staff = ground_weapon("tall staff")
 ground_iron_knife = ground_weapon("iron knife")
 ground_iron_spear = ground_weapon("iron spear")
 ground_iron_dagger = ground_weapon("iron dagger")
+
+ground_long_spear = ground_weapon("long spear")
+ground_short_dagger = ground_weapon("short dagger")
+ground_staff_of_air = ground_weapon("staff of air")
+ground_staff_of_fire = ground_weapon("staff of fire")
+ground_staff_of_earth = ground_weapon("staff of earth")
+ground_staff_of_ice = ground_weapon("staff of ice")
+
 ground_steel_spear = ground_weapon("steel spear")
 
 ground_iron_sword = ground_weapon("iron sword")
@@ -139,6 +156,7 @@ class armor:
         self.attack_bonus = attack_bonus
         self.defence_bonus = defence_bonus
         self.maxhp_bonus = maxhp_bonus
+        self.amount = 1
 
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
@@ -174,7 +192,7 @@ class ground_armor:
     def __init__(self, name):
         self.name = name
         self.print_name = (Fore.BLACK + Style.BRIGHT + self.name + Style.RESET_ALL)
-
+        self.amount = 1
         all_ground_game_armor.append(self)
 
 ground_birdshirt = ground_armor("bird t shirt")
@@ -202,6 +220,7 @@ class helmet:
         self.attack_bonus = attack_bonus
         self.defence_bonus = defence_bonus
         self.maxhp_bonus = maxhp_bonus
+        self.amount = 1
 
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
@@ -231,7 +250,7 @@ class ground_helmet:
     def __init__(self, name):
         self.name = name
         self.print_name = (Fore.BLACK + Style.BRIGHT + self.name + Style.RESET_ALL)
-
+        self.amount = 1
         all_ground_game_helmets.append(self)
 
 ground_bird_hat = ground_helmet("bird hat")
@@ -253,6 +272,7 @@ class shield:
         self.attack_bonus = attack_bonus
         self.defence_bonus = defence_bonus
         self.maxhp_bonus = maxhp_bonus
+        self.amount = 1
 
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
@@ -281,11 +301,16 @@ mage_book = shield(301,"mage book",100,"light",99,"air",100,0,0,40,1000)
 wooden_round_shield = shield(301,"wooden round shield",100,"light",1,"air",0,0,0,40,100)
 magic_orb = shield(301,"magic orb",100,"light",1,"air",30,0,0,0,0)
 
+buckler = shield(301,"buckler",500,"light",5,"air",0,0,0,60,650)
+red_magic_gem = shield(301,"red magic gem",1000,"light",5,"fire",50,40,0,0,0)
+green_magic_gem = shield(301,"green magic gem",1000,"light",5,"earth",40,10,10,10,0)
+blue_magic_gem = shield(301,"blue magic gem",1000,"light",5,"water",40,0,0,40,1000)
+
 class ground_shield:
     def __init__(self, name):
         self.name = name
         self.print_name = (Fore.BLACK + Style.BRIGHT + self.name + Style.RESET_ALL)
-
+        self.amount = 1
         all_ground_game_shields.append(self)
 
 ground_bird_shield = ground_shield("bird shield")
@@ -295,3 +320,8 @@ ground_mage_book = ground_shield("mage book")
 
 ground_wooden_round_shield = ground_shield("wooden round shield")
 ground_magic_orb = ground_shield("magic orb")
+
+ground_buckler = ground_shield("buckler")
+ground_red_magic_gem = ground_shield("red magic gem")
+ground_green_magic_gem = ground_shield("green magic gem")
+ground_blue_magic_gem = ground_shield("blue magic gem")

@@ -19,6 +19,7 @@ class spell:
         self.attribute = attribute
         self.xp = xp
         self.effect = effect
+        self.amount = 1
         self.spell_desc = spell_desc
 
         self.print_name = (Fore.BLACK + Back.WHITE + Style.NORMAL + name + Style.RESET_ALL)
