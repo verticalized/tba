@@ -70,7 +70,7 @@ earthblast = spell("earthblast",8,25,250,False,60,"earth",100,0,"light earth dam
 necroblast = spell("necroblast",8,25,250,False,60,"undead",100,0,"light undead damage")
 holyblast = spell("holyblast",8,25,250,False,60,"holy",100,0,"light holy damage")
 
-#### status -1 spells HEAL AND DAMAGE
+#### status 1 spells HEAL AND DAMAGE
 life_drain = spell("life drain",5,5,5,True,100,"undead",50,1,"a life draining spell which heals the user")
 
 ##################--STATUS EFFECT/DEBUFF SPELLS--##############################
@@ -91,6 +91,19 @@ hypnosis = spell("hypnosis",50,5,50,True,5,"water",70,5,"puts the enemy to sleep
 
 #### status 6 spells BADLY POISON
 toxic = spell("toxic",22,5,500,True,5,"earth",70,6,"badly poisons the enemy")
+
+#### status 10 spells STR UP
+str_up = spell("STR UP",5,5,50,True,5,"fire",70,10,"STR UP")
+str_up_heal = spell("STR UP and heal",5,5,50,False,5,"fire",70,10,"STR UP and heal")
+#### status 11 spells ATK UP
+atk_up = spell("ATK UP",5,5,50,True,5,"fire",70,10,"ATK UP")
+atk_up_heal = spell("ATK UP and heal",5,5,50,False,5,"fire",70,11,"ATK UP and heal")
+#### status 12 spells MGK UP
+mgk_up = spell("MGK UP",5,5,50,True,5,"fire",70,10,"MGK UP")
+mgk_up_heal = spell("MGK UP and heal",5,5,50,False,5,"fire",70,12,"MGK UP and heal")
+#### status 13 spells DEF UP
+def_up = spell("DEF UP",5,5,50,True,5,"fire",70,10,"DEF UP")
+def_up_heal = spell("DEF UP and heal",5,5,50,False,5,"fire",70,13,"DEF UP and heal")
 
 ##################--BUFF/HEALING SPELLS--##############################
 
