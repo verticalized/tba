@@ -13,23 +13,23 @@ from spell_module import *
 
 all_game_enemies = []
 
-spr_no_sprite = pygame.image.load("no_sprite1.png")
+spr_no_sprite = pygame.image.load("sprites/enemy/no_sprite1.png")
 
-spr_goblin = pygame.image.load("goblin1.png")
-spr_goblin2 = pygame.image.load("goblin2.png")
-spr_ghost = pygame.image.load("ghost1.png")
-spr_imp = pygame.image.load("imp1.png")
-spr_imp2 = pygame.image.load("imp2.png")
-spr_wolf = pygame.image.load("wolf1.png")
-spr_ice_wolf = pygame.image.load("ice_wolf1.png")
+spr_goblin = pygame.image.load("sprites/enemy/goblin1.png")
+spr_goblin2 = pygame.image.load("sprites/enemy/goblin2.png")
+spr_ghost = pygame.image.load("sprites/enemy/ghost1.png")
+spr_imp = pygame.image.load("sprites/enemy/imp1.png")
+spr_imp2 = pygame.image.load("sprites/enemy/imp2.png")
+spr_wolf = pygame.image.load("sprites/enemy/wolf1.png")
+spr_ice_wolf = pygame.image.load("sprites/enemy/ice_wolf1.png")
 
-spr_cow = pygame.image.load("cow1.png")
-spr_sheep = pygame.image.load("sheep1.png")
+spr_cow = pygame.image.load("sprites/enemy/cow1.png")
+spr_sheep = pygame.image.load("sprites/enemy/sheep1.png")
 
-spr_fire_ele = pygame.image.load("fire_ele1.png")
-spr_air_ele = pygame.image.load("air_ele1.png")
-spr_water_ele = pygame.image.load("water_ele1.png")
-spr_earth_ele = pygame.image.load("earth_ele1.png")
+spr_fire_ele = pygame.image.load("sprites/enemy/fire_ele1.png")
+spr_air_ele = pygame.image.load("sprites/enemy/air_ele1.png")
+spr_water_ele = pygame.image.load("sprites/enemy/water_ele1.png")
+spr_earth_ele = pygame.image.load("sprites/enemy/earth_ele1.png")
 
 
 class enemy_stats:

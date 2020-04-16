@@ -11,12 +11,17 @@ all_scene_types = []
 
 minimum_difficulty = 1
 
-spr_grass = pygame.image.load("grass1.png")
-spr_forest = pygame.image.load("forest1.png")
-spr_road = pygame.image.load("road1.png")
-spr_town = pygame.image.load("town1.png")
-spr_cliffs = pygame.image.load("cliffs1.png")
-spr_water = pygame.image.load("water1.png")
+spr_grass = pygame.image.load("sprites/map/grass1.png")
+spr_forest = pygame.image.load("sprites/map/forest1.png")
+spr_road = pygame.image.load("sprites/map/road1.png")
+spr_town = pygame.image.load("sprites/map/town1.png")
+spr_cliffs = pygame.image.load("sprites/map/cliffs1.png")
+spr_water = pygame.image.load("sprites/map/water1.png")
+spr_rivermiddle_horizontal = pygame.image.load("sprites/map/river1_middle.png")
+spr_rivertop = pygame.image.load("sprites/map/river1_top.png")
+spr_riverbottom = pygame.image.load("sprites/map/river1_bottom.png")
+spr_riverleft = pygame.image.load("sprites/map/river1_middle.png")
+spr_riverright = pygame.image.load("sprites/map/river1_middle.png")
 
 class scene_type:
     def __init__(self, xpos, ypos, zpos, name, temp, light, safe, can_fish, can_cook, can_craft, can_steal, passable, treasure, difficulty, biome, has_stairs, indoors, impass_msg, flavour, scene_inventory, scene_weapon_inventory, scene_armor_inventory, scene_helmet_inventory, scene_shield_inventory):
@@ -58,45 +63,74 @@ class scene_type:
             self.tile_g = 0
             self.tile_b = 255
             self.tile_sprite = spr_water
+            tile_N_is_water = False
+            tile_S_is_water = False
+            tile_E_is_water = False
+            tile_W_is_water = False
+            for scene_type in all_scene_types:
+                if scene_type.ypos == (self.ypos-1) and scene_type.biome == "water":
+                    tile_N_is_water = True
+                if scene_type.ypos == (self.ypos+1) and scene_type.biome == "water":
+                    tile_S_is_water = True
+                if scene_type.xpos == (self.xpos+1) and scene_type.biome == "water":
+                    tile_E_is_water = True
+                if scene_type.xpos == (self.xpos-1) and scene_type.biome == "water":
+                    tile_W_is_water = True
+
+            if tile_N_is_water == True and tile_S_is_water == True and tile_E_is_water == True and tile_W_is_water == True:
+                self.tile_sprite = spr_water
+            if tile_N_is_water == False and tile_S_is_water == False:
+                self.tile_sprite = spr_rivermiddle_horizontal
+            if tile_E_is_water == False and tile_W_is_water == False:
+                self.tile_sprite = spr_water #placeholder for spr_rivermiddle_vertical
+
+
         elif self.biome == "forest":
             self.name = (Fore.GREEN + Style.NORMAL + name + Style.RESET_ALL)
             self.tile_r = 50
             self.tile_g = 120
             self.tile_b = 40
             self.tile_sprite = spr_forest
+
         elif self.biome == "town":
             self.name = (Fore.BLACK + Style.BRIGHT + name + Style.RESET_ALL)
             self.tile_r = 139
             self.tile_g = 139
             self.tile_b = 143
             self.tile_sprite = spr_town
+
         elif self.biome == "sandy":
             self.name = (Fore.YELLOW + Style.NORMAL + name + Style.RESET_ALL)
             self.tile_r = 237
             self.tile_g = 206
             self.tile_b = 0
+
         elif self.biome == "grassy":
             self.name = (Fore.GREEN + Style.DIM + name + Style.RESET_ALL)
             self.tile_r = 90
             self.tile_g = 217
             self.tile_b = 72
             self.tile_sprite = spr_grass
+
         elif self.biome == "snow":
             self.name = (Fore.WHITE + Style.BRIGHT + name + Style.RESET_ALL)
             self.tile_r = 247
             self.tile_g = 247
             self.tile_b = 247
+
         elif self.biome == "cave":
             self.name = (Fore.MAGENTA + Style.DIM + name + Style.RESET_ALL)
             self.tile_r = 136
             self.tile_g = 10
             self.tile_b = 145
+
         elif self.biome == "dirt":
             self.name = (Fore.BLACK + Style.BRIGHT + name + Style.RESET_ALL)
             self.tile_r = 145
             self.tile_g = 102
             self.tile_b = 16
             self.tile_sprite = spr_cliffs
+
         elif self.biome == "road":
             self.name = (Fore.BLACK + Style.BRIGHT + name + Style.RESET_ALL)
             self.tile_r = 89
