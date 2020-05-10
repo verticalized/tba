@@ -3,6 +3,7 @@ import random # default python module
 from time import sleep # default python module
 
 ##########--3RD PARTY MODULES--###############
+from pickle import *
 from tkinter import *
 
 from colorama import init
@@ -33,7 +34,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 
 has_moved = False
@@ -536,6 +537,15 @@ hobgoblin.spellbook.append(poison)
 hobgoblin.spellbook.append(snare)
 hobgoblin.spellbook.append(super_heal)
 
+wolf.spellbook.append(str_up_heal_aoe)
+wolf.spellbook.append(str_up_heal_aoe)
+
+ice_wolf.spellbook.append(str_up_aoe)
+ice_wolf.spellbook.append(str_up_aoe)
+ice_wolf.spellbook.append(str_up_heal_aoe)
+ice_wolf.spellbook.append(str_up_heal_aoe)
+
+
 goblin.spellbook.append(prayer)
 goblin.spellbook.append(burn)
 
@@ -642,6 +652,18 @@ big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 
+if dev_mode >= 1:
+    cow.spellbook.append(str_down_damage)
+    cow.spellbook.append(str_down_damage)
+    cow.spellbook.append(str_down_damage)
+    cow.spellbook.append(str_down_damage)
+    cow.spellbook.append(atk_down_damage)
+    cow.spellbook.append(atk_down_damage)
+    cow.spellbook.append(atk_down_damage)
+    cow.spellbook.append(atk_down_damage)
+
+
+
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
 forest_1.scene_inventory.append(ground_oak_key)
@@ -694,17 +716,17 @@ equiped_spells = []
 
 if dev_mode >= 1:
 
-    equiped_helmet.append(bird_hat)
-    equiped_shield.append(bird_shield)
-    equiped_weapon.append(super_bird_sword)
-    equiped_armor.append(birdshirt)
+    equiped_helmet.append(leather_armor)
+    equiped_shield.append(wooden_round_shield)
+    equiped_weapon.append(iron_sword)
+    equiped_armor.append(iron_chain_mail)
 
     equiped_spells.append(str_up)
     equiped_spells.append(str_up_heal)
-    equiped_spells.append(atk_up)
-    equiped_spells.append(atk_up_heal)
-    equiped_spells.append(mgk_up)
-    equiped_spells.append(mgk_up_heal)
+    equiped_spells.append(str_down)
+    equiped_spells.append(str_down_damage)
+    equiped_spells.append(str_down_aoe)
+    equiped_spells.append(str_down_damage_aoe)
     equiped_spells.append(def_up)
     equiped_spells.append(def_up_heal)
 
@@ -979,12 +1001,14 @@ def func_refresh_pygame(battle_intro):
             if scene_type.indoors == True:
                 win_map.blit(spr_house, ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
 
+
                 #pygame.draw.rect(win_map, (tile_r_2,tile_g_2,tile_b_2), ( ((cx-14) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)), map_tile_width-4, map_tile_height-12))
-            if len(scene_type.npc_list) == 1:
-                pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-4) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
-            if len(scene_type.npc_list) > 1:
-                pygame.draw.rect(win_map, (182,0,0), ( ((cx+6) + ((scene_type.xpos - steps_x)*32)), ((cy+6) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
-                pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
+            if dev_mode >= 3:
+                if len(scene_type.npc_list) == 1:
+                    pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-4) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
+                if len(scene_type.npc_list) > 1:
+                    pygame.draw.rect(win_map, (182,0,0), ( ((cx+6) + ((scene_type.xpos - steps_x)*32)), ((cy+6) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
+                    pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
 
 
     # pygame.draw.rect(win_map, (255,0,0), (cx-5, cy-5, char_width, char_height))
@@ -1076,6 +1100,8 @@ def func_refresh_pygame(battle_intro):
         func_blit_list(combat_option,combat_option_list,1,False)
         func_blit_combat_cursor(1)
         func_blit_title("Battle:",1)
+
+
 
 
 
@@ -1429,7 +1455,7 @@ def func_choose_enemy():
             for enemy_stats in all_game_enemies:
                 encounter_chance = 0
                 encounter_chance = random.randint(1,10)
-                if encounter_chance == 1 and enemy_stats not in current_enemies and len(current_enemies) < enemy_count and enemy_stats.level <= scene_level and enemy_stats.level >= scene_level - 10:
+                if encounter_chance == 1 and enemy_stats not in current_enemies and len(current_enemies) < enemy_count and enemy_stats.level <= scene_level + 5 and enemy_stats.level >= scene_level - 15:
                     current_enemies.append(enemy_stats)
         if compatible_enemies_found == False:
             print("no compatitible enemies found for difficulty level of scene!")
@@ -1740,7 +1766,7 @@ def func_get_target():
     #         target = enemy_stats.name
     return target
 
-def func_player_melee(status_str,status_atk):
+def func_player_melee(status_str,status_atk): #add spell bonus, status effect buffs to melee attacks
     global player_turns
     target = func_get_target()
 
@@ -1750,11 +1776,26 @@ def func_player_melee(status_str,status_atk):
             player_weapon_level = 0
             for weapon in equiped_weapon:
                 player_weapon_level = weapon.level
-            player_damage = (player1.attack + player1.attack_bonus + status_atk + player_weapon_level) + (player1.strength + status_str + player1.strength_bonus + player_weapon_level) + (random.randint(1,player1.level) * (player1.level // 2))
+            player_hit_chance = random.randint(0,enemy_stats.defence) + (player1.attack + player1.attack_bonus + status_atk + player_weapon_level)
+            player_crit_chance = random.randint(0,100) + ((player1.attack + player1.attack_bonus + status_atk + player_weapon_level) // 10)
+            player_damage =  + (player1.strength + status_str + player1.strength_bonus) + (random.randint(1,player1.level) * (player1.level // 2))
             if player_damage > (enemy_stats.hp):
                 player_damage = (enemy_stats.hp)
-            enemy_stats.hp = enemy_stats.hp - player_damage
-            print("\nyou hit " + enemy_stats.name + " for: " + Fore.RED + Style.BRIGHT + str(player_damage) + Style.RESET_ALL + " melee damage!")
+
+            player_crit_damage = player_damage * 2
+            if player_crit_damage > (enemy_stats.hp):
+                player_crit_damage = (enemy_stats.hp)
+
+            if player_hit_chance >= enemy_stats.defence:
+                if player_crit_chance >= 100:
+                    enemy_stats.hp = enemy_stats.hp - player_crit_damage
+                    print(Fore.RED + Style.BRIGHT + "\nCRITICAL HIT!" + Style.RESET_ALL)
+                    print("\nyou hit " + enemy_stats.name + " for: " + Fore.RED + Style.BRIGHT + str(player_crit_damage) + Style.RESET_ALL + " melee damage!")
+                else:
+                    enemy_stats.hp = enemy_stats.hp - player_damage
+                    print("\nyou hit " + enemy_stats.name + " for: " + Fore.RED + Style.BRIGHT + str(player_damage) + Style.RESET_ALL + " melee damage!")
+            else:
+                print("Your attack missed the " + enemy_stats.name)
             sleep(sleep_time)
             player1.attack_xp += (player1.attack * (player_damage))
             player1.strength_xp += (player1.strength * (player_damage + player1.strength))
@@ -2002,6 +2043,203 @@ def func_player_spell(status_mgk):
                         player1.magic_xp += (player1.magic + spell.xp + spell.damage)
                         break
 
+                if spell.effect == 20:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            if str_down_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(str_down_lvl_1)
+                                print("you weaken the " + enemy_stats.name)
+                            if spell.aoe_scale >= 1:
+                                for enemy_stats in current_enemies:
+                                    if str_down_lvl_1 not in enemy_stats.status_effect_list:
+                                        enemy_stats.status_effect_list.append(str_down_lvl_1)
+                                        print("you weaken the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if spell.aoe_scale >= 1:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+                                    if spell.aoe_scale == 0 and enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+
+                    break
+                if spell.effect == 21:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            if atk_down_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(atk_down_lvl_1)
+                                print("you weaken the " + enemy_stats.name)
+                            if spell.aoe_scale >= 1:
+                                for enemy_stats in current_enemies:
+                                    if atk_down_lvl_1 not in enemy_stats.status_effect_list:
+                                        enemy_stats.status_effect_list.append(atk_down_lvl_1)
+                                        print("you weaken the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if spell.aoe_scale >= 1:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+                                    if spell.aoe_scale == 0 and enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+
+                    break
+                if spell.effect == 22:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            if mgk_down_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(mgk_down_lvl_1)
+                                print("you weaken the " + enemy_stats.name)
+                            if spell.aoe_scale >= 1:
+                                for enemy_stats in current_enemies:
+                                    if mgk_down_lvl_1 not in enemy_stats.status_effect_list:
+                                        enemy_stats.status_effect_list.append(mgk_down_lvl_1)
+                                        print("you weaken the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if spell.aoe_scale >= 1:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+                                    if spell.aoe_scale == 0 and enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+
+                    break
+                if spell.effect == 23:
+                    target = func_get_target()
+                    for enemy_stats in current_enemies:
+                        if enemy_stats.name == target:
+                            print("you cast " + spell.print_name)
+                            if def_down_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(def_down_lvl_1)
+                                print("you weaken the " + enemy_stats.name)
+                            if spell.aoe_scale >= 1:
+                                for enemy_stats in current_enemies:
+                                    if def_down_lvl_1 not in enemy_stats.status_effect_list:
+                                        enemy_stats.status_effect_list.append(def_down_lvl_1)
+                                        print("you weaken the " + enemy_stats.name)
+                            if spell.utility == False:
+                                for enemy_stats in current_enemies:
+                                    if spell.aoe_scale >= 1:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+                                    if spell.aoe_scale == 0 and enemy_stats.name == target:
+                                        player_damage = (player1.level + spell_damage) * (player1.magic + player1.magic_bonus + status_mgk)
+                                        if spell.attribute == enemy_stats.weakness or spell.attribute == enemy_stats.attribute:
+                                            if spell.attribute == enemy_stats.weakness:
+                                                print("it's super effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage * 2
+                                            if spell.attribute == enemy_stats.attribute:
+                                                print("it's not very effective")
+                                                sleep(sleep_time)
+                                                player_damage = player_damage // 2
+                                        if player_damage > (enemy_stats.hp):
+                                            player_damage = (enemy_stats.hp)
+                                        enemy_stats.hp = enemy_stats.hp - player_damage
+                                        print("\nyou hit " + enemy_stats.name + " for " + Fore.RED + Style.BRIGHT + str(player_damage) + " " + spell.print_attribute + " " + "damage!")
+
+
+                    break
+
 
             else:
                 print(Fore.RED + "\nNOT ENOUGH MANA!\n")
@@ -2186,6 +2424,24 @@ def func_enemy_status_check():
                     status_def_bonus = (enemy_stats.defence // 4) + (2 * status_condition.scalar)
                     enemy_can_attack = True
 
+                ####
+
+                if status_condition.is_str_down == True:
+                    status_str_bonus -= (enemy_stats.strength // 4) - (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+                if status_condition.is_atk_down == True:
+                    status_atk_bonus -= (enemy_stats.attack // 4) - (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+                if status_condition.is_mgk_down == True:
+                    status_mgk_bonus -= (enemy_stats.magic // 4) - (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
+                if status_condition.is_def_down == True:
+                    status_def_bonus -= (enemy_stats.defence // 4) - (2 * status_condition.scalar)
+                    enemy_can_attack = True
+
         if enemy_can_attack == True:
             func_enemy_attack(enemy_stats,status_str_bonus,status_atk_bonus,status_mgk_bonus,status_def_bonus)
 
@@ -2213,7 +2469,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
     global blit_player_damage_amount
 
     if (not enemy_stats.spellbook):
-        func_enemy_melee(enemy_stats)
+        func_enemy_melee(enemy_stats,status_str,status_atk)
     else:
         player_magic_level = 0
         player_defence_level = 0
@@ -2223,9 +2479,17 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
         player_magic_level = player1.magic
         player_defence_level = player1.defence
         for spell in enemy_stats.spellbook:
-            spellchance = random.randint(0,1)
-            if spell.effect >= 2 and spell.effect == player1.status_effect:
-                spellchance = 0
+            if spell.effect == 1 or spell.effect == 0:
+                if player1.hp >= player1.maxhp / 4:
+                    spellchance = 1
+            elif spell.effect >= 2 and spell.effect <= 99 and (not player_stats.status_effect_list):
+                spellchance = 1
+            elif spell.effect == 1 or spell.effect == 100:
+                if enemy_stats.hp <= enemy_stats.maxhp / 2:
+                    spellchance = 1
+            else:
+                spellchance = random.randint(0,1)
+
             if spellchance == 1:
                 if spell.effect == 0 or spell.effect == 1:
                     print("\n" + enemy_stats.name + " casts:")
@@ -2257,6 +2521,7 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                     print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
                     sleep(sleep_time)
                     break
+
                 if spell.effect == 2:
                     print("\n" + enemy_stats.name + " casts :")
                     print(spell.print_name)
@@ -2306,22 +2571,207 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def):
                             player1.hp = player1.hp - (enemy_spell_damage)
                             print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
                             func_check_player_dead()
-                    sleep(sleep_time)
                     break
+
+                if spell.effect == 10:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    if str_up_lvl_1 not in enemy_stats.status_effect_list:
+                        enemy_stats.status_effect_list.append(str_up_lvl_1)
+                        print(enemy_stats.name + " powered up!")
+                    if spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            if str_up_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(str_up_lvl_1)
+                                print(enemy_stats.name + " powered up!")
+
+                    if spell.utility == False and spell.aoe_scale == 0:
+                        spell_healing = spell.damage
+                        enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                        enemy_stats.hp = enemy_stats.hp + enemy_healing
+                        if enemy_stats.hp > enemy_stats.maxhp:
+                            enemy_stats.hp = enemy_stats.maxhp
+                        print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+                        break
+
+                    if spell.utility == False and spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            spell_healing = spell.damage
+                            enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                            enemy_stats.hp = enemy_stats.hp + enemy_healing
+                            if enemy_stats.hp > enemy_stats.maxhp:
+                                enemy_stats.hp = enemy_stats.maxhp
+                            print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+                    break
+                if spell.effect == 11:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    if atk_up_lvl_1 not in enemy_stats.status_effect_list:
+                        enemy_stats.status_effect_list.append(atk_up_lvl_1)
+                        print(enemy_stats.name + " powered up!")
+                    if spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            if atk_up_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(atk_up_lvl_1)
+                                print(enemy_stats.name + " powered up!")
+
+                    if spell.utility == False and spell.aoe_scale == 0:
+                        spell_healing = spell.damage
+                        enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                        enemy_stats.hp = enemy_stats.hp + enemy_healing
+                        if enemy_stats.hp > enemy_stats.maxhp:
+                            enemy_stats.hp = enemy_stats.maxhp
+                        print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+                        break
+
+                    if spell.utility == False and spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            spell_healing = spell.damage
+                            enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                            enemy_stats.hp = enemy_stats.hp + enemy_healing
+                            if enemy_stats.hp > enemy_stats.maxhp:
+                                enemy_stats.hp = enemy_stats.maxhp
+                            print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+
+                    break
+                if spell.effect == 12:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    if mgk_up_lvl_1 not in enemy_stats.status_effect_list:
+                        enemy_stats.status_effect_list.append(mgk_up_lvl_1)
+                        print(enemy_stats.name + " powered up!")
+                    if spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            if mgk_up_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(mgk_up_lvl_1)
+                                print(enemy_stats.name + " powered up!")
+
+                    if spell.utility == False and spell.aoe_scale == 0:
+                        spell_healing = spell.damage
+                        enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                        enemy_stats.hp = enemy_stats.hp + enemy_healing
+                        if enemy_stats.hp > enemy_stats.maxhp:
+                            enemy_stats.hp = enemy_stats.maxhp
+                        print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+                        break
+
+                    if spell.utility == False and spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            spell_healing = spell.damage
+                            enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                            enemy_stats.hp = enemy_stats.hp + enemy_healing
+                            if enemy_stats.hp > enemy_stats.maxhp:
+                                enemy_stats.hp = enemy_stats.maxhp
+                            print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+
+                    break
+                if spell.effect == 13:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    if def_up_lvl_1 not in enemy_stats.status_effect_list:
+                        enemy_stats.status_effect_list.append(def_up_lvl_1)
+                        print(enemy_stats.name + " powered up!")
+                    if spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            if def_up_lvl_1 not in enemy_stats.status_effect_list:
+                                enemy_stats.status_effect_list.append(def_up_lvl_1)
+                                print(enemy_stats.name + " powered up!")
+
+                    if spell.utility == False and spell.aoe_scale == 0:
+                        spell_healing = spell.damage
+                        enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                        enemy_stats.hp = enemy_stats.hp + enemy_healing
+                        if enemy_stats.hp > enemy_stats.maxhp:
+                            enemy_stats.hp = enemy_stats.maxhp
+                        print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+                        break
+
+                    if spell.utility == False and spell.aoe_scale >= 1:
+                        for enemy_stats in current_enemies:
+                            spell_healing = spell.damage
+                            enemy_healing = (enemy_stats.level + spell_healing) * enemy_stats.magic
+                            enemy_stats.hp = enemy_stats.hp + enemy_healing
+                            if enemy_stats.hp > enemy_stats.maxhp:
+                                enemy_stats.hp = enemy_stats.maxhp
+                            print("\n" + enemy_stats.name + " heals for: " + Fore.GREEN + Style.BRIGHT + str(enemy_healing))
+
+                    break
+
+                if spell.effect == 20:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    for player_stats in players:
+                        if str_down_lvl_1 not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(str_down_lvl_1)
+                            print("you were weakend by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
+                    break
+                if spell.effect == 21:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    for player_stats in players:
+                        if atk_down_lvl_1 not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(atk_down_lvl_1)
+                            print("you were weakend by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
+                    break
+                if spell.effect == 22:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    for player_stats in players:
+                        if mgk_down_lvl_1 not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(mgk_down_lvl_1)
+                            print("you were weakend by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
+                    break
+                if spell.effect == 23:
+                    print("\n" + enemy_stats.name + " casts :")
+                    print(spell.print_name)
+                    for player_stats in players:
+                        if def_down_lvl_1 not in player_stats.status_effect_list:
+                            player_stats.status_effect_list.append(def_down_lvl_1)
+                            print("you were weakend by the " + enemy_stats.name)
+                        if spell.utility == False:
+                            spell_damage = spell.damage
+                            enemy_spell_damage = (enemy_stats.level + spell_damage) * (enemy_stats.magic + status_mgk)
+                            enemy_spell_damage = enemy_spell_damage // (player1.magic + player1.defence + player1.defence_bonus // 10)
+                            player1.hp = player1.hp - (enemy_spell_damage)
+                            print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_spell_damage) + Style.RESET_ALL + " " + spell.print_attribute + " " + "damage!")
+                            func_check_player_dead()
+                    break
+
                 break
             else:
-                func_enemy_melee(enemy_stats)
+                func_enemy_melee(enemy_stats,status_str,status_atk)
                 break
 
-def func_enemy_melee(enemy_stats):
+def func_enemy_melee(enemy_stats,status_str,status_atk):
     global blit_player_damage_amount
     for player_stats in players:
         player_armor_level = 0
         enemy_damage = 0
         for armor in equiped_armor:
             player_armor_level = armor.level
-        enemy_damage = (enemy_stats.attack + enemy_stats.strength + (random.randint(1,5) * (enemy_stats.level // 2)))
-        enemy_damage = (enemy_damage * enemy_damage)//(player_armor_level + player1.defence + player1.defence_bonus)
+        enemy_damage = (enemy_stats.attack + status_atk + enemy_stats.strength + status_str + (random.randint(1,5) * (enemy_stats.level // 2)))
+        enemy_damage = (enemy_damage * status_atk)//(player_armor_level + player1.defence + player1.defence_bonus)
         player_stats.hp = player_stats.hp - enemy_damage
         print("\n" + enemy_stats.name + " hit you for " + Fore.RED + Style.BRIGHT + str(enemy_damage) + Style.RESET_ALL + " melee damage!" )
         blit_player_damage_amount = enemy_damage
@@ -4144,9 +4594,13 @@ player1.mp = player1.maxmp
 if dev_mode >= 1:
     player1.gp = 10000
 
+
+for scene_type in all_scene_types:
+    scene_type.func_generate_sprite_positions()
+
+
 ########## GAME START #########
 game_start = 1
-
 
 
 print(Fore.RED + "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to the land of Tonbale! \n")
@@ -4966,6 +5420,11 @@ while game_start == 1:
                             while len(scene_type.scene_inventory) != 0 or len(scene_type.scene_weapon_inventory) != 0 or len(scene_type.scene_armor_inventory) != 0 or len(scene_type.scene_helmet_inventory) != 0 or len(scene_type.scene_shield_inventory) != 0:
                                 has_item = False
                                 has_item_multiple = False
+                                has_weapon_multiple = False
+                                has_armor_multiple = False
+                                has_helmet_multiple = False
+                                has_shield_multiple = False
+
                                 while has_item == False:
                                     for scene_type in location:
 
@@ -5556,274 +6015,7 @@ while game_start == 1:
                     ################################################
 
                         elif menu_cursor_pos == 17:
-                            if dev_mode >= 1:
-                                print("dev menu open")
-
-                                root = Tk()
-
-                                dw_p1_xp = IntVar()
-                                dw_p1_xp.set(player1.xp)
-
-                                dw_player_xp = Label(root, textvariable=dw_p1_xp)
-                                dw_player_xp.grid(row=0, column=1)
-                                xp_label = Label(root, text="xp:")
-                                xp_label.grid(row=0, column=0)
-
-                                dw_p1_gp = IntVar()
-                                dw_p1_gp.set(player1.gp)
-
-                                dw_player_gp = Label(root, textvariable=dw_p1_gp)
-
-
-                                #####################################
-
-                                def func_click_xp():
-                                    player1.xp += int(xp_entry.get())
-                                    dw_p1_xp.set(player1.xp)
-                                    xp_entry.delete(0, 'end')
-
-
-                                xp_entry = Entry(root, width = 10)
-                                xp_entry.grid(row=1, column=0, columnspan=2)
-
-                                xp_button = Button(root, text=" + xp", command=func_click_xp)
-                                xp_button.grid(row=2, column=0, columnspan=2)
-
-                                #####################################
-
-                                dw_player_gp.grid(row=0, column=3)
-                                gp_label = Label(root, text="gp:")
-                                gp_label.grid(row=0, column=2)
-
-                                def func_click_gp():
-                                    player1.gp += int(gp_entry.get())
-                                    dw_p1_gp.set(player1.gp)
-                                    gp_entry.delete(0, 'end')
-
-
-                                gp_entry = Entry(root, width = 10)
-                                gp_entry.grid(row=1, column=2, columnspan=2)
-
-                                gp_button = Button(root, text=" + gp", command=func_click_gp)
-                                gp_button.grid(row=2, column=2, columnspan=2)
-
-                                #####################################
-                                def func_click_tp():
-                                    func_tp(int(tpx_entry.get()),int(tpy_entry.get()),int(tpz_entry.get()))
-
-
-
-                                tpx_entry = Entry(root, width = 10)
-                                tpx_entry.grid(row=3, column=0)
-                                tpx_entry.insert(0,"0")
-
-                                tpy_entry = Entry(root, width = 10)
-                                tpy_entry.grid(row=4, column=0)
-                                tpy_entry.insert(0,"0")
-
-                                tpz_entry = Entry(root, width = 10)
-                                tpz_entry.grid(row=5, column=0)
-                                tpz_entry.insert(0,"0")
-
-                                tp_button = Button(root, text="teleport", command=func_click_tp)
-                                tp_button.grid(row=3, column=1)
-
-                                #####################################
-
-                                item_name_list = []
-                                dev_item = StringVar()
-
-                                name_string = "0"
-
-
-                                def func_click_item():
-                                    has_item_multiple = False
-                                    for item in all_game_items:
-                                        if item.name == dev_item.get():
-                                            for item in inventory:
-                                                if item.name == dev_item.get():
-                                                    has_item_multiple = True
-                                                    item.amount += 1
-                                                    break
-                                            if has_item_multiple == False:
-                                                for item in all_game_items:
-                                                    if item.name == dev_item.get():
-                                                        inventory.append(item)
-                                                        break
-                                            # break
-
-                                for item in all_game_items:
-                                    name_string = item.name
-                                    item_name_list.append(name_string)
-
-                                dev_item.set(item_name_list[0])
-
-                                item_choice = OptionMenu(root, dev_item, *item_name_list)
-                                item_choice.grid(row=0, column=4, columnspan=2)
-                                item_button = Button(root, text=" + item", command=func_click_item)
-                                item_button.grid(row=0, column=6, columnspan=1)
-
-                                #####################################
-
-                                weapon_name_list = []
-                                dev_weapon = StringVar()
-
-                                weapon_name_string = "0"
-
-                                def func_click_weapon():
-                                    has_weapon_multiple = False
-                                    for weapon in all_game_weapons:
-                                        if weapon.name == dev_weapon.get():
-                                            for weapon in weapon_inventory:
-                                                if weapon.name == dev_weapon.get():
-                                                    has_weapon_multiple = True
-                                                    weapon.amount += 1
-                                                    break
-                                            if has_weapon_multiple == False:
-                                                for weapon in all_game_weapons:
-                                                    if weapon.name == dev_weapon.get():
-                                                        weapon_inventory.append(weapon)
-                                                        break
-                                            # break
-
-                                for weapon in all_game_weapons:
-                                    weapon_name_string = weapon.name
-                                    weapon_name_list.append(weapon_name_string)
-
-                                dev_weapon.set(weapon_name_list[0])
-
-                                weapon_choice = OptionMenu(root, dev_weapon, *weapon_name_list)
-                                weapon_choice.grid(row=2, column=4, columnspan=2)
-                                weapon_button = Button(root, text=" + weapon", command=func_click_weapon)
-                                weapon_button.grid(row=2, column=6, columnspan=1)
-
-                                #####################################
-
-                                armor_name_list = []
-                                dev_armor = StringVar()
-
-                                armor_name_string = "0"
-
-                                def func_click_armor():
-                                    has_armor_multiple = False
-                                    for armor in all_game_armor:
-                                        if armor.name == dev_armor.get():
-                                            for armor in armor_inventory:
-                                                if armor.name == dev_armor.get():
-                                                    has_armor_multiple = True
-                                                    armor.amount += 1
-                                                    break
-                                            if has_armor_multiple == False:
-                                                for armor in all_game_armor:
-                                                    if armor.name == dev_armor.get():
-                                                        armor_inventory.append(armor)
-                                                        break
-
-                                for armor in all_game_armor:
-                                    armor_name_string = armor.name
-                                    armor_name_list.append(armor_name_string)
-
-                                dev_armor.set(armor_name_list[0])
-
-                                armor_choice = OptionMenu(root, dev_armor, *armor_name_list)
-                                armor_choice.grid(row=3, column=4, columnspan=2)
-                                armor_button = Button(root, text=" + armor", command=func_click_armor)
-                                armor_button.grid(row=3, column=6, columnspan=1)
-
-
-                                #####################################
-
-                                helmet_name_list = []
-                                dev_helmet = StringVar()
-
-                                helmet_name_string = "0"
-
-                                def func_click_helmet():
-                                    has_helmet_multiple = False
-                                    for helmet in all_game_helmets:
-                                        if helmet.name == dev_helmet.get():
-                                            for helmet in helmet_inventory:
-                                                if helmet.name == dev_helmet.get():
-                                                    has_helmet_multiple = True
-                                                    helmet.amount += 1
-                                                    break
-                                            if has_helmet_multiple == False:
-                                                for helmet in all_game_helmets:
-                                                    if helmet.name == dev_helmet.get():
-                                                        helmet_inventory.append(helmet)
-                                                        break
-
-                                for helmet in all_game_helmets:
-                                    helmet_name_string = helmet.name
-                                    helmet_name_list.append(helmet_name_string)
-
-                                dev_helmet.set(helmet_name_list[0])
-
-                                helmet_choice = OptionMenu(root, dev_helmet, *helmet_name_list)
-                                helmet_choice.grid(row=4, column=4, columnspan=2)
-                                helmet_button = Button(root, text=" + helmet", command=func_click_helmet)
-                                helmet_button.grid(row=4, column=6, columnspan=1)
-
-                                #####################################
-                                shield_name_list = []
-                                dev_shield = StringVar()
-
-                                shield_name_string = "0"
-
-                                def func_click_shield():
-                                    has_shield_multiple = False
-                                    for shield in all_game_shields:
-                                        if shield.name == dev_shield.get():
-                                            for shield in shield_inventory:
-                                                if shield.name == dev_shield.get():
-                                                    has_shield_multiple = True
-                                                    shield.amount += 1
-                                                    break
-                                            if has_shield_multiple == False:
-                                                for shield in all_game_shields:
-                                                    if shield.name == dev_shield.get():
-                                                        shield_inventory.append(shield)
-                                                        break
-
-                                for shield in all_game_shields:
-                                    shield_name_string = shield.name
-                                    shield_name_list.append(shield_name_string)
-
-                                dev_shield.set(shield_name_list[0])
-
-                                shield_choice = OptionMenu(root, dev_shield, *shield_name_list)
-                                shield_choice.grid(row=5, column=4, columnspan=2)
-                                shield_button = Button(root, text=" + shield", command=func_click_shield)
-                                shield_button.grid(row=5, column=6, columnspan=1)
-
-                                #####################################
-
-                                spell_name_list = []
-                                dev_spell = StringVar()
-
-                                name_string = "0"
-
-                                def func_click_spell():
-                                    for spell in all_game_spells:
-                                        if spell.name == dev_spell.get():
-                                            spell_inventory.append(spell)
-                                            break
-
-                                for spell in all_game_spells:
-                                    spell_name_string = spell.name
-                                    spell_name_list.append(spell_name_string)
-
-                                dev_spell.set(spell_name_list[0])
-
-                                spell_choice = OptionMenu(root, dev_spell, *spell_name_list)
-                                spell_choice.grid(row=1, column=4, columnspan=2)
-                                spell_button = Button(root, text=" + spell", command=func_click_spell)
-                                spell_button.grid(row=1, column=6, columnspan=1)
-
-                                #####################################
-
-
-                                root.mainloop()
+                            pass
 
 
                         elif menu_cursor_pos == 18:
@@ -5848,6 +6040,275 @@ while game_start == 1:
                         else:
                             print("invalid command\n")
 
+    if keys[pygame.K_F1]:
+        if dev_mode >= 1:
+            print("dev menu open")
+
+            root = Tk()
+
+            dw_p1_xp = IntVar()
+            dw_p1_xp.set(player1.xp)
+
+            dw_player_xp = Label(root, textvariable=dw_p1_xp)
+            dw_player_xp.grid(row=0, column=1)
+            xp_label = Label(root, text="xp:")
+            xp_label.grid(row=0, column=0)
+
+            dw_p1_gp = IntVar()
+            dw_p1_gp.set(player1.gp)
+
+            dw_player_gp = Label(root, textvariable=dw_p1_gp)
+
+
+            #####################################
+
+            def func_click_xp():
+                player1.xp += int(xp_entry.get())
+                dw_p1_xp.set(player1.xp)
+                xp_entry.delete(0, 'end')
+
+
+            xp_entry = Entry(root, width = 10)
+            xp_entry.grid(row=1, column=0, columnspan=2)
+
+            xp_button = Button(root, text=" + xp", command=func_click_xp)
+            xp_button.grid(row=2, column=0, columnspan=2)
+
+            #####################################
+
+            dw_player_gp.grid(row=0, column=3)
+            gp_label = Label(root, text="gp:")
+            gp_label.grid(row=0, column=2)
+
+            def func_click_gp():
+                player1.gp += int(gp_entry.get())
+                dw_p1_gp.set(player1.gp)
+                gp_entry.delete(0, 'end')
+
+
+            gp_entry = Entry(root, width = 10)
+            gp_entry.grid(row=1, column=2, columnspan=2)
+
+            gp_button = Button(root, text=" + gp", command=func_click_gp)
+            gp_button.grid(row=2, column=2, columnspan=2)
+
+            #####################################
+            def func_click_tp():
+                func_tp(int(tpx_entry.get()),int(tpy_entry.get()),int(tpz_entry.get()))
+
+
+
+            tpx_entry = Entry(root, width = 10)
+            tpx_entry.grid(row=3, column=0)
+            tpx_entry.insert(0,"0")
+
+            tpy_entry = Entry(root, width = 10)
+            tpy_entry.grid(row=4, column=0)
+            tpy_entry.insert(0,"0")
+
+            tpz_entry = Entry(root, width = 10)
+            tpz_entry.grid(row=5, column=0)
+            tpz_entry.insert(0,"0")
+
+            tp_button = Button(root, text="teleport", command=func_click_tp)
+            tp_button.grid(row=3, column=1)
+
+            #####################################
+
+            item_name_list = []
+            dev_item = StringVar()
+
+            name_string = "0"
+
+
+            def func_click_item():
+                has_item_multiple = False
+                for item in all_game_items:
+                    if item.name == dev_item.get():
+                        for item in inventory:
+                            if item.name == dev_item.get():
+                                has_item_multiple = True
+                                item.amount += 1
+                                break
+                        if has_item_multiple == False:
+                            for item in all_game_items:
+                                if item.name == dev_item.get():
+                                    inventory.append(item)
+                                    break
+                        # break
+
+            for item in all_game_items:
+                name_string = item.name
+                item_name_list.append(name_string)
+
+            dev_item.set(item_name_list[0])
+
+            item_choice = OptionMenu(root, dev_item, *item_name_list)
+            item_choice.grid(row=0, column=4, columnspan=2)
+            item_button = Button(root, text=" + item", command=func_click_item)
+            item_button.grid(row=0, column=6, columnspan=1)
+
+            #####################################
+
+            weapon_name_list = []
+            dev_weapon = StringVar()
+
+            weapon_name_string = "0"
+
+            def func_click_weapon():
+                has_weapon_multiple = False
+                for weapon in all_game_weapons:
+                    if weapon.name == dev_weapon.get():
+                        for weapon in weapon_inventory:
+                            if weapon.name == dev_weapon.get():
+                                has_weapon_multiple = True
+                                weapon.amount += 1
+                                break
+                        if has_weapon_multiple == False:
+                            for weapon in all_game_weapons:
+                                if weapon.name == dev_weapon.get():
+                                    weapon_inventory.append(weapon)
+                                    break
+                        # break
+
+            for weapon in all_game_weapons:
+                weapon_name_string = weapon.name
+                weapon_name_list.append(weapon_name_string)
+
+            dev_weapon.set(weapon_name_list[0])
+
+            weapon_choice = OptionMenu(root, dev_weapon, *weapon_name_list)
+            weapon_choice.grid(row=2, column=4, columnspan=2)
+            weapon_button = Button(root, text=" + weapon", command=func_click_weapon)
+            weapon_button.grid(row=2, column=6, columnspan=1)
+
+            #####################################
+
+            armor_name_list = []
+            dev_armor = StringVar()
+
+            armor_name_string = "0"
+
+            def func_click_armor():
+                has_armor_multiple = False
+                for armor in all_game_armor:
+                    if armor.name == dev_armor.get():
+                        for armor in armor_inventory:
+                            if armor.name == dev_armor.get():
+                                has_armor_multiple = True
+                                armor.amount += 1
+                                break
+                        if has_armor_multiple == False:
+                            for armor in all_game_armor:
+                                if armor.name == dev_armor.get():
+                                    armor_inventory.append(armor)
+                                    break
+
+            for armor in all_game_armor:
+                armor_name_string = armor.name
+                armor_name_list.append(armor_name_string)
+
+            dev_armor.set(armor_name_list[0])
+
+            armor_choice = OptionMenu(root, dev_armor, *armor_name_list)
+            armor_choice.grid(row=3, column=4, columnspan=2)
+            armor_button = Button(root, text=" + armor", command=func_click_armor)
+            armor_button.grid(row=3, column=6, columnspan=1)
+
+
+            #####################################
+
+            helmet_name_list = []
+            dev_helmet = StringVar()
+
+            helmet_name_string = "0"
+
+            def func_click_helmet():
+                has_helmet_multiple = False
+                for helmet in all_game_helmets:
+                    if helmet.name == dev_helmet.get():
+                        for helmet in helmet_inventory:
+                            if helmet.name == dev_helmet.get():
+                                has_helmet_multiple = True
+                                helmet.amount += 1
+                                break
+                        if has_helmet_multiple == False:
+                            for helmet in all_game_helmets:
+                                if helmet.name == dev_helmet.get():
+                                    helmet_inventory.append(helmet)
+                                    break
+
+            for helmet in all_game_helmets:
+                helmet_name_string = helmet.name
+                helmet_name_list.append(helmet_name_string)
+
+            dev_helmet.set(helmet_name_list[0])
+
+            helmet_choice = OptionMenu(root, dev_helmet, *helmet_name_list)
+            helmet_choice.grid(row=4, column=4, columnspan=2)
+            helmet_button = Button(root, text=" + helmet", command=func_click_helmet)
+            helmet_button.grid(row=4, column=6, columnspan=1)
+
+            #####################################
+            shield_name_list = []
+            dev_shield = StringVar()
+
+            shield_name_string = "0"
+
+            def func_click_shield():
+                has_shield_multiple = False
+                for shield in all_game_shields:
+                    if shield.name == dev_shield.get():
+                        for shield in shield_inventory:
+                            if shield.name == dev_shield.get():
+                                has_shield_multiple = True
+                                shield.amount += 1
+                                break
+                        if has_shield_multiple == False:
+                            for shield in all_game_shields:
+                                if shield.name == dev_shield.get():
+                                    shield_inventory.append(shield)
+                                    break
+
+            for shield in all_game_shields:
+                shield_name_string = shield.name
+                shield_name_list.append(shield_name_string)
+
+            dev_shield.set(shield_name_list[0])
+
+            shield_choice = OptionMenu(root, dev_shield, *shield_name_list)
+            shield_choice.grid(row=5, column=4, columnspan=2)
+            shield_button = Button(root, text=" + shield", command=func_click_shield)
+            shield_button.grid(row=5, column=6, columnspan=1)
+
+            #####################################
+
+            spell_name_list = []
+            dev_spell = StringVar()
+
+            name_string = "0"
+
+            def func_click_spell():
+                for spell in all_game_spells:
+                    if spell.name == dev_spell.get():
+                        spell_inventory.append(spell)
+                        break
+
+            for spell in all_game_spells:
+                spell_name_string = spell.name
+                spell_name_list.append(spell_name_string)
+
+            dev_spell.set(spell_name_list[0])
+
+            spell_choice = OptionMenu(root, dev_spell, *spell_name_list)
+            spell_choice.grid(row=1, column=4, columnspan=2)
+            spell_button = Button(root, text=" + spell", command=func_click_spell)
+            spell_button.grid(row=1, column=6, columnspan=1)
+
+            #####################################
+
+
+            root.mainloop()
 
 
 #######################################################################################
