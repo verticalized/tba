@@ -5540,6 +5540,397 @@ while game_start == 1:
             pygame.quit()
         elif event.type == pygame.KEYDOWN:
 
+            if event.key == pygame.K_F1:
+                if dev_mode >= 0:
+                    print("dev menu open")
+
+                    root = Tk()
+
+                    dw_p1_xp = IntVar()
+                    dw_p1_xp.set(player1.xp)
+
+                    dw_player_xp = Label(root, textvariable=dw_p1_xp)
+                    dw_player_xp.grid(row=0, column=1)
+                    xp_label = Label(root, text="xp:")
+                    xp_label.grid(row=0, column=0)
+
+                    dw_p1_gp = IntVar()
+                    dw_p1_gp.set(player1.gp)
+
+                    dw_player_gp = Label(root, textvariable=dw_p1_gp)
+
+
+                    #####################################
+
+                    def func_click_xp():
+                        player1.xp += int(xp_entry.get())
+                        dw_p1_xp.set(player1.xp)
+                        xp_entry.delete(0, 'end')
+
+
+                    xp_entry = Entry(root, width = 10)
+                    xp_entry.grid(row=1, column=0, columnspan=2)
+
+                    xp_button = Button(root, text=" + xp", command=func_click_xp)
+                    xp_button.grid(row=2, column=0, columnspan=2)
+
+                    #####################################
+
+                    dw_player_gp.grid(row=0, column=3)
+                    gp_label = Label(root, text="gp:")
+                    gp_label.grid(row=0, column=2)
+
+                    def func_click_gp():
+                        player1.gp += int(gp_entry.get())
+                        dw_p1_gp.set(player1.gp)
+                        gp_entry.delete(0, 'end')
+
+
+                    gp_entry = Entry(root, width = 10)
+                    gp_entry.grid(row=1, column=2, columnspan=2)
+
+                    gp_button = Button(root, text=" + gp", command=func_click_gp)
+                    gp_button.grid(row=2, column=2, columnspan=2)
+
+                    #####################################
+                    def func_click_tp():
+                        func_tp(int(tpx_entry.get()),int(tpy_entry.get()),int(tpz_entry.get()))
+
+
+
+                    tpx_entry = Entry(root, width = 10)
+                    tpx_entry.grid(row=3, column=0)
+                    tpx_entry.insert(0,"0")
+
+                    tpy_entry = Entry(root, width = 10)
+                    tpy_entry.grid(row=4, column=0)
+                    tpy_entry.insert(0,"0")
+
+                    tpz_entry = Entry(root, width = 10)
+                    tpz_entry.grid(row=5, column=0)
+                    tpz_entry.insert(0,"0")
+
+                    tp_button = Button(root, text="teleport", command=func_click_tp)
+                    tp_button.grid(row=3, column=1)
+
+                    #####################################
+
+                    item_name_list = []
+                    dev_item = StringVar()
+
+                    name_string = "0"
+
+
+                    def func_click_item():
+                        has_item_multiple = False
+                        for item in all_game_items:
+                            if item.name == dev_item.get():
+                                for item in inventory:
+                                    if item.name == dev_item.get():
+                                        has_item_multiple = True
+                                        item.amount += 1
+                                        break
+                                if has_item_multiple == False:
+                                    for item in all_game_items:
+                                        if item.name == dev_item.get():
+                                            inventory.append(item)
+                                            break
+                                # break
+
+                    for item in all_game_items:
+                        name_string = item.name
+                        item_name_list.append(name_string)
+
+                    dev_item.set(item_name_list[0])
+
+                    item_choice = OptionMenu(root, dev_item, *item_name_list)
+                    item_choice.grid(row=0, column=4, columnspan=2)
+                    item_button = Button(root, text=" + item", command=func_click_item)
+                    item_button.grid(row=0, column=6, columnspan=1)
+
+                    #####################################
+
+                    weapon_name_list = []
+                    dev_weapon = StringVar()
+
+                    weapon_name_string = "0"
+
+                    def func_click_weapon():
+                        has_weapon_multiple = False
+                        for weapon in all_game_weapons:
+                            if weapon.name == dev_weapon.get():
+                                for weapon in weapon_inventory:
+                                    if weapon.name == dev_weapon.get():
+                                        has_weapon_multiple = True
+                                        weapon.amount += 1
+                                        break
+                                if has_weapon_multiple == False:
+                                    for weapon in all_game_weapons:
+                                        if weapon.name == dev_weapon.get():
+                                            weapon_inventory.append(weapon)
+                                            break
+                                # break
+
+                    for weapon in all_game_weapons:
+                        weapon_name_string = weapon.name
+                        weapon_name_list.append(weapon_name_string)
+
+                    dev_weapon.set(weapon_name_list[0])
+
+                    weapon_choice = OptionMenu(root, dev_weapon, *weapon_name_list)
+                    weapon_choice.grid(row=2, column=4, columnspan=2)
+                    weapon_button = Button(root, text=" + weapon", command=func_click_weapon)
+                    weapon_button.grid(row=2, column=6, columnspan=1)
+
+                    #####################################
+
+                    armor_name_list = []
+                    dev_armor = StringVar()
+
+                    armor_name_string = "0"
+
+                    def func_click_armor():
+                        has_armor_multiple = False
+                        for armor in all_game_armor:
+                            if armor.name == dev_armor.get():
+                                for armor in armor_inventory:
+                                    if armor.name == dev_armor.get():
+                                        has_armor_multiple = True
+                                        armor.amount += 1
+                                        break
+                                if has_armor_multiple == False:
+                                    for armor in all_game_armor:
+                                        if armor.name == dev_armor.get():
+                                            armor_inventory.append(armor)
+                                            break
+
+                    for armor in all_game_armor:
+                        armor_name_string = armor.name
+                        armor_name_list.append(armor_name_string)
+
+                    dev_armor.set(armor_name_list[0])
+
+                    armor_choice = OptionMenu(root, dev_armor, *armor_name_list)
+                    armor_choice.grid(row=3, column=4, columnspan=2)
+                    armor_button = Button(root, text=" + armor", command=func_click_armor)
+                    armor_button.grid(row=3, column=6, columnspan=1)
+
+
+                    #####################################
+
+                    helmet_name_list = []
+                    dev_helmet = StringVar()
+
+                    helmet_name_string = "0"
+
+                    def func_click_helmet():
+                        has_helmet_multiple = False
+                        for helmet in all_game_helmets:
+                            if helmet.name == dev_helmet.get():
+                                for helmet in helmet_inventory:
+                                    if helmet.name == dev_helmet.get():
+                                        has_helmet_multiple = True
+                                        helmet.amount += 1
+                                        break
+                                if has_helmet_multiple == False:
+                                    for helmet in all_game_helmets:
+                                        if helmet.name == dev_helmet.get():
+                                            helmet_inventory.append(helmet)
+                                            break
+
+                    for helmet in all_game_helmets:
+                        helmet_name_string = helmet.name
+                        helmet_name_list.append(helmet_name_string)
+
+                    dev_helmet.set(helmet_name_list[0])
+
+                    helmet_choice = OptionMenu(root, dev_helmet, *helmet_name_list)
+                    helmet_choice.grid(row=4, column=4, columnspan=2)
+                    helmet_button = Button(root, text=" + helmet", command=func_click_helmet)
+                    helmet_button.grid(row=4, column=6, columnspan=1)
+
+                    #####################################
+                    shield_name_list = []
+                    dev_shield = StringVar()
+
+                    shield_name_string = "0"
+
+                    def func_click_shield():
+                        has_shield_multiple = False
+                        for shield in all_game_shields:
+                            if shield.name == dev_shield.get():
+                                for shield in shield_inventory:
+                                    if shield.name == dev_shield.get():
+                                        has_shield_multiple = True
+                                        shield.amount += 1
+                                        break
+                                if has_shield_multiple == False:
+                                    for shield in all_game_shields:
+                                        if shield.name == dev_shield.get():
+                                            shield_inventory.append(shield)
+                                            break
+
+                    for shield in all_game_shields:
+                        shield_name_string = shield.name
+                        shield_name_list.append(shield_name_string)
+
+                    dev_shield.set(shield_name_list[0])
+
+                    shield_choice = OptionMenu(root, dev_shield, *shield_name_list)
+                    shield_choice.grid(row=5, column=4, columnspan=2)
+                    shield_button = Button(root, text=" + shield", command=func_click_shield)
+                    shield_button.grid(row=5, column=6, columnspan=1)
+
+                    #####################################
+
+                    spell_name_list = []
+                    dev_spell = StringVar()
+
+                    name_string = "0"
+
+                    def func_click_spell():
+                        for spell in all_game_spells:
+                            if spell.name == dev_spell.get():
+                                spell_inventory.append(spell)
+                                break
+
+                    for spell in all_game_spells:
+                        spell_name_string = spell.name
+                        spell_name_list.append(spell_name_string)
+
+                    dev_spell.set(spell_name_list[0])
+
+                    spell_choice = OptionMenu(root, dev_spell, *spell_name_list)
+                    spell_choice.grid(row=1, column=4, columnspan=2)
+                    spell_button = Button(root, text=" + spell", command=func_click_spell)
+                    spell_button.grid(row=1, column=6, columnspan=1)
+
+                    #####################################
+
+
+                    root.mainloop()
+
+            if event.key == pygame.K_F2:
+                for player1 in players:
+                    print("|| Stats: \n")
+                    print("|| Name: " + player1.name)
+                    print("|| Level: " + str(player1.level))
+                    print("|| xp: " + str(player1.xp))
+                    print("|| gold: " + str(player1.gp))
+                    print("|| hp: " + str(player1.hp) + " / " + str(player1.nobonus_maxhp) + " || + " + str(player1.maxhp_bonus))
+                    print("|| mp: " + str(player1.mp) + " / " + str(player1.nobonus_maxmp) + " || + " + str(player1.maxmp_bonus))
+
+                    print("|| Magic: " + str(player1.magic) + " || + " + str(player1.magic_bonus) + " || xp: " + str(player1.magic_xp))
+                    print("|| Strength: " + str(player1.strength) + " || + " + str(player1.strength_bonus) + " || xp: " + str(player1.strength_xp))
+                    print("|| Attack: " + str(player1.attack) + " || + " + str(player1.attack_bonus) + " || xp: " + str(player1.attack_xp))
+                    print("|| Defence: " + str(player1.defence) + " || + " + str(player1.defence_bonus) + " || xp: " + str(player1.defence_xp))
+
+                    print("|| Skills: \n")
+                    print("|| Fishing: " + str(player1_skills.fishing) + " || xp: " + str(player1_skills.fishing_xp))
+                    print("|| Theiving: " + str(player1_skills.thieving) + " || xp: " + str(player1_skills.thieving_xp))
+                    print("|| Alchemy: " + str(player1_skills.alchemy) + " || xp: " + str(player1_skills.alchemy_xp))
+                    print("|| Cooking: " + str(player1_skills.cooking) + " || xp: " + str(player1_skills.cooking_xp))
+
+            if event.key == pygame.K_F3:
+                if dev_mode >= 0:
+                    if dev_mode >= 0:
+                        for player1 in players:
+
+                            print("gear: \n")
+
+                            if len(equiped_helmet) != 0:
+                                for helmet in equiped_helmet:
+                                    print("|| Helmet: \n")
+                                    print("|| level: ", helmet.level)
+                                    print("|| name: " + helmet.print_name + " || attribute: " + helmet.print_attribute + " || type: " + helmet.type)
+                                    print("|| magic: " + str(helmet.magic_bonus) + " || strength: " + str(helmet.strength_bonus) + " || attack: " + str(helmet.attack_bonus))
+                                    print("|| hp bonus: " + str(helmet.maxhp_bonus) + " || defence: " + str(helmet.defence_bonus))
+
+
+                                print("")
+                            else:
+                                print("you have no helmet... \n")
+
+                            if len(equiped_armor) != 0:
+                                for armor in equiped_armor:
+                                    print("|| Armor: \n")
+                                    print("|| level: ", armor.level)
+                                    print("|| name: " + armor.print_name + " || attribute: " + armor.print_attribute + " || type: " + armor.type)
+                                    print("|| magic: " + str(armor.magic_bonus) + " || strength: " + str(armor.strength_bonus) + " || attack: " + str(armor.attack_bonus))
+                                    print("|| hp bonus: " + str(armor.maxhp_bonus) + " || defence: " + str(armor.defence_bonus))
+
+                                print("")
+                            else:
+                                print("you have no armor... \n")
+
+                            if len(equiped_shield) != 0:
+                                for shield in equiped_shield:
+                                    print("|| Shield: \n")
+                                    print("|| level: ", shield.level)
+                                    print("|| name: " + shield.print_name + " || attribute: " + shield.print_attribute + " || type: " + shield.type)
+                                    print("|| magic: " + str(shield.magic_bonus) + " || strength: " + str(shield.strength_bonus) + " || attack: " + str(shield.attack_bonus))
+                                    print("|| hp bonus: " + str(shield.maxhp_bonus) + " || defence: " + str(shield.defence_bonus))
+
+                                print("")
+                            else:
+                                print("you have no shield... \n")
+
+                            if len(equiped_weapon) != 0:
+                                for weapon in equiped_weapon:
+                                    print("|| Weapon: \n")
+                                    print("|| level: ", weapon.level)
+                                    print("|| name: " + weapon.print_name + " || attribute: " + weapon.print_attribute + " || type: " + weapon.type)
+                                    print("|| magic: " + str(weapon.magic_bonus) + " || strength: " + str(weapon.strength_bonus) + " || attack: " + str(weapon.attack_bonus))
+                                    print("|| hp bonus: " + str(weapon.maxhp_bonus) + " || defence: " + str(weapon.defence_bonus))
+                                print("")
+                            else:
+                                print("you have no weapon... \n")
+                    print("\nInventory: \n")
+
+                    if len(inventory) != 0:
+                        for item in inventory:
+
+                            print("|| " + item.print_name + " x " + str(item.amount))
+
+                    if len(spell_inventory) != 0:
+                        for spell in spell_inventory:
+
+                            print("|| " + spell.print_name + " || " + spell.print_attribute + " || lvl: " + str(spell.level))
+
+                    if len(helmet_inventory) != 0:
+                        for helmet in helmet_inventory:
+
+                            print("|| " + helmet.print_name + " x " + str(helmet.amount) + " || attribute: " + helmet.print_attribute + " || type: " + helmet.type + " || lvl: " + str(helmet.level))
+
+                    if len(armor_inventory) != 0:
+                        for armor in armor_inventory:
+
+                            print("|| " + armor.print_name + " x " + str(armor.amount) + " || attribute: " + armor.print_attribute + " || type: " + armor.type + " || lvl: " + str(armor.level))
+
+                    if len(shield_inventory) != 0:
+                        for shield in shield_inventory:
+
+                            print("|| " + shield.print_name + " x " + str(shield.amount) + " || attribute: " + shield.print_attribute + " || type: " + shield.type + " || lvl: " + str(shield.level))
+
+                    if len(weapon_inventory) != 0:
+                        for weapon in weapon_inventory:
+
+                            print("|| " + weapon.print_name + " x " + str(weapon.amount) + " || attribute: " + weapon.print_attribute + " || type: " + weapon.type + " || lvl: " + str(weapon.level))
+
+                    print("")
+
+            if event.key == pygame.K_F4:
+                dev_mode += 1
+                if dev_mode > 6:
+                    dev_mode = 0
+                print("dev mode " + str(dev_mode))
+
+            if event.key == pygame.K_F5:
+                grid_mode += 1
+                if grid_mode > 2:
+                    grid_mode = 0
+                print("grid mode " + str(grid_mode))
+
             if event.key == pygame.K_w:
                 has_moved = True
                 for scene_type in location_north:
@@ -6367,7 +6758,7 @@ while game_start == 1:
 
                                                                                                                             in_fight = True
                                                                                                                             npc_fight = True
-                                                                                                                            
+
                                                                                                                             break
 
                                                                                                                         if dialouge_option.is_give == True:
@@ -6438,397 +6829,6 @@ while game_start == 1:
                                 else:
                                     print("invalid command\n")
 
-            if event.key == pygame.K_F1:
-                if dev_mode >= 0:
-                    print("dev menu open")
-
-
-                    root = Tk()
-
-                    dw_p1_xp = IntVar()
-                    dw_p1_xp.set(player1.xp)
-
-                    dw_player_xp = Label(root, textvariable=dw_p1_xp)
-                    dw_player_xp.grid(row=0, column=1)
-                    xp_label = Label(root, text="xp:")
-                    xp_label.grid(row=0, column=0)
-
-                    dw_p1_gp = IntVar()
-                    dw_p1_gp.set(player1.gp)
-
-                    dw_player_gp = Label(root, textvariable=dw_p1_gp)
-
-
-                    #####################################
-
-                    def func_click_xp():
-                        player1.xp += int(xp_entry.get())
-                        dw_p1_xp.set(player1.xp)
-                        xp_entry.delete(0, 'end')
-
-
-                    xp_entry = Entry(root, width = 10)
-                    xp_entry.grid(row=1, column=0, columnspan=2)
-
-                    xp_button = Button(root, text=" + xp", command=func_click_xp)
-                    xp_button.grid(row=2, column=0, columnspan=2)
-
-                    #####################################
-
-                    dw_player_gp.grid(row=0, column=3)
-                    gp_label = Label(root, text="gp:")
-                    gp_label.grid(row=0, column=2)
-
-                    def func_click_gp():
-                        player1.gp += int(gp_entry.get())
-                        dw_p1_gp.set(player1.gp)
-                        gp_entry.delete(0, 'end')
-
-
-                    gp_entry = Entry(root, width = 10)
-                    gp_entry.grid(row=1, column=2, columnspan=2)
-
-                    gp_button = Button(root, text=" + gp", command=func_click_gp)
-                    gp_button.grid(row=2, column=2, columnspan=2)
-
-                    #####################################
-                    def func_click_tp():
-                        func_tp(int(tpx_entry.get()),int(tpy_entry.get()),int(tpz_entry.get()))
-
-
-
-                    tpx_entry = Entry(root, width = 10)
-                    tpx_entry.grid(row=3, column=0)
-                    tpx_entry.insert(0,"0")
-
-                    tpy_entry = Entry(root, width = 10)
-                    tpy_entry.grid(row=4, column=0)
-                    tpy_entry.insert(0,"0")
-
-                    tpz_entry = Entry(root, width = 10)
-                    tpz_entry.grid(row=5, column=0)
-                    tpz_entry.insert(0,"0")
-
-                    tp_button = Button(root, text="teleport", command=func_click_tp)
-                    tp_button.grid(row=3, column=1)
-
-                    #####################################
-
-                    item_name_list = []
-                    dev_item = StringVar()
-
-                    name_string = "0"
-
-
-                    def func_click_item():
-                        has_item_multiple = False
-                        for item in all_game_items:
-                            if item.name == dev_item.get():
-                                for item in inventory:
-                                    if item.name == dev_item.get():
-                                        has_item_multiple = True
-                                        item.amount += 1
-                                        break
-                                if has_item_multiple == False:
-                                    for item in all_game_items:
-                                        if item.name == dev_item.get():
-                                            inventory.append(item)
-                                            break
-                                # break
-
-                    for item in all_game_items:
-                        name_string = item.name
-                        item_name_list.append(name_string)
-
-                    dev_item.set(item_name_list[0])
-
-                    item_choice = OptionMenu(root, dev_item, *item_name_list)
-                    item_choice.grid(row=0, column=4, columnspan=2)
-                    item_button = Button(root, text=" + item", command=func_click_item)
-                    item_button.grid(row=0, column=6, columnspan=1)
-
-                    #####################################
-
-                    weapon_name_list = []
-                    dev_weapon = StringVar()
-
-                    weapon_name_string = "0"
-
-                    def func_click_weapon():
-                        has_weapon_multiple = False
-                        for weapon in all_game_weapons:
-                            if weapon.name == dev_weapon.get():
-                                for weapon in weapon_inventory:
-                                    if weapon.name == dev_weapon.get():
-                                        has_weapon_multiple = True
-                                        weapon.amount += 1
-                                        break
-                                if has_weapon_multiple == False:
-                                    for weapon in all_game_weapons:
-                                        if weapon.name == dev_weapon.get():
-                                            weapon_inventory.append(weapon)
-                                            break
-                                # break
-
-                    for weapon in all_game_weapons:
-                        weapon_name_string = weapon.name
-                        weapon_name_list.append(weapon_name_string)
-
-                    dev_weapon.set(weapon_name_list[0])
-
-                    weapon_choice = OptionMenu(root, dev_weapon, *weapon_name_list)
-                    weapon_choice.grid(row=2, column=4, columnspan=2)
-                    weapon_button = Button(root, text=" + weapon", command=func_click_weapon)
-                    weapon_button.grid(row=2, column=6, columnspan=1)
-
-                    #####################################
-
-                    armor_name_list = []
-                    dev_armor = StringVar()
-
-                    armor_name_string = "0"
-
-                    def func_click_armor():
-                        has_armor_multiple = False
-                        for armor in all_game_armor:
-                            if armor.name == dev_armor.get():
-                                for armor in armor_inventory:
-                                    if armor.name == dev_armor.get():
-                                        has_armor_multiple = True
-                                        armor.amount += 1
-                                        break
-                                if has_armor_multiple == False:
-                                    for armor in all_game_armor:
-                                        if armor.name == dev_armor.get():
-                                            armor_inventory.append(armor)
-                                            break
-
-                    for armor in all_game_armor:
-                        armor_name_string = armor.name
-                        armor_name_list.append(armor_name_string)
-
-                    dev_armor.set(armor_name_list[0])
-
-                    armor_choice = OptionMenu(root, dev_armor, *armor_name_list)
-                    armor_choice.grid(row=3, column=4, columnspan=2)
-                    armor_button = Button(root, text=" + armor", command=func_click_armor)
-                    armor_button.grid(row=3, column=6, columnspan=1)
-
-
-                    #####################################
-
-                    helmet_name_list = []
-                    dev_helmet = StringVar()
-
-                    helmet_name_string = "0"
-
-                    def func_click_helmet():
-                        has_helmet_multiple = False
-                        for helmet in all_game_helmets:
-                            if helmet.name == dev_helmet.get():
-                                for helmet in helmet_inventory:
-                                    if helmet.name == dev_helmet.get():
-                                        has_helmet_multiple = True
-                                        helmet.amount += 1
-                                        break
-                                if has_helmet_multiple == False:
-                                    for helmet in all_game_helmets:
-                                        if helmet.name == dev_helmet.get():
-                                            helmet_inventory.append(helmet)
-                                            break
-
-                    for helmet in all_game_helmets:
-                        helmet_name_string = helmet.name
-                        helmet_name_list.append(helmet_name_string)
-
-                    dev_helmet.set(helmet_name_list[0])
-
-                    helmet_choice = OptionMenu(root, dev_helmet, *helmet_name_list)
-                    helmet_choice.grid(row=4, column=4, columnspan=2)
-                    helmet_button = Button(root, text=" + helmet", command=func_click_helmet)
-                    helmet_button.grid(row=4, column=6, columnspan=1)
-
-                    #####################################
-                    shield_name_list = []
-                    dev_shield = StringVar()
-
-                    shield_name_string = "0"
-
-                    def func_click_shield():
-                        has_shield_multiple = False
-                        for shield in all_game_shields:
-                            if shield.name == dev_shield.get():
-                                for shield in shield_inventory:
-                                    if shield.name == dev_shield.get():
-                                        has_shield_multiple = True
-                                        shield.amount += 1
-                                        break
-                                if has_shield_multiple == False:
-                                    for shield in all_game_shields:
-                                        if shield.name == dev_shield.get():
-                                            shield_inventory.append(shield)
-                                            break
-
-                    for shield in all_game_shields:
-                        shield_name_string = shield.name
-                        shield_name_list.append(shield_name_string)
-
-                    dev_shield.set(shield_name_list[0])
-
-                    shield_choice = OptionMenu(root, dev_shield, *shield_name_list)
-                    shield_choice.grid(row=5, column=4, columnspan=2)
-                    shield_button = Button(root, text=" + shield", command=func_click_shield)
-                    shield_button.grid(row=5, column=6, columnspan=1)
-
-                    #####################################
-
-                    spell_name_list = []
-                    dev_spell = StringVar()
-
-                    name_string = "0"
-
-                    def func_click_spell():
-                        for spell in all_game_spells:
-                            if spell.name == dev_spell.get():
-                                spell_inventory.append(spell)
-                                break
-
-                    for spell in all_game_spells:
-                        spell_name_string = spell.name
-                        spell_name_list.append(spell_name_string)
-
-                    dev_spell.set(spell_name_list[0])
-
-                    spell_choice = OptionMenu(root, dev_spell, *spell_name_list)
-                    spell_choice.grid(row=1, column=4, columnspan=2)
-                    spell_button = Button(root, text=" + spell", command=func_click_spell)
-                    spell_button.grid(row=1, column=6, columnspan=1)
-
-                    #####################################
-
-
-                    root.mainloop()
-
-            if event.key == pygame.K_F2:
-                for player1 in players:
-                    print("|| Stats: \n")
-                    print("|| Name: " + player1.name)
-                    print("|| Level: " + str(player1.level))
-                    print("|| xp: " + str(player1.xp))
-                    print("|| gold: " + str(player1.gp))
-                    print("|| hp: " + str(player1.hp) + " / " + str(player1.nobonus_maxhp) + " || + " + str(player1.maxhp_bonus))
-                    print("|| mp: " + str(player1.mp) + " / " + str(player1.nobonus_maxmp) + " || + " + str(player1.maxmp_bonus))
-
-                    print("|| Magic: " + str(player1.magic) + " || + " + str(player1.magic_bonus) + " || xp: " + str(player1.magic_xp))
-                    print("|| Strength: " + str(player1.strength) + " || + " + str(player1.strength_bonus) + " || xp: " + str(player1.strength_xp))
-                    print("|| Attack: " + str(player1.attack) + " || + " + str(player1.attack_bonus) + " || xp: " + str(player1.attack_xp))
-                    print("|| Defence: " + str(player1.defence) + " || + " + str(player1.defence_bonus) + " || xp: " + str(player1.defence_xp))
-
-                    print("|| Skills: \n")
-                    print("|| Fishing: " + str(player1_skills.fishing) + " || xp: " + str(player1_skills.fishing_xp))
-                    print("|| Theiving: " + str(player1_skills.thieving) + " || xp: " + str(player1_skills.thieving_xp))
-                    print("|| Alchemy: " + str(player1_skills.alchemy) + " || xp: " + str(player1_skills.alchemy_xp))
-                    print("|| Cooking: " + str(player1_skills.cooking) + " || xp: " + str(player1_skills.cooking_xp))
-
-            if event.key == pygame.K_F3:
-                if dev_mode >= 0:
-                    if dev_mode >= 0:
-                        for player1 in players:
-
-                            print("gear: \n")
-
-                            if len(equiped_helmet) != 0:
-                                for helmet in equiped_helmet:
-                                    print("|| Helmet: \n")
-                                    print("|| level: ", helmet.level)
-                                    print("|| name: " + helmet.print_name + " || attribute: " + helmet.print_attribute + " || type: " + helmet.type)
-                                    print("|| magic: " + str(helmet.magic_bonus) + " || strength: " + str(helmet.strength_bonus) + " || attack: " + str(helmet.attack_bonus))
-                                    print("|| hp bonus: " + str(helmet.maxhp_bonus) + " || defence: " + str(helmet.defence_bonus))
-
-
-                                print("")
-                            else:
-                                print("you have no helmet... \n")
-
-                            if len(equiped_armor) != 0:
-                                for armor in equiped_armor:
-                                    print("|| Armor: \n")
-                                    print("|| level: ", armor.level)
-                                    print("|| name: " + armor.print_name + " || attribute: " + armor.print_attribute + " || type: " + armor.type)
-                                    print("|| magic: " + str(armor.magic_bonus) + " || strength: " + str(armor.strength_bonus) + " || attack: " + str(armor.attack_bonus))
-                                    print("|| hp bonus: " + str(armor.maxhp_bonus) + " || defence: " + str(armor.defence_bonus))
-
-                                print("")
-                            else:
-                                print("you have no armor... \n")
-
-                            if len(equiped_shield) != 0:
-                                for shield in equiped_shield:
-                                    print("|| Shield: \n")
-                                    print("|| level: ", shield.level)
-                                    print("|| name: " + shield.print_name + " || attribute: " + shield.print_attribute + " || type: " + shield.type)
-                                    print("|| magic: " + str(shield.magic_bonus) + " || strength: " + str(shield.strength_bonus) + " || attack: " + str(shield.attack_bonus))
-                                    print("|| hp bonus: " + str(shield.maxhp_bonus) + " || defence: " + str(shield.defence_bonus))
-
-                                print("")
-                            else:
-                                print("you have no shield... \n")
-
-                            if len(equiped_weapon) != 0:
-                                for weapon in equiped_weapon:
-                                    print("|| Weapon: \n")
-                                    print("|| level: ", weapon.level)
-                                    print("|| name: " + weapon.print_name + " || attribute: " + weapon.print_attribute + " || type: " + weapon.type)
-                                    print("|| magic: " + str(weapon.magic_bonus) + " || strength: " + str(weapon.strength_bonus) + " || attack: " + str(weapon.attack_bonus))
-                                    print("|| hp bonus: " + str(weapon.maxhp_bonus) + " || defence: " + str(weapon.defence_bonus))
-                                print("")
-                            else:
-                                print("you have no weapon... \n")
-                    print("\nInventory: \n")
-
-                    if len(inventory) != 0:
-                        for item in inventory:
-
-                            print("|| " + item.print_name + " x " + str(item.amount))
-
-                    if len(spell_inventory) != 0:
-                        for spell in spell_inventory:
-
-                            print("|| " + spell.print_name + " || " + spell.print_attribute + " || lvl: " + str(spell.level))
-
-                    if len(helmet_inventory) != 0:
-                        for helmet in helmet_inventory:
-
-                            print("|| " + helmet.print_name + " x " + str(helmet.amount) + " || attribute: " + helmet.print_attribute + " || type: " + helmet.type + " || lvl: " + str(helmet.level))
-
-                    if len(armor_inventory) != 0:
-                        for armor in armor_inventory:
-
-                            print("|| " + armor.print_name + " x " + str(armor.amount) + " || attribute: " + armor.print_attribute + " || type: " + armor.type + " || lvl: " + str(armor.level))
-
-                    if len(shield_inventory) != 0:
-                        for shield in shield_inventory:
-
-                            print("|| " + shield.print_name + " x " + str(shield.amount) + " || attribute: " + shield.print_attribute + " || type: " + shield.type + " || lvl: " + str(shield.level))
-
-                    if len(weapon_inventory) != 0:
-                        for weapon in weapon_inventory:
-
-                            print("|| " + weapon.print_name + " x " + str(weapon.amount) + " || attribute: " + weapon.print_attribute + " || type: " + weapon.type + " || lvl: " + str(weapon.level))
-
-                    print("")
-
-            if event.key == pygame.K_F4:
-                dev_mode += 1
-                if dev_mode > 6:
-                    dev_mode = 0
-                print("dev mode " + str(dev_mode))
-
-            if event.key == pygame.K_F5:
-                grid_mode += 1
-                if grid_mode > 2:
-                    grid_mode = 0
-                print("grid mode " + str(grid_mode))
 
 
 #######################################################################################
