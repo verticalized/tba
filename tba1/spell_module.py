@@ -80,6 +80,7 @@ life_drain = spell("life drain",5,5,5,True,100,"undead",50,1,0,"a life draining 
 snare = spell("snare",5,5,500,True,5,"ice",70,2,0,"snares the enemy in ice")
 blizzard = spell("blizzard",5,5,500,False,150,"ice",150,2,0,"freezes the enemy and does lots of damage")
 cone_of_cold = spell("cone of cold",5,5,500,False,50,"ice",50,2,0,"freezes the enemy and does damage")
+
 #### status 3 spells POISON
 poison = spell("poison",5,5,50,True,5,"earth",70,3,0,"poisons the enemy")
 
@@ -120,21 +121,27 @@ def_up_heal_aoe = spell("DEF UP and heal aoe",5,5,50,False,5,"fire",70,13,1,"DEF
 
 ##############//DE-BUFFS//###################
 
-#### status 20 spells STR down
+#### status 20 spells STR down 1
 str_down = spell("STR down",5,5,50,True,5,"fire",70,20,0,"STR down")
 str_down_aoe = spell("STR down aoe",5,5,50,True,5,"fire",70,20,1,"STR down aoe")
 str_down_damage = spell("STR down and damage",5,5,50,False,5,"fire",70,20,0,"STR down and damage")
 str_down_damage_aoe = spell("STR down and damage aoe",5,5,50,False,5,"fire",70,20,1,"STR down and damage aoe")
 
-#### status 21 spells ATK down
+#### status 21 spells ATK down 1
 atk_down = spell("ATK down",5,5,50,True,5,"fire",70,10,0,"ATK down")
 atk_down_damage = spell("ATK down and damage",5,5,50,False,5,"fire",70,21,0,"ATK down and damage")
-#### status 22 spells MGK down
+atk_down_damage = spell("ATK down and damage",5,5,50,False,5,"fire",70,21,0,"ATK down and damage")
+atk_down_damage_aoe = spell("ATK down and damage aoe",5,5,50,False,5,"fire",70,21,1,"ATK down and damage aoe")
+#### status 22 spells MGK down 1
 mgk_down = spell("MGK down",5,5,50,True,5,"fire",70,10,0,"MGK down")
 mgk_down_damage = spell("MGK down and damage",5,5,50,False,5,"fire",70,22,0,"MGK down and damage")
-#### status 23 spells DEF down
+mgk_down_damage = spell("MGK down and damage",5,5,50,False,5,"fire",70,22,0,"MGK down and damage")
+mgk_down_damage_aoe = spell("MGK down and damage aoe",5,5,50,False,5,"fire",70,22,1,"MGK down and damage aoe")
+#### status 23 spells DEF down 1
 def_down = spell("DEF down",5,5,50,True,5,"fire",70,10,0,"DEF down")
 def_down_damage = spell("DEF down and damage",5,5,50,False,5,"fire",70,23,0,"DEF down and damage")
+def_down_damage = spell("DEF down and damage",5,5,50,False,5,"fire",70,23,0,"DEF down and damage")
+def_down_damage_aoe = spell("DEF down and damage aoe",5,5,50,False,5,"fire",70,23,1,"DEF down and damage aoe")
 
 ##################--BUFF/HEALING SPELLS--##############################
 
