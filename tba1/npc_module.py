@@ -6,7 +6,7 @@ from colorama import Fore, Back, Style
 init(autoreset=True)
 
 class dialouge_option:
-    def __init__(self, text, is_quit, is_buy_item, is_buy_weapon, is_buy_armor, is_buy_helmet, is_buy_shield, is_buy_spell, is_sell, is_talk, is_assault, is_give, is_quest, is_heal):
+    def __init__(self, text, is_quit, is_buy_item, is_buy_weapon, is_buy_armor, is_buy_helmet, is_buy_shield, is_buy_spell, is_sell, is_talk, is_assault, is_give, is_quest, quest_name, is_heal):
         self.text = text #text displayed for dialouge option
         self.is_quit = is_quit #option to allow user to leave dialouge
         self.is_buy_item = is_buy_item #interprets dialouge option as player wanting to make a purchase
@@ -19,26 +19,30 @@ class dialouge_option:
         self.is_talk = is_talk #interprets dialouge option as player wanting to talk
         self.is_assault = is_assault #interprets dialouge option as player wanting to attack the npc
         self.is_give = is_give #interprets dialouge option as a trigger to give the player an item
-        self.is_quest = is_quest #interprets dialouge option as player wanting to give the npc an item
+        self.is_quest = is_quest #interprets dialouge option as player wanting a quest
+        self.quest_name = quest_name
         self.is_heal = is_heal #etc...
 
-dialouge_buy_item = dialouge_option("buy item",False,True,False,False,False,False,False,False,False,False,False,False,False)
-dialouge_buy_weapon = dialouge_option("buy weapons",False,False,True,False,False,False,False,False,False,False,False,False,False)
-dialouge_buy_armor = dialouge_option("buy armor",False,False,False,True,False,False,False,False,False,False,False,False,False)
-dialouge_buy_helmet = dialouge_option("buy helmets",False,False,False,False,True,False,False,False,False,False,False,False,False)
-dialouge_buy_shield = dialouge_option("buy shields",False,False,False,False,False,True,False,False,False,False,False,False,False)
-dialouge_buy_spell = dialouge_option("buy spells",False,False,False,False,False,False,True,False,False,False,False,False,False)
+dialouge_buy_item = dialouge_option("buy item",False,True,False,False,False,False,False,False,False,False,False,False,"0",False)
+dialouge_buy_weapon = dialouge_option("buy weapons",False,False,True,False,False,False,False,False,False,False,False,False,"0",False)
+dialouge_buy_armor = dialouge_option("buy armor",False,False,False,True,False,False,False,False,False,False,False,False,"0",False)
+dialouge_buy_helmet = dialouge_option("buy helmets",False,False,False,False,True,False,False,False,False,False,False,False,"0",False)
+dialouge_buy_shield = dialouge_option("buy shields",False,False,False,False,False,True,False,False,False,False,False,False,"0",False)
+dialouge_buy_spell = dialouge_option("buy spells",False,False,False,False,False,False,True,False,False,False,False,False,"0",False)
 
-dialouge_heal = dialouge_option("ask for healing",False,False,False,False,False,False,False,False,False,False,False,False,True)
+dialouge_heal = dialouge_option("ask for healing",False,False,False,False,False,False,False,False,False,False,False,False,"0",True)
 
-dialouge_sell = dialouge_option("can I sell",False,False,False,False,False,False,False,True,False,False,False,False,False)
-dialouge_talk = dialouge_option("heard any news?",False,False,False,False,False,False,False,False,True,False,False,False,False)
-dialouge_gf = dialouge_option("prepare to die!",False,False,False,False,False,False,False,False,False,True,False,False,False)
-dialouge_attack = dialouge_option("attack",False,False,False,False,False,False,False,False,False,True,False,False,False)
-dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,False,True,False,False)
-dialouge_quest = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,False)
+dialouge_sell = dialouge_option("can I sell",False,False,False,False,False,False,False,True,False,False,False,False,"0",False)
+dialouge_talk = dialouge_option("heard any news?",False,False,False,False,False,False,False,False,True,False,False,False,"0",False)
+dialouge_gf = dialouge_option("prepare to die!",False,False,False,False,False,False,False,False,False,True,False,False,"0",False)
+dialouge_attack = dialouge_option("attack",False,False,False,False,False,False,False,False,False,True,False,False,"0",False)
+dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,False,True,False,"0",False)
+dialouge_quest1 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Cow Elite Killer",False)
+dialouge_quest2 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"The Bandit Menace",False)
+dialouge_quest3 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Talk to Shmurlitz",False)
 
-dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,False,False,False,False,False,False,False)
+
+dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,False,False,False,False,False,False,"0",False)
 
 all_npcs = []
 
@@ -75,9 +79,9 @@ class npc:
 
 #########   TWO NPCS CANNOT HAVE THE SAME FIRST NAME !!!!   #############
 
-npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","I am a doctor and you are talking to me")
+npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","I am a doctor")
 
-npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","")
+npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","owwwweeeeeeee")
 npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","")
 npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","")
 npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof","")
@@ -87,10 +91,10 @@ npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoe
 npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof","")
 npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","")
 
-npc_merchant_ollie = npc("Ollie","Zed-ecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","")
-npc_merchant_dech = npc("Dechen","Knee-pah","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","")
+npc_merchant_ollie = npc("Olliver","Zeddecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","")
+npc_merchant_dech = npc("Dechen","Kneepa","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","")
 
-npc_lib = npc("Lib","","The Mad","a man of many names","G'day",False,"human","man","0","fine clothes","oof","")
+npc_lib = npc("Lord","Quas","The mad","a man of many names","G'day",False,"human","man","0","fine clothes","oof","")
 npc_king = npc("Daniel","Geedorah","King","known as the crown ruler...","G'day",False,"human","man","0","royal clothes","oof","")
 npc_chris_cornwell = npc("Chris","Cornwell","Farmer","has a beautiful garden...","G'day",False,"human","man","0","farmer's clothes","oof","")
 
