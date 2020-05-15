@@ -34,9 +34,11 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 1
+dev_mode = 0
 
 grid_mode = 0
+
+toggle_music = 0
 
 tick_delay_time = 100
 
@@ -386,7 +388,9 @@ class quest:
 
 quest_1 = quest("Cow Elite Killer","Prove your combat ability.", xp = 50, gp = 80, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = True, quest_enemy_name = "cow", quest_kill_amount = 1, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
 quest_2 = quest("The Bandit Menace","Eliminate the local bandit population.", xp = 200, gp = 200, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = True, quest_enemy_name = "bandit", quest_kill_amount = 3, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
-quest_3 = quest("Talk to Shmurlitz","Talk to Shmurlitz Durlitz, the town doctor.", xp = 2000, gp = 8000, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Shmurlitz", quest_npc_lname = "Durlitz")
+quest_3 = quest("Talk to Shmurlitz","Talk to Shmurlitz Durlitz, the town doctor.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Shmurlitz", quest_npc_lname = "Durlitz")
+quest_4 = quest("Travel to Sorrlund","Travel down the high road to Sorrlund.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Shmurlitz", quest_npc_lname = "Durlitz")
+
 
 # place npcs in the world
 dismurth_gates.npc_list.append(npc_town_guard)
@@ -896,7 +900,7 @@ def func_choose_music():
 
         music_playing = pygame.mixer.music.get_busy()
 
-        if music_playing == 0:
+        if music_playing == 0 and toggle_music == 1:
             pygame.mixer.music.play(-1)
 
 
@@ -6294,7 +6298,7 @@ while game_start == 1:
                                                     pickedup_amount = ground_weapon.amount
                                                     pickedup_weapon = "0"
                                                     pickedup_weapon = ground_weapon.name
-                                                    has_weapon = True
+                                                    has_item = True
                                                     print("you pickup " + ground_weapon.print_name + " x " + str(ground_weapon.amount))
                                                     sleep(sleep_time_fast)
                                                     for weapon in weapon_inventory:
@@ -6317,7 +6321,7 @@ while game_start == 1:
                                                     pickedup_amount = ground_armor.amount
                                                     pickedup_armor = "0"
                                                     pickedup_armor = ground_armor.name
-                                                    has_armor = True
+                                                    has_item = True
                                                     print("you pickup " + ground_armor.print_name + " x " + str(ground_armor.amount))
                                                     sleep(sleep_time_fast)
                                                     for armor in armor_inventory:
@@ -6340,7 +6344,7 @@ while game_start == 1:
                                                     pickedup_amount = ground_helmet.amount
                                                     pickedup_helmet = "0"
                                                     pickedup_helmet = ground_helmet.name
-                                                    has_helmet = True
+                                                    has_item = True
                                                     print("you pickup " + ground_helmet.print_name + " x " + str(ground_helmet.amount))
                                                     sleep(sleep_time_fast)
                                                     for helmet in helmet_inventory:
@@ -6363,7 +6367,7 @@ while game_start == 1:
                                                     pickedup_amount = ground_shield.amount
                                                     pickedup_shield = "0"
                                                     pickedup_shield = ground_shield.name
-                                                    has_shield = True
+                                                    has_item = True
                                                     print("you pickup " + ground_shield.print_name + " x " + str(ground_shield.amount))
                                                     sleep(sleep_time_fast)
                                                     for shield in shield_inventory:

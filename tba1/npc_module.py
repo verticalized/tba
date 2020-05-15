@@ -40,6 +40,7 @@ dialouge_give = dialouge_option("give me something!",False,False,False,False,Fal
 dialouge_quest1 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Cow Elite Killer",False)
 dialouge_quest2 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"The Bandit Menace",False)
 dialouge_quest3 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Talk to Shmurlitz",False)
+dialouge_quest4 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Travel to Sorrlund",False)
 
 
 dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,False,False,False,False,False,False,"0",False)
