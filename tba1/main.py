@@ -34,7 +34,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 0
+dev_mode = 1
 
 grid_mode = 0
 
@@ -2198,7 +2198,7 @@ def func_player_melee(status_str,status_atk): #add spell bonus, status effect bu
 
 
 
-            player_turns -= 1
+
             player_weapon_level = 0
             for weapon in equiped_weapon:
                 player_weapon_level = weapon.level
@@ -2728,10 +2728,10 @@ def func_player_spell_non_combat(cast_spell):
 def func_player_status_check(is_attack_type_hit,force_no_attack):
 
     for player_stats in players:
-        status_str_bonus = 1
-        status_atk_bonus = 1
-        status_mgk_bonus = 1
-        status_def_bonus = 1
+        status_str_bonus = 0
+        status_atk_bonus = 0
+        status_mgk_bonus = 0
+        status_def_bonus = 0
         player_can_attack = False
         if len(player_stats.status_effect_list) == 0:
             player_can_attack = True
@@ -5427,6 +5427,7 @@ while game_start == 1:
                                 func_player_status_check(True,False)
                                 func_check_enemy_dead()
                                 func_check_level()
+                                player_turns -= 1
 
                             elif combat_cursor_pos == 2: #spell option
 
@@ -5496,13 +5497,10 @@ while game_start == 1:
                                 func_check_enemy_dead()
                                 func_check_level()
 
-                            elif combat_cursor_pos == 5:
+                            elif combat_cursor_pos == 555:
                                 in_fight = False
                                 game_start = 0
 
-                            elif combat_cursor_pos == 10:
-                                in_fight = False
-                                game_start = 0
 
                             else:
                                 print("invalid combat command \n")
