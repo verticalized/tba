@@ -2,6 +2,7 @@ import random
 from time import sleep
 from colorama import init
 from colorama import Fore, Back, Style
+import pygame
 
 init(autoreset=True)
 
@@ -15,6 +16,16 @@ all_game_shields = []
 all_ground_game_shields = []
 
 #ITEM IDS SERVE NO PURPOSE!
+
+spr_att_fire = pygame.image.load("sprites/icons/icon_fire1.png")
+spr_att_water = pygame.image.load("sprites/icons/icon_water1.png")
+spr_att_air = pygame.image.load("sprites/icons/icon_air1.png")
+spr_att_earth = pygame.image.load("sprites/icons/icon_earth1.png")
+
+spr_att_undead = pygame.image.load("sprites/icons/icon_fire1.png")
+spr_att_holy = pygame.image.load("sprites/icons/icon_water1.png")
+spr_att_slime = pygame.image.load("sprites/icons/icon_air1.png")
+spr_att_ice = pygame.image.load("sprites/icons/icon_earth1.png")
 
 class weapon:
     def __init__(self, id, name, value, type, level, attribute, magic_bonus, strength_bonus, attack_bonus, defence_bonus, maxhp_bonus):
@@ -32,23 +43,32 @@ class weapon:
         self.maxhp_bonus = maxhp_bonus
         self.amount = 1
         self.print_attribute = ""
+        self.attribute_sprite = spr_att_fire
 
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_fire
         if self.attribute == "water":
             self.print_attribute = (Fore.BLUE + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_water
         if self.attribute == "earth":
             self.print_attribute = (Fore.GREEN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_earth
         if self.attribute == "air":
             self.print_attribute = (Fore.BLACK + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_air
         if self.attribute == "holy":
             self.print_attribute = (Fore.YELLOW + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_holy
         if self.attribute == "undead":
             self.print_attribute = (Fore.MAGENTA + Style.DIM + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_undead
         if self.attribute == "slime":
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_slime
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_ice
 
         self.print_name = (Fore.BLACK + Style.BRIGHT + name + Style.RESET_ALL)
 
@@ -158,22 +178,34 @@ class armor:
         self.maxhp_bonus = maxhp_bonus
         self.amount = 1
 
+        self.print_attribute = ""
+        self.attribute_sprite = spr_att_fire
+
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_fire
         if self.attribute == "water":
             self.print_attribute = (Fore.BLUE + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_water
         if self.attribute == "earth":
             self.print_attribute = (Fore.GREEN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_earth
         if self.attribute == "air":
             self.print_attribute = (Fore.BLACK + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_air
         if self.attribute == "holy":
             self.print_attribute = (Fore.YELLOW + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_holy
         if self.attribute == "undead":
             self.print_attribute = (Fore.MAGENTA + Style.DIM + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_undead
         if self.attribute == "slime":
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_slime
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_ice
+
 
         all_game_armor.append(self)
 
@@ -222,22 +254,34 @@ class helmet:
         self.maxhp_bonus = maxhp_bonus
         self.amount = 1
 
+        self.print_attribute = ""
+        self.attribute_sprite = spr_att_fire
+
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_fire
         if self.attribute == "water":
             self.print_attribute = (Fore.BLUE + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_water
         if self.attribute == "earth":
             self.print_attribute = (Fore.GREEN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_earth
         if self.attribute == "air":
             self.print_attribute = (Fore.BLACK + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_air
         if self.attribute == "holy":
             self.print_attribute = (Fore.YELLOW + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_holy
         if self.attribute == "undead":
             self.print_attribute = (Fore.MAGENTA + Style.DIM + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_undead
         if self.attribute == "slime":
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_slime
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_ice
+
 
         all_game_helmets.append(self)
 
@@ -274,22 +318,34 @@ class shield:
         self.maxhp_bonus = maxhp_bonus
         self.amount = 1
 
+        self.print_attribute = ""
+        self.attribute_sprite = spr_att_fire
+
         if self.attribute == "fire":
             self.print_attribute = (Fore.RED + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_fire
         if self.attribute == "water":
             self.print_attribute = (Fore.BLUE + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_water
         if self.attribute == "earth":
             self.print_attribute = (Fore.GREEN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_earth
         if self.attribute == "air":
             self.print_attribute = (Fore.BLACK + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_air
         if self.attribute == "holy":
             self.print_attribute = (Fore.YELLOW + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_holy
         if self.attribute == "undead":
             self.print_attribute = (Fore.MAGENTA + Style.DIM + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_undead
         if self.attribute == "slime":
             self.print_attribute = (Fore.GREEN + Style.BRIGHT + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_slime
         if self.attribute == "ice":
             self.print_attribute = (Fore.CYAN + Style.NORMAL + attribute + Style.RESET_ALL)
+            self.attribute_sprite = spr_att_ice
+
 
         all_game_shields.append(self)
 

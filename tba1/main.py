@@ -34,7 +34,7 @@ from party_member_module import *
 
 version = "1.8.4"
 
-dev_mode = 0
+dev_mode = 1
 
 grid_mode = 0
 
@@ -1028,7 +1028,7 @@ def func_blit_player_gear(hud_val):
             blit_weapon_name = myfont.render(weapon.name, False, (0, 0, 0))
             blit_weapon_lvl = myfont.render("Lvl: " + str(weapon.level), False, (0, 0, 0))
             blit_weapon_type = myfont.render("Type: " + str(weapon.type), False, (0, 0, 0))
-            blit_weapon_attribute = myfont.render("Attribute: " + str(weapon.attribute), False, (0, 0, 0))
+            blit_weapon_attribute = myfont.render("Att. ", False, (0, 0, 0))
 
             blit_weapon_attack = myfont.render("ATK: " + str(weapon.attack_bonus), False, (0, 0, 0))
             blit_weapon_defence = myfont.render("DEF: " + str(weapon.defence_bonus), False, (0, 0, 0))
@@ -1040,6 +1040,7 @@ def func_blit_player_gear(hud_val):
         win_map.blit(blit_weapon_lvl,(32+((hud_val-1)*200),(2*16)))
         win_map.blit(blit_weapon_type,(32+((hud_val-1)*200),(3*16)))
         win_map.blit(blit_weapon_attribute,(32+((hud_val-1)*200),(4*16)))
+        win_map.blit(weapon.attribute_sprite, ( (62+((hud_val-1)*200),(4*16))) )
 
         win_map.blit(blit_weapon_attack,(32+((hud_val-1)*200),(5*16)))
         win_map.blit(blit_weapon_defence,(32+((hud_val-1)*200),(6*16)))
@@ -1055,7 +1056,8 @@ def func_blit_player_gear(hud_val):
             blit_armor_name = myfont.render(armor.name, False, (0, 0, 0))
             blit_armor_lvl = myfont.render("Lvl: " + str(armor.level), False, (0, 0, 0))
             blit_armor_type = myfont.render("Type: " + str(armor.type), False, (0, 0, 0))
-            blit_armor_attribute = myfont.render("Attribute: " + str(armor.attribute), False, (0, 0, 0))
+            blit_armor_attribute = myfont.render("Att. ", False, (0, 0, 0))
+
 
             blit_armor_attack = myfont.render("ATK: " + str(armor.attack_bonus), False, (0, 0, 0))
             blit_armor_defence = myfont.render("DEF: " + str(armor.defence_bonus), False, (0, 0, 0))
@@ -1067,6 +1069,7 @@ def func_blit_player_gear(hud_val):
         win_map.blit(blit_armor_lvl,(32+((hud_val-1)*200),(12*16)))
         win_map.blit(blit_armor_type,(32+((hud_val-1)*200),(13*16)))
         win_map.blit(blit_armor_attribute,(32+((hud_val-1)*200),(14*16)))
+        win_map.blit(armor.attribute_sprite, ( (62+((hud_val-1)*200),(14*16))) )
 
         win_map.blit(blit_armor_attack,(32+((hud_val-1)*200),(15*16)))
         win_map.blit(blit_armor_defence,(32+((hud_val-1)*200),(16*16)))
@@ -1084,7 +1087,7 @@ def func_blit_player_gear2(hud_val):
             blit_helmet_name = myfont.render(helmet.name, False, (0, 0, 0))
             blit_helmet_lvl = myfont.render("Lvl: " + str(helmet.level), False, (0, 0, 0))
             blit_helmet_type = myfont.render("Type: " + str(helmet.type), False, (0, 0, 0))
-            blit_helmet_attribute = myfont.render("Attribute: " + str(helmet.attribute), False, (0, 0, 0))
+            blit_helmet_attribute = myfont.render("Att. ", False, (0, 0, 0))
 
             blit_helmet_attack = myfont.render("ATK: " + str(helmet.attack_bonus), False, (0, 0, 0))
             blit_helmet_defence = myfont.render("DEF: " + str(helmet.defence_bonus), False, (0, 0, 0))
@@ -1096,6 +1099,7 @@ def func_blit_player_gear2(hud_val):
         win_map.blit(blit_helmet_lvl,(32+((hud_val-1)*200),(2*16)))
         win_map.blit(blit_helmet_type,(32+((hud_val-1)*200),(3*16)))
         win_map.blit(blit_helmet_attribute,(32+((hud_val-1)*200),(4*16)))
+        win_map.blit(helmet.attribute_sprite, ( (62+((hud_val-1)*200),(4*16))) )
 
         win_map.blit(blit_helmet_attack,(32+((hud_val-1)*200),(5*16)))
         win_map.blit(blit_helmet_defence,(32+((hud_val-1)*200),(6*16)))
@@ -1111,7 +1115,8 @@ def func_blit_player_gear2(hud_val):
             blit_shield_name = myfont.render(shield.name, False, (0, 0, 0))
             blit_shield_lvl = myfont.render("Lvl: " + str(shield.level), False, (0, 0, 0))
             blit_shield_type = myfont.render("Type: " + str(shield.type), False, (0, 0, 0))
-            blit_shield_attribute = myfont.render("Attribute: " + str(shield.attribute), False, (0, 0, 0))
+            blit_shield_attribute = myfont.render("Att. ", False, (0, 0, 0))
+            win_map.blit(shield.attribute_sprite, ( (62+((hud_val-1)*200),(14*16))) )
 
             blit_shield_attack = myfont.render("ATK: " + str(shield.attack_bonus), False, (0, 0, 0))
             blit_shield_defence = myfont.render("DEF: " + str(shield.defence_bonus), False, (0, 0, 0))
@@ -1145,6 +1150,10 @@ def func_blit_enemy_HUD(hud_val):
         status_list = []
         for status_condition in enemy_stats.status_effect_list:
             status_list.append(status_condition.name)
+
+        blit_HUD_active = myfont.render("ACTIVE", False, (150, 50, 0))
+        blit_HUD_inactive = myfont.render("ACTIVE", False, (10, 10, 10))
+
         blit_HUD_name = myfont.render(enemy_stats.name, False, (0, 0, 0))
         blit_HUD_lvl = myfont.render("Lvl: " + str(enemy_stats.level), False, (0, 0, 0))
         blit_HUD_att = myfont.render("Att: " + enemy_stats.attribute, False, (0, 0, 0))
@@ -1161,8 +1170,16 @@ def func_blit_enemy_HUD(hud_val):
         win_map.blit(blit_HUD_hp,(32+((hud_val+enemy_number-1)*200),(36*16)))
         win_map.blit(blit_HUD_mp,(32+((hud_val+enemy_number-1)*200),(37*16)))
         win_map.blit(blit_HUD_status,(32+((hud_val+enemy_number-1)*200),(38*16)))
-        win_map.blit(enemy_stats.enemy_sprite, ( ((cx-256) + ((enemy_number+1)*128)), ((cy) + ((1)*32)) )  )
-        # win_map.blit(enemy_stats.enemy_sprite,(32+(18(hud_val+enemy_number-1)*200),(18*16)))
+        win_map.blit(enemy_stats.enemy_sprite, ( ((cx-256) + ((enemy_number+1)*128)), ((cy) + ((1)*32)) ) )
+        if enemy_stats.is_active == True:
+
+            win_map.blit(blit_HUD_active,(32+((hud_val+enemy_number-1)*200),(32*16)))
+            pygame.draw.rect(win_map, (125,100,0), ( ((cx-256) + ((enemy_number+1)*128)),((cy-100) + ((1)*32)), 16, 16 ) )
+        if enemy_stats.is_active == False:
+            win_map.blit(blit_HUD_inactive,(32+((hud_val+enemy_number-1)*200),(32*16)))
+            pygame.draw.rect(win_map, (100,100,100), ( ((cx-256) + ((enemy_number+1)*128)),((cy-100) + ((1)*32)), 16, 16 ) )
+
+
 
 def func_blit_title(title_string,gui_val):
     blit_title = myfont.render(title_string, False, (0, 0, 0))
@@ -1181,7 +1198,7 @@ def func_refresh_pygame(battle_intro):
 
     battle_intro_ticks = 0
     if dev_mode >= 6:
-        print("\nrefreshing pygame window//\n")
+        print("\nrefreshing pygame window // \n")
 
     if steps_z >= 0:
         win_map.fill((3,140,217))
@@ -1237,8 +1254,7 @@ def func_refresh_pygame(battle_intro):
                 grid_y +=1
                 if grid_y >= 20:
                     break
-            # pygame.draw.rect(win_map, (0,0,0), ( ((cx-16) + ((grid_x)*(32))), ((cy-16) + ((grid_y)*(32))), map_tile_width//4, map_tile_height//4))
-            # grid_y += 1
+
 
 
     if battle_intro == True:
@@ -1261,52 +1277,9 @@ def func_refresh_pygame(battle_intro):
                     break
             for scene_type in all_scene_types:
                 if scene_type.zpos == steps_z:
-                    if time < 600:
-                        tile_r = scene_type.tile_r + (time2/10)
-                        tile_g = scene_type.tile_g + (time2/10)
-                        tile_b = scene_type.tile_b + (time2/10)
-                    if time >= 600 and time < 1200:
-                        tile_r = (scene_type.tile_r + 60) - (time2/10)
-                        tile_g = (scene_type.tile_g + 60) - (time2/10)
-                        tile_b = (scene_type.tile_b + 60) - (time2/10)
-                    if time >= 1200 and time < 1800:
-                        tile_r = scene_type.tile_r - (time2/10)
-                        tile_g = scene_type.tile_g - (time2/10)
-                        tile_b = scene_type.tile_b - (time2/10)
-                    if time >= 1800:
-                        tile_r = (scene_type.tile_r - 60) + (time2/10)
-                        tile_g = (scene_type.tile_g - 60) + (time2/10)
-                        tile_b = (scene_type.tile_b - 60) + (time2/10)
-
-                    if tile_r >= 255:
-                        tile_r = 255
-                    if tile_g >= 255:
-                        tile_g = 255
-                    if tile_b >= 255:
-                        tile_b = 255
-                    if tile_r < 0:
-                        tile_r = 0
-                    if tile_g < 0:
-                        tile_g = 0
-                    if tile_b < 0:
-                        tile_b = 0
-
-                    tile_r_2 = tile_r - 20
-                    tile_g_2 = tile_g - 20
-                    tile_b_2 = tile_b - 20
-
-                    if tile_r_2 >= 255:
-                        tile_r_2 = 255
-                    if tile_g_2 >= 255:
-                        tile_g_2 = 255
-                    if tile_b_2 >= 255:
-                        tile_b_2 = 255
-                    if tile_r_2 < 0:
-                        tile_r_2 = 0
-                    if tile_g_2 < 0:
-                        tile_g_2 = 0
-                    if tile_b_2 < 0:
-                        tile_b_2 = 0
+                    tile_r = 100
+                    tile_g = 100
+                    tile_b = 100
 
                     pygame.draw.rect(win_map, (tile_r,tile_g,tile_b), ( ((cx-16) + ((scene_type.xpos - steps_x)*32*random.randint(1,3))), ((cy-16) + ((scene_type.ypos - steps_y)*(32*random.randint(1,3)))), map_tile_width, map_tile_height))
 
@@ -1328,8 +1301,6 @@ def func_refresh_pygame(battle_intro):
         func_blit_list(combat_option,combat_option_list,1,False)
         func_blit_combat_cursor(1)
         func_blit_title("Battle:",1)
-
-
 
 
 
@@ -1787,7 +1758,7 @@ def func_refresh_pygame(battle_intro):
                 func_blit_menu_cursor(2)
                 func_blit_title("Drop 2:",2)
 
-
+    #draws bottom hud box
     pygame.draw.rect(win_map, (100,100,100), (0, 512, 1024, 256))
     pygame.draw.rect(win_map, (125,125,125), (10,522, 1004, 236))
 
@@ -2834,7 +2805,7 @@ def func_check_player_dead():
         exit()
 
 def func_enemy_status_check():
-
+    # iterates through all current enemies and performs their turn
     for enemy_stats in current_enemies:
         status_str_bonus = 0
         status_atk_bonus = 0
@@ -2843,6 +2814,16 @@ def func_enemy_status_check():
         player_status_mgk_bonus = 0
         player_status_def_bonus = 0
         enemy_can_attack = False
+        enemy_stats.is_active = True
+        print(enemy_stats.name + " is active")
+        if enemy_stats.is_active == True:
+            combat_wait_count = 0
+            while combat_wait_count < 100:
+                combat_wait_count += 1
+                func_refresh_pygame(False)
+            if combat_wait_count >= 100:
+                enemy_stats.is_active = False
+
         if len(enemy_stats.status_effect_list) == 0:
             enemy_can_attack = True
         else:
@@ -3335,6 +3316,8 @@ def func_enemy_attack(enemy_stats,status_str,status_atk,status_mgk,status_def,pl
                             func_check_player_dead()
                     break
 
+                enemy_stats.is_active = False
+
                 break
             else:
                 player_status_def_bonus = 0
@@ -3376,7 +3359,7 @@ def func_enemy_melee(enemy_stats,status_str,status_atk,player_status_def):
         else:
             print(enemy_stats.name + "'s attack missed!")
 
-
+        enemy_stats.is_active = False
         func_check_player_dead()
 
 def func_use_combat(gear,player_gear_inv):
@@ -3443,10 +3426,8 @@ def func_use_combat(gear,player_gear_inv):
                                         can_use = True
                                         player1.hp = player1.hp - item.hp
                                         print("you feel sick...")
+                                        func_check_player_dead()
 
-                                        if player1.hp <= 0:
-                                            print("\nYOU ARE DEAD \n")
-                                            game_start = 0
 
                                     if item.name == eaten_item and item.amount > 1:
                                         has_item_multiple = True
@@ -3533,6 +3514,11 @@ def func_shop(gear,npc_gear_inv):
                         if event.key == pygame.K_q:
                             in_submenu3 = False
                             in_submenu_buy3 = False
+                            in_menu_weapon = False
+                            in_menu_armor = False
+                            in_menu_helmet = False
+                            in_menu_shield = False
+                            in_menu_spell = False
 
                         if event.key == pygame.K_e:
                             sfx_cursor_select.play()
@@ -3630,21 +3616,21 @@ def func_shop(gear,npc_gear_inv):
                                                         break
 
                                         print("\nthanks, enjoy your " + gear.name + "\n")
-                                        in_submenu3 = False
-                                        in_submenu_buy3 = False
-                                        in_menu_item = False
-                                        in_menu_weapon = False
-                                        in_menu_armor = False
-                                        in_menu_helmet = False
-                                        in_menu_shield = False
-                                        in_menu_spell = False
+                                        # in_submenu3 = False
+                                        # in_submenu_buy3 = False
+                                        # in_menu_item = False
+                                        # in_menu_weapon = False
+                                        # in_menu_armor = False
+                                        # in_menu_helmet = False
+                                        # in_menu_shield = False
+                                        # in_menu_spell = False
 
                                     else:
                                         print("You can't afford that!")
-                                        in_submenu3 = False
-                                        in_submenu_buy3 = False
-                            in_submenu3 = False
-                            in_submenu_buy3 = False
+                                        # in_submenu3 = False
+                                        # in_submenu_buy3 = False
+                            # in_submenu3 = False
+                            # in_submenu_buy3 = False
 
 
         else:
@@ -3854,13 +3840,18 @@ def func_use(gear,player_gear_inv):
 
                                         func_check_player_dead()
 
-                                    if item.name == eaten_item and item.amount > 1:
-                                        has_item_multiple = True
+                                    if item.name == eaten_item:
                                         item.amount -= 1
-                                    if has_item_multiple == False:
-                                        for item in inventory:
-                                            if item.name == eaten_item:
-                                                inventory.remove(item)
+                                        if item.amount <= 0:
+                                            inventory.remove(item)
+
+                                    # if item.name == eaten_item and item.amount > 1:
+                                    #     has_item_multiple = True
+                                    #     item.amount -= 1
+                                    # if has_item_multiple == False:
+                                    #     for item in inventory:
+                                    #         if item.name == eaten_item:
+                                    #             inventory.remove(item)
                                     break
 
                                 if can_use == False:
@@ -4292,7 +4283,6 @@ def func_move_cursor(is_up):
             menu_cursor_pos += 1
         if dev_mode >= 4:
             print(menu_cursor_pos)
-
 
 def func_move_combat_cursor(is_up):
     global combat_cursor_pos
@@ -6641,34 +6631,34 @@ while game_start == 1:
 
                                                                                                                         if dialouge_option.is_buy_weapon == True:
                                                                                                                             func_shop(weapon,npc.npc_weapon_inventory)
-                                                                                                                            in_submenu2 = False
-                                                                                                                            in_submenu_talk2 = False
+                                                                                                                            # in_submenu2 = False
+                                                                                                                            # in_submenu_talk2 = False
                                                                                                                             # break
                                                                                                                         if dialouge_option.is_buy_armor == True:
                                                                                                                             func_shop(armor,npc.npc_armor_inventory)
-                                                                                                                            in_submenu2 = False
-                                                                                                                            in_submenu_talk2 = False
+                                                                                                                            # in_submenu2 = False
+                                                                                                                            # in_submenu_talk2 = False
                                                                                                                             break
                                                                                                                         if dialouge_option.is_buy_helmet == True:
                                                                                                                             func_shop(helmet,npc.npc_helmet_inventory)
-                                                                                                                            in_submenu2 = False
-                                                                                                                            in_submenu_talk2 = False
+                                                                                                                            # in_submenu2 = False
+                                                                                                                            # in_submenu_talk2 = False
                                                                                                                             break
                                                                                                                         if dialouge_option.is_buy_shield == True:
                                                                                                                             func_shop(armor,npc.npc_shield_inventory)
-                                                                                                                            in_submenu2 = False
-                                                                                                                            in_submenu_talk2 = False
+                                                                                                                            # in_submenu2 = False
+                                                                                                                            # in_submenu_talk2 = False
                                                                                                                             break
 
                                                                                                                         if dialouge_option.is_buy_item == True:
                                                                                                                             func_shop(item,npc.npc_inventory)
-                                                                                                                            in_submenu2 = False
-                                                                                                                            in_submenu_talk2 = False
+                                                                                                                            # in_submenu2 = False
+                                                                                                                            # in_submenu_talk2 = False
                                                                                                                             break
                                                                                                                         if dialouge_option.is_buy_spell == True:
                                                                                                                             func_shop(spell,npc.npc_spell_inventory)
-                                                                                                                            in_submenu2 = False
-                                                                                                                            in_submenu_talk2 = False
+                                                                                                                            # in_submenu2 = False
+                                                                                                                            # in_submenu_talk2 = False
                                                                                                                             break
 
                                                                                                                         if dialouge_option.is_talk == True:

@@ -67,6 +67,7 @@ class enemy_stats:
         self.enemy_sprite = spr_no_sprite
         self.status_effect_list = []
 
+        self.is_active = False
         self.print_name = (Fore.RED + Style.DIM + self.name + Style.RESET_ALL)
 
         if self.attribute == "fire":
