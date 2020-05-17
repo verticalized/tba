@@ -36,13 +36,13 @@ from party_member_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "1.8.4"
+version = "1.9"
 
-dev_mode = 1
+dev_mode = 0
 
 grid_mode = 0
 
-toggle_music = 0
+toggle_music = 1
 
 tick_delay_time = 100
 
@@ -920,6 +920,13 @@ def func_choose_music():
 
 ##############################--GUI / GRAPHICS FUNCTIONS--#################################
 
+def func_blit_enemy_list(gui_val):
+    list_object_number = 0
+    for enemy_stats in current_enemies:
+        list_object_number += 1
+        blit_text = myfont.render(enemy_stats.name, False, (0, 0, 0))
+        win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
 def func_blit_list(list_object,list,gui_val,is_stackable):
     list_object_number = 0
     for list_object in list:
@@ -1203,7 +1210,7 @@ def func_blit_title(title_string,gui_val):
 ##############################--MAIN GRAPHICS FUNCTION--################################
 #########################################################################################
 
-def func_refresh_pygame(battle_intro):
+def func_refresh_pygame(battle_intro,animation):
     global grid_x
     global grid_y
     global grid_mode
@@ -1335,7 +1342,6 @@ def func_refresh_pygame(battle_intro):
         func_blit_title("Battle:",1)
 
 
-
         if in_submenu_cast_combat == True:
 
             pygame.draw.rect(win_map, (100,100,100), (0, 0, 200, 500))
@@ -1368,7 +1374,8 @@ def func_refresh_pygame(battle_intro):
             pygame.draw.rect(win_map, (100,100,100), (200, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (210,10, 180, 480))
 
-            func_blit_list(enemy_stats,current_enemies,2,False)
+
+            func_blit_enemy_list(2)
 
             func_blit_combat_cursor(2)
             func_blit_title("Target:",2)
@@ -1796,7 +1803,29 @@ def func_refresh_pygame(battle_intro):
 
     func_blit_HUD(1)
     func_blit_enemy_HUD(1)
-    func_blit_player_damage(1,32,blit_player_damage_amount)
+    # func_blit_player_damage(1,32,blit_player_damage_amount)
+
+    if animation != 0:
+        frame_count = 1
+        while frame_count < 5:
+            pygame.time.delay(tick_delay_time)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_start = 0
+                    battle_intro = False
+                    break
+
+            if animation == 1:
+                for enemy_stats in current_enemies:
+                    enemy_pos = current_enemies.index(enemy_stats) + 1
+                    if enemy_stats.is_active == True:
+                        print(str(frame_count))
+                        win_map.blit(enemy_stats.cast_sprite[frame_count], ( ((cx-256) + ((enemy_pos+1)*128)), ((cy) + ((1)*32)) ) )
+                        frame_count += 1
+
+
+            pygame.display.update()
+
     pygame.display.update()
 
 #########################################################################################
@@ -2152,7 +2181,7 @@ def func_get_target():
             pygame.time.delay(tick_delay_time)
 
             func_check_level()
-            func_refresh_pygame(False)
+            func_refresh_pygame(False,0)
 
 
 
@@ -2850,10 +2879,11 @@ def func_enemy_status_check():
         print(enemy_stats.name + " is active")
         if enemy_stats.is_active == True:
             combat_wait_count = 0
-            while combat_wait_count < 100:
+            while combat_wait_count < 2:
                 combat_wait_count += 1
-                func_refresh_pygame(False)
-            if combat_wait_count >= 100:
+                func_refresh_pygame(False,1)
+
+            if combat_wait_count >= 2:
                 enemy_stats.is_active = False
 
         if len(enemy_stats.status_effect_list) == 0:
@@ -3412,7 +3442,7 @@ def func_use_combat(gear,player_gear_inv):
         pygame.time.delay(tick_delay_time)
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
         for event in pygame.event.get():
@@ -3528,7 +3558,7 @@ def func_shop(gear,npc_gear_inv):
                 pygame.time.delay(tick_delay_time)
 
                 func_check_level()
-                func_refresh_pygame(False)
+                func_refresh_pygame(False,0)
 
 
                 for event in pygame.event.get():
@@ -3713,7 +3743,7 @@ def func_sell(gear,player_gear_inv):
         pygame.time.delay(tick_delay_time)
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
         for event in pygame.event.get():
@@ -3778,7 +3808,7 @@ def func_use(gear,player_gear_inv):
         pygame.time.delay(tick_delay_time)
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
 
@@ -3908,7 +3938,7 @@ def func_cast(gear,player_gear_inv):
         pygame.time.delay(tick_delay_time)
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
 
@@ -4005,7 +4035,7 @@ def func_drop(gear,player_gear_inv):
         pygame.time.delay(tick_delay_time)
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
 
@@ -4352,7 +4382,7 @@ def func_cook(gear,player_gear_inv):
         pygame.time.delay(tick_delay_time)
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
 
@@ -4499,7 +4529,7 @@ def func_equip(gear,player_gear_inv,current_gear):
 
 
         func_check_level()
-        func_refresh_pygame(False)
+        func_refresh_pygame(False,0)
 
 
 
@@ -4952,7 +4982,6 @@ def func_place_tile(relative_xpos,relative_ypos):
             func_scene_gen_args(scene_type)
             break
 
-
 def func_check_tile_exists(relative_xpos,relative_ypos):
     check_location_found = False
     for scene_type in all_scene_types:
@@ -4962,7 +4991,6 @@ def func_check_tile_exists(relative_xpos,relative_ypos):
     if check_location_found == False:
         if steps_z <= -1000:
             func_place_tile(relative_xpos,relative_ypos)
-
 
 def player_position_check():
 
@@ -5356,8 +5384,6 @@ def location_desc():
         print("above you is " + scene_type.name + "")
         sleep(sleep_time_fast)
 
-
-
 #######################--- QUESTS ---#######################
 
 def func_check_quest_items():
@@ -5370,7 +5396,6 @@ def func_check_quest_items():
                         if quest.finished_message_displayed == False:
                             print("you have collected the " + quest.quest_item_name + ", " + quest.name + " is ready to turn in!")
                             quest.finished_message_displayed = True
-
 
 ##########--pre game stat calcutions--#########
 
@@ -5428,7 +5453,7 @@ while game_start == 1:
     func_check_level()
     player_position_check()
 
-    func_refresh_pygame(False)
+    func_refresh_pygame(False,0)
 
     if has_moved == True or in_fight == True:
         step_counter += 1
@@ -5532,9 +5557,9 @@ while game_start == 1:
             if dev_mode >= 1:
                 print("playing battle intro")
             if npc_fight == False:
-                func_refresh_pygame(True)
+                func_refresh_pygame(True,0)
             else:
-                func_refresh_pygame(False)
+                func_refresh_pygame(False,0)
             npc_fight = False
             if dev_mode >= 1:
                 print("battle intro finished")
@@ -5566,7 +5591,7 @@ while game_start == 1:
                 pygame.time.delay(tick_delay_time)
 
                 func_check_level()
-                func_refresh_pygame(False)
+                func_refresh_pygame(False,0)
 
 
 
@@ -5609,7 +5634,7 @@ while game_start == 1:
                                     pygame.time.delay(tick_delay_time)
 
                                     func_check_level()
-                                    func_refresh_pygame(False)
+                                    func_refresh_pygame(False,0)
 
 
 
@@ -5692,7 +5717,7 @@ while game_start == 1:
     player1.status_effect_list.clear()
     func_check_stat_bonus()
     func_check_level()
-    func_refresh_pygame(False)
+    func_refresh_pygame(False,0)
 
 
 
@@ -6169,7 +6194,7 @@ while game_start == 1:
                     pygame.time.delay(tick_delay_time)
 
                     func_check_level()
-                    func_refresh_pygame(False)
+                    func_refresh_pygame(False,0)
 
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
@@ -6228,7 +6253,7 @@ while game_start == 1:
                                         pygame.time.delay(tick_delay_time)
 
                                         func_check_level()
-                                        func_refresh_pygame(False)
+                                        func_refresh_pygame(False,0)
 
                                         for event in pygame.event.get():
                                             if event.type == pygame.QUIT:
@@ -6306,7 +6331,7 @@ while game_start == 1:
                                         pygame.time.delay(tick_delay_time)
 
                                         func_check_level()
-                                        func_refresh_pygame(False)
+                                        func_refresh_pygame(False,0)
 
 
 
@@ -6361,7 +6386,7 @@ while game_start == 1:
                                         pygame.time.delay(tick_delay_time)
 
                                         func_check_level()
-                                        func_refresh_pygame(False)
+                                        func_refresh_pygame(False,0)
 
 
 
@@ -6567,7 +6592,7 @@ while game_start == 1:
                                         pygame.time.delay(tick_delay_time)
 
                                         func_check_level()
-                                        func_refresh_pygame(False)
+                                        func_refresh_pygame(False,0)
 
 
 
@@ -6706,7 +6731,7 @@ while game_start == 1:
                                                         pygame.time.delay(tick_delay_time)
 
                                                         func_check_level()
-                                                        func_refresh_pygame(False)
+                                                        func_refresh_pygame(False,0)
 
 
 
@@ -6765,7 +6790,7 @@ while game_start == 1:
                                                                                         pygame.time.delay(tick_delay_time)
 
                                                                                         func_check_level()
-                                                                                        func_refresh_pygame(False)
+                                                                                        func_refresh_pygame(False,0)
 
 
 
@@ -6863,7 +6888,7 @@ while game_start == 1:
                                                                                                                                 pygame.time.delay(tick_delay_time)
 
                                                                                                                                 func_check_level()
-                                                                                                                                func_refresh_pygame(False)
+                                                                                                                                func_refresh_pygame(False,0)
 
 
 

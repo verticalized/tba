@@ -31,6 +31,9 @@ spr_air_ele = pygame.image.load("sprites/enemy/air_ele1.png")
 spr_water_ele = pygame.image.load("sprites/enemy/water_ele1.png")
 spr_earth_ele = pygame.image.load("sprites/enemy/earth_ele1.png")
 
+spr_cast1 = [pygame.image.load("sprites/combat_animations/spell_cast1.png"),pygame.image.load("sprites/combat_animations/spell_cast2.png"),pygame.image.load("sprites/combat_animations/spell_cast3.png"),pygame.image.load("sprites/combat_animations/spell_cast4.png"),pygame.image.load("sprites/combat_animations/spell_cast5.png"),]
+
+
 
 class enemy_stats:
     def __init__(self, name, level, xp, hp, maxhp, mp, maxmp, magic, strength, attack, defence, gp, attribute, weakness, spellbook, drop_table_items, drop_table_weapons, drop_table_armor, drop_table_helmets, drop_table_shields, status_effect, sprite_variable):
@@ -66,6 +69,7 @@ class enemy_stats:
         self.sprite_variable = sprite_variable
         self.enemy_sprite = spr_no_sprite
         self.status_effect_list = []
+        self.cast_sprite = spr_cast1
 
         self.is_active = False
         self.print_name = (Fore.RED + Style.DIM + self.name + Style.RESET_ALL)
