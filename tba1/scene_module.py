@@ -408,6 +408,8 @@ misty_forest_15 = scene_type(20,3,0,"the misty forest","","",False,False,False,F
 
 # Dismurth
 
+#(self, xpos, ypos, zpos, name, temp, light, safe, can_fish, can_cook, can_craft, can_steal, passable, treasure, difficulty, biome, tile_type, has_tp, indoors, impass_msg, flavour, scene_inventory, scene_weapon_inventory, scene_armor_inventory, scene_helmet_inventory, scene_shield_inventory,use_gen):
+
 dismurth_monument_a = scene_type(7,0,0,"dwarf monument","","",True,True,False,False,True,True,False,0,"town","",False,False,"","This large monuments mark the entrance to the dismurth tunnel, it is a statue of a dwarf holding a book...",[],[],[],[],[],use_gen=False)
 dismurth_monument_b = scene_type(5,0,0,"elf monument","","",True,True,False,False,True,True,False,0,"town","",False,False,"","This large monuments mark the entrance to the dismurth tunnel, it is a statue of an elf holding a sword...",[],[],[],[],[],use_gen=False)
 
@@ -418,7 +420,7 @@ dismurth_gates = scene_type(6,3,0,"the town gates of Dismurth","","",True,False,
 dismurth_square = scene_type(6,2,0,"the town square of Dismurth","","",True,False,False,False,True,True,False,0,"town","",False,False,"","",[],[],[],[],[],use_gen=False)
 dismurth_market = scene_type(6,1,0,"Dismurth markets","","",True,False,False,False,True,True,False,0,"town","",False,False,"","",[],[],[],[],[],use_gen=False)
 dismurth_tavern = scene_type(5,1,0,"Dismurth tavern","","",True,False,False,False,True,True,False,0,"town","",False,True,"","",[],[],[],[],[],use_gen=False)
-dismurth_tunnel_entrance = scene_type(6,0,0,"the entrance to the Dismurth Tunnel","","",True,True,False,False,True,True,False,0,"road","",False,False,"","",[],[],[],[],[],use_gen=False)
+dismurth_dungeon_entrance = scene_type(6,0,0,"the entrance to the Dungeon","","",True,True,False,False,True,True,False,0,"road","",True,True,"","",[],[],[],[],[],use_gen=False)
 dismurth_tower_1f = scene_type(7,1,1,"the tower of Dismurth's first floor","","",True,False,False,False,True,True,False,0,"town","",True,True,"","the tower walls are lined with more bookshelves",[],[],[],[],[],use_gen=False)
 dismurth_tower_gf = scene_type(7,1,0,"the tower of Dismurth's ground floor","","",True,False,False,False,True,True,False,0,"town","",True,True,"","the tower walls are lined with bookshelves, there are many large runestones in the middle of the room",[],[],[],[],[],use_gen=False)
 dismurth_smith = scene_type(7,2,0,"the Blacksmith of Dismurth","","",True,False,False,False,True,True,False,0,"town","",False,True,"","*a young man is working hard at the furnace*",[],[],[],[],[],use_gen=False)

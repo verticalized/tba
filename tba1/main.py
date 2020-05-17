@@ -55,7 +55,7 @@ restock_ticks = 0
 
 steps_x = 0
 steps_y = 0
-steps_z = -1000
+steps_z = 0
 
 ###########################################
 
@@ -6139,9 +6139,9 @@ while game_start == 1:
                         new_floor_zpos = scene_type.zpos - 1
                         func_tp(0,0,new_floor_zpos)
 
-                    if dev_mode >= 1:
-                        if scene_type.xpos == 0 and scene_type.ypos == 0 and scene_type.zpos == 0:
-                            func_tp(0,0,-1000)#dev area tp
+
+                    if scene_type.xpos == 6 and scene_type.ypos == 0 and scene_type.zpos == 0:
+                        func_tp(0,0,-1000)#dev area tp
 
                     #northern cave entrance
                     if scene_type.xpos == 3 and scene_type.ypos == 1 and scene_type.zpos == 0:
