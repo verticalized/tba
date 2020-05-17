@@ -37,10 +37,12 @@ dialouge_talk = dialouge_option("heard any news?",False,False,False,False,False,
 dialouge_gf = dialouge_option("prepare to die!",False,False,False,False,False,False,False,False,False,True,False,False,"0",False)
 dialouge_attack = dialouge_option("attack",False,False,False,False,False,False,False,False,False,True,False,False,"0",False)
 dialouge_give = dialouge_option("give me something!",False,False,False,False,False,False,False,False,False,False,True,False,"0",False)
-dialouge_quest1 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Cow Elite Killer",False)
+dialouge_quest1 = dialouge_option("quests",False,False,False,False,False,False,False,False,False,False,False,True,"Cow Elite Killer",False)
 dialouge_quest2 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"The Bandit Menace",False)
 dialouge_quest3 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Talk to Shmurlitz",False)
 dialouge_quest4 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Travel to Sorrlund",False)
+dialouge_quest5 = dialouge_option("do you have a quest?",False,False,False,False,False,False,False,False,False,False,False,True,"Chop Wood",False)
+
 
 
 dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,False,False,False,False,False,False,"0",False)
@@ -63,7 +65,7 @@ class npc:
         self.talk_text = talk_text
 
         self.dialouge_options_list = []
-        self.dialouge_options_list.append(dialouge_quit)
+        # self.dialouge_options_list.append(dialouge_quit)
         self.combat_enemy_list = []
         self.quest_list = []
 

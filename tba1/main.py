@@ -14,7 +14,11 @@ import pygame
 pygame.mixer.pre_init() #44100, 16, 2, 4096
 pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
-myfont = pygame.font.SysFont('MS Comic Sans', 21) # you have to call this at the start if you want to use fonts
+myfont = pygame.font.SysFont('candara', 16, bold=True, italic=False) # you have to call this at the start if you want to use fonts
+gridfont = pygame.font.SysFont('MS Comic Sans', 16) # you have to call this at the start if you want to use fonts
+
+fontlist = pygame.font.get_fonts()
+print(fontlist)
 
 pygame.key.set_repeat(0,1) # held key repeat timer
 
@@ -49,11 +53,16 @@ check_for_combat = True
 restock_shops = False
 restock_ticks = 0
 
-steps_x = 6
-steps_y = 2
-steps_z = 0
+steps_x = 0
+steps_y = 0
+steps_z = -1000
 
 ###########################################
+
+step_counter = 8
+step_counter2 = 5
+
+step_counter_max = 10
 
 prev_x = 6
 prev_y = 2
@@ -367,10 +376,11 @@ class quest:
         self.player_kill_count = 0
         self.started = False
         self.finished = False
+        self.finished_message_displayed = False
         self.reward_collected = False
         self.quest_info = ""
         if quest_collect_item == True and quest_item_amount > 1:
-            self.quest_info += "\nyou must find" + str(quest_item_amount) + " x " + quest_item_name
+            self.quest_info += "\nyou must find " + str(quest_item_amount) + " x " + quest_item_name
         if quest_collect_item == True and quest_item_amount == 1:
             self.quest_info += "\nyou must find " + quest_item_name
 
@@ -389,7 +399,8 @@ class quest:
 quest_1 = quest("Cow Elite Killer","Prove your combat ability.", xp = 50, gp = 80, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = True, quest_enemy_name = "cow", quest_kill_amount = 1, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
 quest_2 = quest("The Bandit Menace","Eliminate the local bandit population.", xp = 200, gp = 200, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = True, quest_enemy_name = "bandit", quest_kill_amount = 3, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
 quest_3 = quest("Talk to Shmurlitz","Talk to Shmurlitz Durlitz, the town doctor.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Shmurlitz", quest_npc_lname = "Durlitz")
-quest_4 = quest("Travel to Sorrlund","Travel down the high road to Sorrlund.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Shmurlitz", quest_npc_lname = "Durlitz")
+quest_4 = quest("Travel to Sorrlund","Travel down the high road to Sorrlund.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Jim", quest_npc_lname = "Greenmichs")
+quest_5 = quest("Chop Wood","Cut down some trees for Jim.", xp = 50, gp = 120, reward_list = [certificate_of_passage], quest_collect_item = True, quest_item_name = "wood", quest_item_amount = 10, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
 
 
 # place npcs in the world
@@ -450,6 +461,7 @@ npc_dismurth_smith.dialouge_options_list.append(dialouge_buy_shield)
 
 npc_wizard_jim.dialouge_options_list.append(dialouge_talk)
 npc_wizard_jim.dialouge_options_list.append(dialouge_buy_spell)
+npc_wizard_jim.dialouge_options_list.append(dialouge_quest5)
 
 npc_wizard_tilly.dialouge_options_list.append(dialouge_talk)
 npc_wizard_tilly.dialouge_options_list.append(dialouge_buy_weapon)
@@ -464,6 +476,7 @@ npc_sheep.dialouge_options_list.append(dialouge_attack)
 
 npc_doctor.dialouge_options_list.append(dialouge_talk)
 npc_doctor.dialouge_options_list.append(dialouge_heal)
+npc_doctor.dialouge_options_list.append(dialouge_quest4)
 
 ####################-NPC COMBAT ENCOUNTERS--#########################
 
@@ -852,6 +865,7 @@ spr_player = pygame.image.load("player1.png")
 spr_chest = pygame.image.load("chest1.png")
 spr_cave = pygame.image.load("cave1.png")
 spr_boulder = pygame.image.load("boulder1.png")
+spr_brick_wall = pygame.image.load("brickwall1.png")
 
 ################################################################
 
@@ -1227,6 +1241,8 @@ def func_refresh_pygame(battle_intro):
 
             if scene_type.passable == False and scene_type.biome == "grassy":
                 win_map.blit(spr_boulder, ( ((cx-18) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+            if scene_type.passable == False and scene_type.biome == "dungeon":
+                win_map.blit(spr_brick_wall, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
 
 
 
@@ -1240,19 +1256,35 @@ def func_refresh_pygame(battle_intro):
 
     win_map.blit(spr_player,(cx-16, cy-16,))
     if grid_mode >= 1:
-        grid_x = -20
-        grid_y = -20
-        while grid_x < 20 and grid_y < 20:
-            if grid_x < 20:
+        grid_x = -30
+        grid_y = -30
+        while grid_x < 30 and grid_y < 30:
+            if grid_x < 30:
+                c1 = 100+(grid_x*5)
+                if c1 >= 255:
+                    c1 = 255
+                if c1 <= 1:
+                    c1 = 1
+                c2 = 100+(grid_y*5)
+                if c2 >= 255:
+                    c2 = 255
+                if c2 <= 1:
+                    c2 = 1
+                c3 = 61 + grid_x + grid_y
+                if c3 >= 255:
+                    c3 = 255
+                if c3 <= 1:
+                    c3 = 1
 
-                pygame.draw.rect(win_map, (100+(grid_x*5),100+(grid_y*5),100), ( ((cx-16) + ((grid_x - steps_x)*(32))), ((cy-16) + ((grid_y - steps_y)*(32))), map_tile_width, (map_tile_height//2) - 3))
-                blit_grid_coords = myfont.render(str(grid_x) + "," + str(grid_y), False, (0, 0, 0))
+                grid_rgb = ( c1, c2, c3)
+                pygame.draw.rect(win_map, grid_rgb, ( ((cx-16) + ((grid_x - steps_x)*(32))), ((cy-16) + ((grid_y - steps_y)*(32))), map_tile_width, (map_tile_height//2) - 3))
+                blit_grid_coords = gridfont.render(str(grid_x) + "," + str(grid_y), False, (0, 0, 0))
                 win_map.blit(blit_grid_coords, ( ((cx-16) + ((grid_x - steps_x)*(32))), ((cy-16) + ((grid_y - steps_y)*(32))) )  )
                 grid_x += 1
-            if grid_x == 20:
-                grid_x = -20
+            if grid_x == 30:
+                grid_x = -30
                 grid_y +=1
-                if grid_y >= 20:
+                if grid_y >= 30:
                     break
 
 
@@ -1930,7 +1962,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
-                        loot_chance_item = random.randint(0,1)
+                        loot_chance_item = random.randint(0,10)
                         if loot_chance_item == 1:
                             for ground_item in all_ground_game_items:
                                 item_dropped = False
@@ -1968,7 +2000,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_weapon == 1:
                 if len(enemy_stats.drop_table_weapons) != 0:
                     for weapon in enemy_stats.drop_table_weapons:
-                        loot_chance_weapon = random.randint(0,1)
+                        loot_chance_weapon = random.randint(0,10)
                         if loot_chance_weapon == 1:
                             for ground_weapon in all_ground_game_weapons:
                                 weapon_dropped = False
@@ -2005,7 +2037,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_armor == 1:
                 if len(enemy_stats.drop_table_armor) != 0:
                     for armor in enemy_stats.drop_table_armor:
-                        loot_chance_armor = random.randint(0,1)
+                        loot_chance_armor = random.randint(0,10)
                         if loot_chance_armor == 1:
                             for ground_armor in all_ground_game_armor:
                                 armor_dropped = False
@@ -2081,7 +2113,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_shield == 1:
                 if len(enemy_stats.drop_table_shields) != 0:
                     for shield in enemy_stats.drop_table_shields:
-                        loot_chance_shield = 1
+                        loot_chance_shield = random.randint(0,10)
                         if loot_chance_shield == 1:
                             for ground_shield in all_ground_game_shields:
                                 shield_dropped = False
@@ -3616,6 +3648,7 @@ def func_shop(gear,npc_gear_inv):
                                                         break
 
                                         print("\nthanks, enjoy your " + gear.name + "\n")
+                                        func_check_quest_items()
                                         # in_submenu3 = False
                                         # in_submenu_buy3 = False
                                         # in_menu_item = False
@@ -3725,7 +3758,6 @@ def func_sell(gear,player_gear_inv):
                             # in_submenu4 = False
                             # in_submenu_sell4 = False
                             break
-
 
 def func_use(gear,player_gear_inv):
     global time
@@ -3856,7 +3888,7 @@ def func_use(gear,player_gear_inv):
 
                                 if can_use == False:
                                     "you try to use " + item.print_name + ", but nothing interesting happens"
-
+                                func_check_quest_items()
                         break
 
 def func_cast(gear,player_gear_inv):
@@ -4859,7 +4891,115 @@ def func_choose_input_option():
 
 #######################---PLAYER LOCATION---#######################
 
+def func_scene_gen_args(gen_scene_type):
+    free_tiles = []
+    for scene_type in all_scene_types:
+        if scene_type.use_gen == True and scene_type.zpos == steps_z:
+            free_tiles.append(scene_type)
+    tiles_left = len(free_tiles)
+    print(str(tiles_left))
+    del free_tiles[:]
+
+    tile_wall_chance = random.randint(1,step_counter)
+    # if tiles_left <= 50:
+    #     tile_wall_chance = 1
+    if steps_x > 8 or steps_y > 8 or steps_x < -8 or steps_y < -8:
+        tile_wall_chance = 1
+
+
+    if tile_wall_chance == 1:
+
+        #when there is less than 50 tiles left all new tiles will become walls
+        gen_scene_type.passable = False
+
+
+    if tile_wall_chance != 1:
+        tile_safe_chance = random.randint(1,3)
+        tile_treasure_chance = random.randint(1,10)
+        tile_stairs_chance = random.randint(1,10)
+
+        if tiles_left <= 60:
+            tile_stairs_chance = 1
+
+        if tile_safe_chance == 1:
+            gen_scene_type.safe = False
+
+        if tile_stairs_chance == 1:
+            tp_counter = 0
+            for scene_type in all_scene_types:
+                if scene_type.zpos == steps_z:
+                    if scene_type.has_tp == False:
+                        tp_counter += 1
+
+            if tp_counter == 0:
+                gen_scene_type.safe = True
+                gen_scene_type.has_tp = True
+                gen_scene_type.treasure = False
+
+        if tile_treasure_chance == 1:
+            gen_scene_type.has_tp == False
+            gen_scene_type.safe = True
+            gen_scene_type.treasure = True
+
+def func_place_tile(relative_xpos,relative_ypos):
+    for scene_type in all_scene_types:
+        if scene_type.use_gen == True:
+            scene_type.ypos = steps_y + relative_ypos
+            scene_type.xpos = steps_x + relative_xpos
+            scene_type.zpos = steps_z
+
+            scene_type.use_gen = False
+            func_scene_gen_args(scene_type)
+            break
+
+
+def func_check_tile_exists(relative_xpos,relative_ypos):
+    check_location_found = False
+    for scene_type in all_scene_types:
+        if steps_y + relative_ypos == scene_type.ypos and steps_x + relative_xpos == scene_type.xpos and steps_z == scene_type.zpos:
+            check_location_found = True
+            break
+    if check_location_found == False:
+        if steps_z <= -1000:
+            func_place_tile(relative_xpos,relative_ypos)
+
+
 def player_position_check():
+
+    #los
+    func_check_tile_exists(0,0)
+    func_check_tile_exists(1,-1)
+    func_check_tile_exists(-1,1)
+
+    func_check_tile_exists(0,1)
+    func_check_tile_exists(0,-1)
+    func_check_tile_exists(1,1)
+
+    func_check_tile_exists(1,0)
+    func_check_tile_exists(-1,0)
+    func_check_tile_exists(-1,-1)
+
+    func_check_tile_exists(2,0)
+    func_check_tile_exists(2,1)
+    func_check_tile_exists(2,-1)
+
+    func_check_tile_exists(0,2)
+    func_check_tile_exists(1,2)
+    func_check_tile_exists(-1,2)
+
+
+    func_check_tile_exists(-2,0)
+    func_check_tile_exists(-2,1)
+    func_check_tile_exists(-2,-1)
+
+    func_check_tile_exists(0,-2)
+    func_check_tile_exists(1,-2)
+    func_check_tile_exists(-1,-2)
+
+
+
+
+
     location_found = False
     for scene_type in all_scene_types:
         if steps_y == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
@@ -4876,6 +5016,7 @@ def player_position_check():
             location.append(solid_cave_wall)
 
 def player_north_check():
+
     location_found = False
     for scene_type in all_scene_types:
         if steps_y-1 == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
@@ -4904,6 +5045,7 @@ def player_north_check():
             location_north.append(sky)
 
 def player_south_check():
+
     location_found = False
     for scene_type in all_scene_types:
         if steps_y+1 == scene_type.ypos and steps_x == scene_type.xpos and steps_z == scene_type.zpos:
@@ -4932,6 +5074,7 @@ def player_south_check():
             location_south.append(sky)
 
 def player_east_check():
+
     location_found = False
     for scene_type in all_scene_types:
         if steps_y == scene_type.ypos and steps_x+1 == scene_type.xpos and steps_z == scene_type.zpos:
@@ -4961,6 +5104,7 @@ def player_east_check():
             location_east.append(sky)
 
 def player_west_check():
+
     location_found = False
     for scene_type in all_scene_types:
         if steps_y == scene_type.ypos and steps_x-1 == scene_type.xpos and steps_z == scene_type.zpos:
@@ -5212,6 +5356,22 @@ def location_desc():
         print("above you is " + scene_type.name + "")
         sleep(sleep_time_fast)
 
+
+
+#######################--- QUESTS ---#######################
+
+def func_check_quest_items():
+    for quest in quest_list:
+        if quest.started == True and quest.quest_collect_item == True:
+            for item in inventory:
+                if item.name == quest.quest_item_name:
+                    if item.amount >= quest.quest_item_amount:
+                        quest.finished = True
+                        if quest.finished_message_displayed == False:
+                            print("you have collected the " + quest.quest_item_name + ", " + quest.name + " is ready to turn in!")
+                            quest.finished_message_displayed = True
+
+
 ##########--pre game stat calcutions--#########
 
 for player_stats in players:
@@ -5261,7 +5421,7 @@ while game_start == 1:
 
     pygame.time.delay(tick_delay_time)
 
-
+    func_check_quest_items()
     func_shop_restock()
     player_keys_check()
     func_check_stat_bonus()
@@ -5271,6 +5431,16 @@ while game_start == 1:
     func_refresh_pygame(False)
 
     if has_moved == True or in_fight == True:
+        step_counter += 1
+        if step_counter >= step_counter_max:
+            step_counter = 1
+            step_counter2 += 1
+            step_counter_max = 12
+            if step_counter2 >= 12:
+                step_counter_max = 15 + random.randint(1,5)
+                step_counter2 = 1
+
+
         if npc_fight == False and check_for_combat == True:
             for scene_type in location:
                 if scene_type.safe == False:
@@ -5965,6 +6135,9 @@ while game_start == 1:
 
             if event.key == pygame.K_r:
                 for scene_type in location:
+                    if scene_type.zpos <= -1000 and scene_type.xpos != 0 and scene_type.ypos != 0:
+                        new_floor_zpos = scene_type.zpos - 1
+                        func_tp(0,0,new_floor_zpos)
 
                     if dev_mode >= 1:
                         if scene_type.xpos == 0 and scene_type.ypos == 0 and scene_type.zpos == 0:
@@ -6282,6 +6455,7 @@ while game_start == 1:
                                                                         item.amount = pickedup_amount
                                                                 break
                                                     scene_type.scene_inventory.remove(ground_item)
+                                                    func_check_quest_items()
                                                     break
 
                                                 for ground_weapon in scene_type.scene_weapon_inventory:
@@ -6633,7 +6807,7 @@ while game_start == 1:
                                                                                                                             func_shop(weapon,npc.npc_weapon_inventory)
                                                                                                                             # in_submenu2 = False
                                                                                                                             # in_submenu_talk2 = False
-                                                                                                                            # break
+                                                                                                                            break
                                                                                                                         if dialouge_option.is_buy_armor == True:
                                                                                                                             func_shop(armor,npc.npc_armor_inventory)
                                                                                                                             # in_submenu2 = False
@@ -6667,9 +6841,10 @@ while game_start == 1:
                                                                                                                             if npc.is_animal == False:
                                                                                                                                 print(npc.talk_text)
                                                                                                                                 for quest in quest_list:
-                                                                                                                                    if quest.quest_npc_fname == target_npc:
-                                                                                                                                        quest.finished = True
-                                                                                                                                        print(quest.name + " is ready to turn in!")
+                                                                                                                                    if quest.started == True and quest.quest_talk_npc == True:
+                                                                                                                                        if quest.quest_npc_fname == target_npc:
+                                                                                                                                            quest.finished = True
+                                                                                                                                            print(quest.name + " is ready to turn in!")
 
 
                                                                                                                         if dialouge_option.is_sell == True:
@@ -6711,6 +6886,7 @@ while game_start == 1:
                                                                                                                                             sfx_cursor_select.play()
                                                                                                                                             if menu_cursor_pos == 1:
                                                                                                                                                 func_sell(item,inventory)
+                                                                                                                                                func_check_quest_items()
                                                                                                                                                 # in_submenu3 = False
                                                                                                                                                 # in_submenu_sell3 = False
                                                                                                                                                 # # break
@@ -6775,8 +6951,22 @@ while game_start == 1:
                                                                                                                                     break
 
                                                                                                                                 if quest.name == dialouge_option.quest_name and quest.finished == True and quest.reward_collected == False:
+                                                                                                                                    if quest.quest_collect_item == True:
+                                                                                                                                        for item in inventory:
+                                                                                                                                            if item.name == quest.quest_item_name:
+                                                                                                                                                item.amount -= quest.quest_item_amount
+                                                                                                                                                if item.amount <= 0:
+                                                                                                                                                    inventory.remove(item)
+
                                                                                                                                     print(dialouge_option.quest_name + " completed!")
                                                                                                                                     print("Thankyou, " + player1.name + " here is your reward ")
+
+                                                                                                                                    if len(quest.reward_list) != 0:
+                                                                                                                                        for item in quest.reward_list:
+                                                                                                                                            inventory.append(item)
+                                                                                                                                            print("\nYou received a " + item.name)
+
+                                                                                                                                    print("\nGained " + str(quest.xp) + " xp and " + str(quest.gp) + " gp.")
                                                                                                                                     quest.reward_collected = True
                                                                                                                                     player1.xp += quest.xp
                                                                                                                                     player1.gp += quest.gp
