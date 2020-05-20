@@ -105,7 +105,7 @@ str_up_heal_aoe = spell("STR UP and heal aoe",5,5,50,False,5,"fire",70,10,1,"STR
 atk_up = spell("ATK UP",5,5,50,True,5,"fire",70,10,0,"ATK UP")
 atk_up_aoe = spell("ATK UP aoe",5,5,50,True,5,"fire",70,10,1,"ATK UP aoe")
 atk_up_heal = spell("ATK UP and heal",5,5,50,False,5,"fire",70,11,0,"ATK UP and heal")
-atk_up_heal_aoe = spell("ATK UP and heal",5,5,50,False,5,"fire",70,11,1,"ATK UP and heal aoe")
+atk_up_heal_aoe = spell("ATK UP and heal aoe",5,5,50,False,5,"fire",70,11,1,"ATK UP and heal aoe")
 
 #### status 12 spells MGK UP
 mgk_up = spell("MGK UP",5,5,50,True,5,"fire",70,10,0,"MGK UP")
@@ -129,17 +129,17 @@ str_down_damage_aoe = spell("STR down and damage aoe",5,5,50,False,5,"fire",70,2
 
 #### status 21 spells ATK down 1
 atk_down = spell("ATK down",5,5,50,True,5,"fire",70,10,0,"ATK down")
-atk_down_damage = spell("ATK down and damage",5,5,50,False,5,"fire",70,21,0,"ATK down and damage")
+atk_down_damage = spell("ATK down aoe",5,5,50,True,5,"fire",70,21,0,"ATK down aoe")
 atk_down_damage = spell("ATK down and damage",5,5,50,False,5,"fire",70,21,0,"ATK down and damage")
 atk_down_damage_aoe = spell("ATK down and damage aoe",5,5,50,False,5,"fire",70,21,1,"ATK down and damage aoe")
 #### status 22 spells MGK down 1
 mgk_down = spell("MGK down",5,5,50,True,5,"fire",70,10,0,"MGK down")
-mgk_down_damage = spell("MGK down and damage",5,5,50,False,5,"fire",70,22,0,"MGK down and damage")
+mgk_down_damage = spell("MGK down aoe",5,5,50,True,5,"fire",70,22,0,"MGK down aoe")
 mgk_down_damage = spell("MGK down and damage",5,5,50,False,5,"fire",70,22,0,"MGK down and damage")
 mgk_down_damage_aoe = spell("MGK down and damage aoe",5,5,50,False,5,"fire",70,22,1,"MGK down and damage aoe")
 #### status 23 spells DEF down 1
 def_down = spell("DEF down",5,5,50,True,5,"fire",70,10,0,"DEF down")
-def_down_damage = spell("DEF down and damage",5,5,50,False,5,"fire",70,23,0,"DEF down and damage")
+def_down_damage = spell("DEF down aoe",5,5,50,True,5,"fire",70,23,0,"DEF down aoe")
 def_down_damage = spell("DEF down and damage",5,5,50,False,5,"fire",70,23,0,"DEF down and damage")
 def_down_damage_aoe = spell("DEF down and damage aoe",5,5,50,False,5,"fire",70,23,1,"DEF down and damage aoe")
 

@@ -2,8 +2,17 @@ import random
 from time import sleep
 from colorama import init
 from colorama import Fore, Back, Style
+import pygame
 
+pygame.init()
 init(autoreset=True)
+
+
+spr_npc_cow1 = pygame.image.load("cow1.png")
+spr_npc_sheep1 = pygame.image.load("sheep1.png")
+spr_npc_male1 = pygame.image.load("npc_m1.png")
+spr_npc_male2 = pygame.image.load("npc_m2.png")
+spr_npc_guard1 = pygame.image.load("npc_mg1.png")
 
 class dialouge_option:
     def __init__(self, text, is_quit, is_buy_item, is_buy_weapon, is_buy_armor, is_buy_helmet, is_buy_shield, is_buy_spell, is_sell, is_talk, is_assault, is_give, is_quest, quest_name, is_heal):
@@ -22,6 +31,7 @@ class dialouge_option:
         self.is_quest = is_quest #interprets dialouge option as player wanting a quest
         self.quest_name = quest_name
         self.is_heal = is_heal #etc...
+
 
 dialouge_buy_item = dialouge_option("buy item",False,True,False,False,False,False,False,False,False,False,False,False,"0",False)
 dialouge_buy_weapon = dialouge_option("buy weapons",False,False,True,False,False,False,False,False,False,False,False,False,"0",False)
@@ -50,7 +60,7 @@ dialouge_quit= dialouge_option("Goodbye",True,False,False,False,False,False,Fals
 all_npcs = []
 
 class npc:
-    def __init__(self, first_name, last_name, title, npc_desc, greeting, is_animal, race, gender, faction, attire, assault_dialouge,talk_text):
+    def __init__(self, first_name, last_name, title, npc_desc, greeting, is_animal, race, gender, faction, attire, assault_dialouge,talk_text,sprite_val):
         self.first_name = first_name
         self.last_name = last_name
         self.npc_desc = npc_desc
@@ -75,6 +85,21 @@ class npc:
         self.npc_armor_inventory = []
         self.npc_helmet_inventory = []
         self.npc_shield_inventory = []
+
+        self.sprite_val = sprite_val
+        self.npc_sprite = spr_npc_male1
+        if self.sprite_val == "m1":
+            self.npc_sprite = spr_npc_male1
+        if self.sprite_val == "m2":
+            self.npc_sprite = spr_npc_male2
+        if self.sprite_val == "g1":
+            self.npc_sprite = spr_npc_guard1
+        if self.sprite_val == "cow":
+            self.npc_sprite = spr_npc_cow1
+        if self.sprite_val == "sheep":
+            self.npc_sprite = spr_npc_sheep1
+
+
         self.is_dead = False
 
         all_npcs.append(self)
@@ -82,27 +107,27 @@ class npc:
 
 #########   TWO NPCS CANNOT HAVE THE SAME FIRST NAME !!!!   #############
 
-npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","I am a doctor")
+npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","I am a doctor","m1")
 
-npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","owwwweeeeeeee")
-npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","")
-npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","")
-npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof","")
-npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of magic...","woof!",True,"dog","cute","0","0","WOOF!","")
-npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof","")
+npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","owwwweeeeeeee","m2")
+npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","","g1")
+npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","","m1")
+npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof","","m1")
+npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of magic...","woof!",True,"dog","cute","0","0","WOOF!","","m1")
+npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof","","m1")
 
-npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof","")
-npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","")
+npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof","","m1")
+npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","","m1")
 
-npc_merchant_ollie = npc("Olliver","Zeddecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","")
-npc_merchant_dech = npc("Dechen","Kneepa","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","")
+npc_merchant_ollie = npc("Oliver","Zeddecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","","m1")
+npc_merchant_dech = npc("Dechen","Kneepa","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","","m1")
 
-npc_lib = npc("Lord","Quas","The mad","a man of many names","G'day",False,"human","man","0","fine clothes","oof","")
-npc_king = npc("Daniel","Geedorah","King","known as the crown ruler...","G'day",False,"human","man","0","royal clothes","oof","")
-npc_chris_cornwell = npc("Chris","Cornwell","Farmer","has a beautiful garden...","G'day",False,"human","man","0","farmer's clothes","oof","")
+npc_lib = npc("Lord","Quas","The mad","a man of many names","G'day",False,"human","man","0","fine clothes","oof","","m1")
+npc_king = npc("Daniel","Geedorah","King","known as the crown ruler...","G'day",False,"human","man","0","royal clothes","oof","","m1")
+npc_chris_cornwell = npc("Chris","Cornwell","Farmer","has a beautiful garden...","G'day",False,"human","man","0","farmer's clothes","oof","","m1")
 
 
-npc_cow = npc("cow","","","","moo",True,"cow","large","0","0","Moo!","")
-npc_sheep = npc("sheep","","","","baaaa",True,"sheep","wooley","0","0","Baa!","")
+npc_cow = npc("cow","","","","moo",True,"cow","large","0","0","Moo!","","cow")
+npc_sheep = npc("sheep","","","","baaaa",True,"sheep","wooley","0","0","Baa!","","sheep")
 
-npc_town_guard = npc("Joneses","Keeneye","Town Guard","Keeps an eye on the gate...","hello",False,"human","man","0","chain mail","Prepare to die, invader!","")
+npc_town_guard = npc("Joneses","Keeneye","Town Guard","Keeps an eye on the gate...","hello",False,"human","man","0","chain mail","Prepare to die, invader!","","g1")

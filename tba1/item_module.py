@@ -45,6 +45,9 @@ all_game_items.append(torch)
 woodcutting_axe = item(110,"woodcutting axe",80,False,False,False,False,False,0,"","")
 all_game_items.append(woodcutting_axe)
 
+fishing_rod = item(110,"fishing rod",80,False,False,False,False,False,0,"","")
+all_game_items.append(fishing_rod)
+
 wood = item(110,"wood",2,False,False,False,False,False,0,"","")
 all_game_items.append(wood)
 
@@ -160,10 +163,13 @@ ground_torch = ground_item(110,"torch",80,False,False,False,False,False,0,"","")
 all_ground_game_items.append(ground_torch)
 
 ground_woodcutting_axe = item(110,"woodcutting axe",80,False,False,False,False,False,0,"","")
-all_game_items.append(ground_woodcutting_axe)
+all_ground_game_items.append(ground_woodcutting_axe)
+
+ground_fishing_rod = item(110,"fishing rod",80,False,False,False,False,False,0,"","")
+all_ground_game_items.append(ground_fishing_rod)
 
 ground_wood = item(110,"wood",2,False,False,False,False,False,0,"","")
-all_game_items.append(ground_wood)
+all_ground_game_items.append(ground_wood)
 
 #########################################
 

@@ -11,6 +11,7 @@ from colorama import Fore, Back, Style
 init(autoreset=True)
 
 import pygame
+import pygame.gfxdraw
 pygame.mixer.pre_init() #44100, 16, 2, 4096
 pygame.init()
 pygame.font.init() # you have to call this at the start if you want to use fonts
@@ -38,13 +39,13 @@ from party_member_module import *
 
 version = "1.9"
 
-dev_mode = 0
-
+dev_mode = 1
+gen_sea = 0
 grid_mode = 0
 
-toggle_music = 1
+toggle_music = 0
 
-tick_delay_time = 100
+tick_delay_time = 50
 
 music_playing = 0
 
@@ -53,7 +54,7 @@ check_for_combat = True
 restock_shops = False
 restock_ticks = 0
 
-steps_x = 0
+steps_x = 6
 steps_y = 0
 steps_z = 0
 
@@ -71,6 +72,8 @@ prev_z = 0
 npc_fight = False
 npc_enemy_fname = "0"
 npc_enemy_lname = "0"
+
+nearby_npc_list = []
 
 player_turns = 0
 
@@ -335,15 +338,6 @@ class player_skills:
 
 player1_skills = player_skills(1,0,1,0,1,0,1,0)
 
-class input_option:
-    def __init__(self, name, hotkey, is_default_option, print_in_main):
-        self.name = name
-        self.hotkey = hotkey
-        self.is_default_option = is_default_option
-        self.print_in_main = print_in_main
-        if is_default_option == True:
-            input_option_list.append(self)
-
 
 class combat_option:
     def __init__(self, name):
@@ -404,23 +398,24 @@ quest_5 = quest("Chop Wood","Cut down some trees for Jim.", xp = 50, gp = 120, r
 
 
 # place npcs in the world
+
 dismurth_gates.npc_list.append(npc_town_guard)
-dismurth_square.npc_list.append(npc_jenkins)
-dismurth_market.npc_list.append(npc_john_doe)
-dismurth_market.npc_list.append(npc_jane_doe)
-dismurth_market.npc_list.append(npc_doctor)
-dismurth_tower_gf.npc_list.append(npc_wizard_traenus)
-dismurth_tower_gf.npc_list.append(npc_wizard_marbles)
-dismurth_smith.npc_list.append(npc_dismurth_smith)
+tavern_interior_2.npc_list.append(npc_jenkins)
+tavern_interior_8.npc_list.append(npc_jane_doe)
+tavern_interior_9.npc_list.append(npc_doctor)
+tower_interior_4.npc_list.append(npc_wizard_traenus)
+tower_interior_7.npc_list.append(npc_wizard_marbles)
+smith_interior_1.npc_list.append(npc_dismurth_smith)
+smith_interior_3.npc_list.append(npc_john_doe)
 
-forest_cabin.npc_list.append(npc_wizard_jim)
-forest_cabin.npc_list.append(npc_wizard_tilly)
 
-grassland_2.npc_list.append(npc_cow)
+cabin_interior_1.npc_list.append(npc_wizard_jim)
+cabin_interior_3.npc_list.append(npc_wizard_tilly)
+
+
 grassland_2.npc_list.append(npc_sheep)
-grassland_4.npc_list.append(npc_sheep)
-grassland_5.npc_list.append(npc_cow)
-grassland_8.npc_list.append(npc_cow)
+
+dungeon_floor_7_entrance_6.npc_list.append(npc_cow)
 
 ################################
 
@@ -690,23 +685,12 @@ big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 
-if dev_mode >= 1:
-    cow.spellbook.append(str_down_damage)
-    cow.spellbook.append(str_down_damage)
-    cow.spellbook.append(str_down_damage)
-    cow.spellbook.append(str_down_damage)
-    cow.spellbook.append(atk_down_damage)
-    cow.spellbook.append(atk_down_damage)
-    cow.spellbook.append(atk_down_damage)
-    cow.spellbook.append(atk_down_damage)
-
-
 
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
 forest_1.scene_inventory.append(ground_oak_key)
 
-fortress.scene_inventory.append(ground_certificate_of_passage)
+fortress.scene_inventory.append(ground_torch)
 
 ########################################------LISTS------###############################################
 
@@ -752,6 +736,7 @@ equiped_spells = []
 
 ####################################################################
 
+#dev loadout
 if dev_mode >= 1:
 
     equiped_helmet.append(leather_armor)
@@ -795,7 +780,17 @@ if dev_mode >= 1:
     inventory.append(torch)
 
 else:
+
     equiped_armor.append(rags)
+
+    inventory.append(pendant)
+    inventory.append(hp_potion)
+    inventory.append(meat)
+
+    for item in inventory:
+        item.amount = 1
+
+
 
 ##########--PYGAME--############
 
@@ -937,11 +932,31 @@ def func_blit_list(list_object,list,gui_val,is_stackable):
             blit_text = myfont.render(list_object.name, False, (0, 0, 0))
         win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
 
-def func_blit_npc_list(list_object,list,gui_val):
+def func_blit_item_list(gui_val):
     list_object_number = 0
-    for list_object in list:
+    for item in inventory:
         list_object_number += 1
-        blit_text = myfont.render(list_object.first_name + " " + list_object.last_name, False, (0, 0, 0))
+
+        blit_text = myfont.render(item.name + " x " + str(item.amount), False, (0, 0, 0))
+
+        win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+def func_blit_npc_item_list(gui_val):
+    for npc in current_npc:
+        list_object_number = 0
+        for item in npc.npc_inventory:
+            list_object_number += 1
+
+            blit_text = myfont.render(item.name, False, (0, 0, 0))
+
+            win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
+
+def func_blit_npc_list(gui_val):
+    global nearby_npc_list
+    list_object_number = 0
+    for npc in nearby_npc_list:
+        list_object_number += 1
+        blit_text = myfont.render(npc.first_name + " " + npc.last_name, False, (0, 0, 0))
         win_map.blit(blit_text,(32+((gui_val-1)*200),(list_object_number*16)))
 
 def func_blit_dialouge_list(list_object,list,gui_val):
@@ -1224,23 +1239,35 @@ def func_refresh_pygame(battle_intro,animation):
     if steps_z >= 0:
         win_map.fill((3,140,217))
     else:
-        win_map.fill((100,100,100))
+        win_map.fill((10,10,10))
 
 
     for scene_type in all_scene_types:
         if scene_type.zpos == steps_z:
 
             win_map.blit(scene_type.tile_sprite, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
+            # win_map.blit(scene_type.tile_sprite, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
 
 
-            if scene_type.indoors == True and scene_type.has_tp == False:
-                win_map.blit(spr_house, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+            if scene_type.has_tp == True and scene_type.indoors == True and scene_type.zpos == 0:
+                if scene_type.biome == "grassy" or scene_type.biome == "forest":
+                    win_map.blit(spr_house, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+                if scene_type.biome == "road" or scene_type.biome == "town":
+                    win_map.blit(spr_house2, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-18) + ((scene_type.ypos - steps_y)*32)) )  )
 
-            if scene_type.has_tp == True and scene_type.indoors == False:
+            if scene_type.has_tp == True and scene_type.indoors == False and scene_type.zpos == 0:
+                if scene_type.biome == "grassy" or scene_type.biome == "forest":
+                    win_map.blit(spr_cave, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+                if scene_type.biome == "dirt" or scene_type.biome == "dirt2":
+                    win_map.blit(spr_cave, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+
+            if scene_type.has_tp == True and scene_type.indoors == False and scene_type.zpos <= -1000:
+                win_map.blit(spr_cave, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+            if scene_type.has_tp == True and scene_type.indoors == False and scene_type.zpos > -1000 and scene_type.zpos < 0:
                 win_map.blit(spr_cave, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
 
-            if scene_type.has_tp == True and scene_type.indoors == True:
-                win_map.blit(spr_house2, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-18) + ((scene_type.ypos - steps_y)*32)) )  )
+
+
 
 
             if scene_type.treasure == True and scene_type.indoors == False:
@@ -1248,8 +1275,14 @@ def func_refresh_pygame(battle_intro,animation):
 
             if scene_type.passable == False and scene_type.biome == "grassy":
                 win_map.blit(spr_boulder, ( ((cx-18) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
-            if scene_type.passable == False and scene_type.biome == "dungeon":
-                win_map.blit(spr_brick_wall, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
+
+            if scene_type.passable == False:
+                if scene_type.biome == "dungeon" or scene_type.biome == "cave" or scene_type.biome == "house":
+                    win_map.blit(spr_brick_wall, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
+
+            if len(scene_type.npc_list) >= 1:
+                for npc in scene_type.npc_list:
+                    win_map.blit(npc.npc_sprite, ( ((cx-18) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
 
 
 
@@ -1259,6 +1292,60 @@ def func_refresh_pygame(battle_intro,animation):
                 if len(scene_type.npc_list) > 1:
                     pygame.draw.rect(win_map, (182,0,0), ( ((cx+6) + ((scene_type.xpos - steps_x)*32)), ((cy+6) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
                     pygame.draw.rect(win_map, (204,0,0), ( ((cx-12) + ((scene_type.xpos - steps_x)*32)), ((cy-12) + ((scene_type.ypos - steps_y)*32)), map_tile_width-24, map_tile_height-24))
+
+
+        ##########################---LIGHTING---#################################
+
+            if scene_type.xpos > steps_x:
+                distance_from_player_x = scene_type.xpos - steps_x
+            if scene_type.xpos < steps_x:
+                distance_from_player_x = ((scene_type.xpos - steps_x) * -1)
+            if scene_type.xpos == steps_x:
+                distance_from_player_x = scene_type.xpos - steps_x
+
+            if scene_type.ypos > steps_y:
+                distance_from_player_y = scene_type.ypos - steps_y
+            if scene_type.ypos < steps_y:
+                distance_from_player_y = ((scene_type.ypos - steps_y) * -1)
+            if scene_type.ypos == steps_y:
+                distance_from_player_y = scene_type.ypos - steps_y
+
+            total_distance = distance_from_player_y + distance_from_player_x
+
+            player_has_torch = False
+            player_underground = False
+            for item in inventory:
+                if item.name == "torch":
+                    player_has_torch = True
+
+            if scene_type.zpos < 0:
+                player_underground = True
+
+
+            time_val = (time//100)
+
+            if player_has_torch == True:
+                total_distance = (total_distance ** 2)
+            else:
+                total_distance = (total_distance ** 3)
+
+            if player_underground == False:
+                total_distance -= time_val
+
+            if total_distance >= 255:
+                total_distance = 255
+            if total_distance <= 0:
+                total_distance = 0
+
+
+
+            if player_underground == True:
+                pygame.gfxdraw.box(win_map, pygame.Rect(((cx-16) + ((scene_type.xpos - steps_x)*32)),((cy-16) + ((scene_type.ypos - steps_y)*32)),32,32), (10,10,10,total_distance))
+            else:
+
+                pygame.gfxdraw.box(win_map, pygame.Rect(((cx-16) + ((scene_type.xpos - steps_x)*32)),((cy-16) + ((scene_type.ypos - steps_y)*32)),32,32), (10,10,10,total_distance))
+
+
 
 
     win_map.blit(spr_player,(cx-16, cy-16,))
@@ -1491,7 +1578,7 @@ def func_refresh_pygame(battle_intro,animation):
             pygame.draw.rect(win_map, (100,100,100), (814, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (824,10, 180, 480))
 
-            func_blit_list(item,inventory,1,True)
+            func_blit_item_list(1)
             func_blit_menu_cursor(1)
             func_blit_title("Use:",1)
 
@@ -1612,10 +1699,10 @@ def func_refresh_pygame(battle_intro,animation):
             pygame.draw.rect(win_map, (100,100,100), (814, 0, 200, 500))
             pygame.draw.rect(win_map, (125,125,125), (824,10, 180, 480))
 
-            for scene_type in location:
-                for npc in scene_type.npc_list:
-                    func_blit_npc_list(npc,scene_type.npc_list,1)
-                    break
+
+            func_blit_npc_list(1)
+
+
 
 
             func_blit_menu_cursor(1)
@@ -1688,7 +1775,8 @@ def func_refresh_pygame(battle_intro,animation):
                         pygame.draw.rect(win_map, (100,100,100), (814, 0, 200, 500))
                         pygame.draw.rect(win_map, (125,125,125), (824,10, 180, 480))
                         if in_menu_item == True:
-                            func_blit_list(item,inventory,4,True)
+                            if len(inventory) != 0:
+                                func_blit_list(item,inventory,4,True)
                         if in_menu_weapon == True:
                             func_blit_list(weapon,weapon_inventory,4,True)
                         if in_menu_armor == True:
@@ -1722,7 +1810,7 @@ def func_refresh_pygame(battle_intro,animation):
 
                     for npc in current_npc:
                         if in_menu_item == True:
-                            func_blit_list(item,npc.npc_inventory,3,False)
+                            func_blit_npc_item_list(3)
                         if in_menu_weapon == True:
                             func_blit_list(weapon,npc.npc_weapon_inventory,3,False)
                         if in_menu_armor == True:
@@ -1782,17 +1870,23 @@ def func_refresh_pygame(battle_intro,animation):
                 pygame.draw.rect(win_map, (125,125,125), (824,10, 180, 480))
 
                 if in_menu_item == True:
-                    func_blit_list(item,inventory,2,True)
+                    if len(inventory) != 0:
+                        func_blit_list(item,inventory,2,True)
                 if in_menu_weapon == True:
-                    func_blit_list(weapon,weapon_inventory,2,True)
+                    if len(weapon_inventory) != 0:
+                        func_blit_list(weapon,weapon_inventory,2,True)
                 if in_menu_armor == True:
-                    func_blit_list(armor,armor_inventory,2,True)
+                    if len(armor_inventory) != 0:
+                        func_blit_list(armor,armor_inventory,2,True)
                 if in_menu_helmet == True:
-                    func_blit_list(helmet,helmet_inventory,2,True)
+                    if len(helmet_inventory) != 0:
+                        func_blit_list(helmet,helmet_inventory,2,True)
                 if in_menu_shield == True:
-                    func_blit_list(shield,shield_inventory,2,True)
+                    if len(shield_inventory) != 0:
+                        func_blit_list(shield,shield_inventory,2,True)
                 if in_menu_spell == True:
-                    func_blit_list(spell,spell_inventory,2,True)
+                    if len(spell_inventory) != 0:
+                        func_blit_list(spell,spell_inventory,2,True)
 
                 func_blit_menu_cursor(2)
                 func_blit_title("Drop 2:",2)
@@ -1819,7 +1913,8 @@ def func_refresh_pygame(battle_intro,animation):
                 for enemy_stats in current_enemies:
                     enemy_pos = current_enemies.index(enemy_stats) + 1
                     if enemy_stats.is_active == True:
-                        print(str(frame_count))
+                        if dev_mode >= 4:
+                            print(str(frame_count))
                         win_map.blit(enemy_stats.cast_sprite[frame_count], ( ((cx-256) + ((enemy_pos+1)*128)), ((cy) + ((1)*32)) ) )
                         frame_count += 1
 
@@ -1907,17 +2002,21 @@ def func_choose_enemy():
         for scene_type in location:
             scene_level = scene_type.difficulty
             for enemy_stats in all_game_enemies:
-                if enemy_stats.level <= scene_level + 5 and enemy_stats.level >= scene_level - 15:
+                if dev_mode >= 2:
+                    print("\ndifficulty: " + str(scene_type.difficulty - 15) + "  - " +str(scene_type.difficulty + 10))
+                    print(enemy_stats.name + ", lvl: " + str(enemy_stats.level))
+                if enemy_stats.level <= scene_level + 5 and enemy_stats.level >= scene_level - 10 and enemy_stats.is_npc == False:
                     compatible_enemies_found = True
         if compatible_enemies_found == True:
             for enemy_stats in all_game_enemies:
                 encounter_chance = 0
                 encounter_chance = random.randint(1,10)
-                if encounter_chance == 1 and enemy_stats not in current_enemies and len(current_enemies) < enemy_count and enemy_stats.level <= scene_level + 5 and enemy_stats.level >= scene_level - 15:
+                if encounter_chance == 1 and enemy_stats not in current_enemies and len(current_enemies) < enemy_count and enemy_stats.level <= scene_level + 10 and enemy_stats.level >= scene_level - 15 and enemy_stats.is_npc == False:
                     current_enemies.append(enemy_stats)
         if compatible_enemies_found == False:
-            print("no compatitible enemies found for difficulty level of scene!")
+            print("not enough compatitible enemies found for difficulty level of scene!")
             in_fight = False
+            break
 
 def func_enemy_dead(enemy_stats):
 
@@ -1940,6 +2039,8 @@ def func_enemy_dead(enemy_stats):
                         quest.player_kill_count = quest.quest_kill_amount
 
 
+            loot_chance_modifier = 40 #the larger the number, the less chance for loot
+            loot_chance_modifier2 = 2
 
             loot_spawn_chance_item = 0
             loot_chance_item = 0
@@ -1963,11 +2064,11 @@ def func_enemy_dead(enemy_stats):
 
             loot_quality = 0
 
-            loot_spawn_chance_item = 1
-            loot_spawn_chance_weapon = 1
-            loot_spawn_chance_armor = 1
-            loot_spawn_chance_helmet = 1
-            loot_spawn_chance_shield = 1
+            loot_spawn_chance_item = random.randint(0,loot_chance_modifier2)
+            loot_spawn_chance_weapon = random.randint(0,loot_chance_modifier2)
+            loot_spawn_chance_armor = random.randint(0,loot_chance_modifier2)
+            loot_spawn_chance_helmet = random.randint(0,loot_chance_modifier2)
+            loot_spawn_chance_shield = random.randint(0,loot_chance_modifier2)
 
             if len(enemy_stats.drop_table_items_always) != 0:
                 for item in enemy_stats.drop_table_items_always:
@@ -1991,7 +2092,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_item == 1:
                 if len(enemy_stats.drop_table_items) != 0:
                     for item in enemy_stats.drop_table_items:
-                        loot_chance_item = random.randint(0,10)
+                        loot_chance_item = random.randint(0,loot_chance_modifier)
                         if loot_chance_item == 1:
                             for ground_item in all_ground_game_items:
                                 item_dropped = False
@@ -2029,7 +2130,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_weapon == 1:
                 if len(enemy_stats.drop_table_weapons) != 0:
                     for weapon in enemy_stats.drop_table_weapons:
-                        loot_chance_weapon = random.randint(0,10)
+                        loot_chance_weapon = random.randint(0,loot_chance_modifier)
                         if loot_chance_weapon == 1:
                             for ground_weapon in all_ground_game_weapons:
                                 weapon_dropped = False
@@ -2066,7 +2167,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_armor == 1:
                 if len(enemy_stats.drop_table_armor) != 0:
                     for armor in enemy_stats.drop_table_armor:
-                        loot_chance_armor = random.randint(0,10)
+                        loot_chance_armor = random.randint(0,loot_chance_modifier)
                         if loot_chance_armor == 1:
                             for ground_armor in all_ground_game_armor:
                                 armor_dropped = False
@@ -2104,7 +2205,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_helmet == 1:
                 if len(enemy_stats.drop_table_helmets) != 0:
                     for helmet in enemy_stats.drop_table_helmets:
-                        loot_chance_helmet = random.randint(0,1)
+                        loot_chance_helmet = random.randint(0,loot_chance_modifier)
                         if loot_chance_helmet == 1:
                             for ground_helmet in all_ground_game_helmets:
                                 helmet_dropped = False
@@ -2142,7 +2243,7 @@ def func_enemy_dead(enemy_stats):
             if loot_spawn_chance_shield == 1:
                 if len(enemy_stats.drop_table_shields) != 0:
                     for shield in enemy_stats.drop_table_shields:
-                        loot_chance_shield = random.randint(0,10)
+                        loot_chance_shield = random.randint(0,loot_chance_modifier)
                         if loot_chance_shield == 1:
                             for ground_shield in all_ground_game_shields:
                                 shield_dropped = False
@@ -2875,16 +2976,19 @@ def func_enemy_status_check():
         player_status_mgk_bonus = 0
         player_status_def_bonus = 0
         enemy_can_attack = False
+
+
         enemy_stats.is_active = True
         print(enemy_stats.name + " is active")
         if enemy_stats.is_active == True:
             combat_wait_count = 0
-            while combat_wait_count < 2:
+            while combat_wait_count < 3:#how many times to loop the combat_animation
                 combat_wait_count += 1
                 func_refresh_pygame(False,1)
 
-            if combat_wait_count >= 2:
+            if combat_wait_count >= 3:
                 enemy_stats.is_active = False
+
 
         if len(enemy_stats.status_effect_list) == 0:
             enemy_can_attack = True
@@ -3887,6 +3991,20 @@ def func_use(gear,player_gear_inv):
                                             player_stats.hp = player_stats.maxhp
                                             player_stats.mp = player_stats.maxmp
 
+                                if item.name == "rope":
+                                    can_climb = False
+                                    can_use = True
+                                    for scene_type in location:
+                                        if scene_type.zpos < 0:
+                                            can_climb = True
+                                        else:
+                                            can_climb = False
+                                            print("\nyou can't use that here!")
+                                    if can_climb == True:
+                                        print("\nyou return to the surface... ")
+                                        func_tp(6,0,0)
+                                    break
+
                                 if item.edible == True:
                                     if item.poisonous == False:
                                         print("you consume " + item.print_name)
@@ -3945,7 +4063,6 @@ def func_cast(gear,player_gear_inv):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_start = 0
-                in_fight = False
                 in_submenu = False
                 in_submenu_cast = False
                 in_menu = False
@@ -3979,8 +4096,7 @@ def func_cast(gear,player_gear_inv):
                     if has_spell == 0:
                         print("Invalid spell!")
 
-                    in_submenu = False
-                    in_submenu_cast = False
+
 
 #############################----SCENE_FUNCTIONS----#########################
 
@@ -3995,6 +4111,23 @@ def func_tp(x,y,z):
 
     if dev_mode >= 1:
         print("you teleported to: ",x,y,z)
+
+    can_gen = False
+    gen_done = False
+
+    if gen_done == False:
+        for scene_type in all_scene_types:
+            if scene_type.zpos == steps_z and scene_type.use_gen == True:
+                can_gen = True
+
+    if can_gen == True:
+        func_dungeon_gen()
+
+    can_gen = False
+    gen_done = True
+
+    location_desc()
+
 
 def func_drop(gear,player_gear_inv):
     global in_menu_item
@@ -4041,11 +4174,16 @@ def func_drop(gear,player_gear_inv):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_start = 0
-                in_fight = False
+                in_menu_item = False
+                in_menu_weapon = False
+                in_menu_armor = False
+                in_menu_helmet = False
+                in_menu_shield = False
+                in_menu_spell = False
                 in_submenu2 = False
                 in_submenu_drop2 = False
                 in_menu = False
+                game_start = 0
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     func_move_cursor(True)
@@ -4054,7 +4192,12 @@ def func_drop(gear,player_gear_inv):
                 if event.key == pygame.K_q:
                     in_submenu2 = False
                     in_submenu_drop2 = False
-
+                    in_menu_item = False
+                    in_menu_weapon = False
+                    in_menu_armor = False
+                    in_menu_helmet = False
+                    in_menu_shield = False
+                    in_menu_spell = False
                 if event.key == pygame.K_e:
                     sfx_cursor_select.play()
 
@@ -4114,14 +4257,7 @@ def func_drop(gear,player_gear_inv):
                                 pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
                             if gear in all_game_shields:
                                 pass # WEAPONS AND ARMOR WILL BE REMOVED FROM INVENTORY, BUT WILL NOT APPEAR ON THE GROUND
-                    in_submenu2 = False
-                    in_submenu_drop2 = False
-                    in_menu_item = False
-                    in_menu_weapon = False
-                    in_menu_armor = False
-                    in_menu_helmet = False
-                    in_menu_shield = False
-                    in_menu_spell = False
+
                     break
 
 def func_search_treasure():
@@ -4604,23 +4740,23 @@ def func_equip(gear,player_gear_inv,current_gear):
                             if has_level == True and has_space == True:
                                 if gear in all_game_weapons:
                                     gear.amount -= 1
-                                    if gear.amount == 0:
+                                    if gear.amount <= 0:
                                         weapon_inventory.remove(gear)
                                 if gear in all_game_armor:
                                     gear.amount -= 1
-                                    if gear.amount == 0:
+                                    if gear.amount <= 0:
                                         armor_inventory.remove(gear)
                                 if gear in all_game_helmets:
                                     gear.amount -= 1
-                                    if gear.amount == 0:
+                                    if gear.amount <= 0:
                                         helmet_inventory.remove(gear)
                                 if gear in all_game_shields:
                                     gear.amount -= 1
-                                    if gear.amount == 0:
+                                    if gear.amount <= 0:
                                         shield_inventory.remove(gear)
                                 if gear in all_game_spells:
                                     gear.amount -= 1
-                                    if gear.amount == 0:
+                                    if gear.amount <= 0:
                                         spell_inventory.remove(gear)
 
                                 if gear in all_game_weapons:
@@ -4919,114 +5055,212 @@ def func_choose_input_option():
             break
     return selected_input_option
 
-#######################---PLAYER LOCATION---#######################
+#######################--- MAP GENERATION ---#######################
 
-def func_scene_gen_args(gen_scene_type):
+def func_scene_gen_args(gen_scene_type,relative_xpos,relative_ypos,chunk_number):
     free_tiles = []
+    tp_counter = 0
+
+    for scene_type in all_scene_types:
+        if scene_type.zpos == steps_z:
+            if scene_type.has_tp == True:
+                tp_counter += 1
+
+    if dev_mode >= 4:
+        for scene_type in all_scene_types:
+            if scene_type.use_gen == True and scene_type.zpos == steps_z:
+                free_tiles.append(scene_type)
+        tiles_left = len(free_tiles)
+        if dev_mode >= 4:
+            print(str(tiles_left))
+        del free_tiles[:]
+
+    print("/")
+    # func_refresh_pygame(False,0)
+    if chunk_number != 99:
+        tile_wall_chance = random.randint(1,step_counter)
+
+        ### inner walls
+        if gen_scene_type.ypos == -5 or gen_scene_type.ypos == 5 or gen_scene_type.ypos == -6 or gen_scene_type.ypos == 6:
+            tile_wall_chance = 1
+
+        if gen_scene_type.xpos == -5 or gen_scene_type.xpos == 5 or gen_scene_type.xpos == -6 or gen_scene_type.xpos == 6:
+            tile_wall_chance = 1
+
+        if gen_scene_type.ypos == -16 or gen_scene_type.ypos == 16 or gen_scene_type.ypos == -17 or gen_scene_type.ypos == 17:
+            tile_wall_chance = 1
+        if gen_scene_type.xpos == -16 or gen_scene_type.xpos == 16 or gen_scene_type.xpos == -17 or gen_scene_type.xpos == 17:
+            tile_wall_chance = 1
+
+
+        ### doors
+        if gen_scene_type.xpos == 0 or gen_scene_type.xpos == 0 or gen_scene_type.ypos == 0 or gen_scene_type.ypos == 0:
+            tile_wall_chance = 0
+
+        if gen_scene_type.xpos == 11 or gen_scene_type.xpos == -11 or gen_scene_type.ypos == 11 or gen_scene_type.ypos == -11:
+            tile_wall_chance = 0
+
+        if gen_scene_type.xpos == 22 or gen_scene_type.xpos == -22 or gen_scene_type.ypos == 22 or gen_scene_type.ypos == -22:
+            tile_wall_chance = 0
+
+        ### border walls
+        if gen_scene_type.ypos == -27 or gen_scene_type.ypos == 27:
+            tile_wall_chance = 1
+
+        if gen_scene_type.xpos == -27 or gen_scene_type.xpos == 27:
+            tile_wall_chance = 1
+
+        if tile_wall_chance == 1:
+
+            gen_scene_type.passable = False
+
+        if tile_wall_chance != 1:
+            tile_safe_chance = random.randint(1,2)
+            tile_treasure_chance = random.randint(1,20)
+            tile_stairs_chance = 0
+            if gen_scene_type.xpos <= -6 or gen_scene_type.xpos >= 6 or gen_scene_type.ypos <= -6 or gen_scene_type.ypos >= 6:
+                tile_treasure_chance = 0
+                tile_stairs_chance = random.randint(1,10)
+
+
+            if tile_safe_chance == 1:
+                gen_scene_type.safe = False
+
+
+            if tile_stairs_chance == 1:
+                if tp_counter == 0:
+                    gen_scene_type.safe = True
+                    gen_scene_type.has_tp = True
+                    gen_scene_type.treasure = False
+
+            if tile_treasure_chance == 1:
+                gen_scene_type.has_tp == False
+                gen_scene_type.safe = True
+                gen_scene_type.treasure = True
+
+
+def func_place_tile(relative_xpos,relative_ypos,chunk_number):
     for scene_type in all_scene_types:
         if scene_type.use_gen == True and scene_type.zpos == steps_z:
-            free_tiles.append(scene_type)
-    tiles_left = len(free_tiles)
-    print(str(tiles_left))
-    del free_tiles[:]
-
-    tile_wall_chance = random.randint(1,step_counter)
-    # if tiles_left <= 50:
-    #     tile_wall_chance = 1
-    if steps_x > 8 or steps_y > 8 or steps_x < -8 or steps_y < -8:
-        tile_wall_chance = 1
-
-
-    if tile_wall_chance == 1:
-
-        #when there is less than 50 tiles left all new tiles will become walls
-        gen_scene_type.passable = False
-
-
-    if tile_wall_chance != 1:
-        tile_safe_chance = random.randint(1,3)
-        tile_treasure_chance = random.randint(1,10)
-        tile_stairs_chance = random.randint(1,10)
-
-        if tiles_left <= 60:
-            tile_stairs_chance = 1
-
-        if tile_safe_chance == 1:
-            gen_scene_type.safe = False
-
-        if tile_stairs_chance == 1:
-            tp_counter = 0
-            for scene_type in all_scene_types:
-                if scene_type.zpos == steps_z:
-                    if scene_type.has_tp == False:
-                        tp_counter += 1
-
-            if tp_counter == 0:
-                gen_scene_type.safe = True
-                gen_scene_type.has_tp = True
-                gen_scene_type.treasure = False
-
-        if tile_treasure_chance == 1:
-            gen_scene_type.has_tp == False
-            gen_scene_type.safe = True
-            gen_scene_type.treasure = True
-
-def func_place_tile(relative_xpos,relative_ypos):
-    for scene_type in all_scene_types:
-        if scene_type.use_gen == True:
-            scene_type.ypos = steps_y + relative_ypos
-            scene_type.xpos = steps_x + relative_xpos
-            scene_type.zpos = steps_z
+            scene_type.ypos = relative_ypos
+            scene_type.xpos = relative_xpos
+            if dev_mode >= 4:
+                print("PLACED TILE AT " + str(relative_xpos) + ", " + str(relative_ypos))
 
             scene_type.use_gen = False
-            func_scene_gen_args(scene_type)
+            func_scene_gen_args(scene_type,relative_xpos,relative_ypos,chunk_number)
             break
 
 def func_check_tile_exists(relative_xpos,relative_ypos):
     check_location_found = False
     for scene_type in all_scene_types:
-        if steps_y + relative_ypos == scene_type.ypos and steps_x + relative_xpos == scene_type.xpos and steps_z == scene_type.zpos:
+        if relative_ypos == scene_type.ypos and relative_xpos == scene_type.xpos and steps_z == scene_type.zpos:
             check_location_found = True
             break
-    if check_location_found == False:
-        if steps_z <= -1000:
-            func_place_tile(relative_xpos,relative_ypos)
+    return check_location_found
+
+def func_gen_chunk(x_min,y_min,chunk_number):
+    x_max = x_min + 10
+    y_max = y_min + 10
+    gen_grid_x = x_min
+    gen_grid_y = y_min
+
+    tile_occupied = False
+
+    while gen_grid_x <= x_max and gen_grid_x >= x_min and gen_grid_y <= y_max and gen_grid_y >= y_min:
+        tile_occupied = func_check_tile_exists(gen_grid_x,gen_grid_y)
+        if tile_occupied == False:
+                func_place_tile(gen_grid_x,gen_grid_y,chunk_number)
+
+        gen_grid_x += 1
+        if dev_mode >= 4:
+            print( str(chunk_number) + "grid gen x: " + str(gen_grid_x))
+        if gen_grid_x > x_max:
+            gen_grid_x = x_min
+            gen_grid_y += 1
+            if dev_mode >= 4:
+                print( str(chunk_number) + "grid gen y: " + str(gen_grid_y))
+
+def func_gen_ow(x_min,y_min):
+    x_max = x_min + 60
+    y_max = y_min + 60
+    gen_grid_x = x_min
+    gen_grid_y = y_min
+
+    tile_occupied = False
+
+    while gen_grid_x <= x_max and gen_grid_x >= x_min and gen_grid_y <= y_max and gen_grid_y >= y_min:
+        tile_occupied = func_check_tile_exists(gen_grid_x,gen_grid_y)
+        if tile_occupied == False:
+                func_place_tile(gen_grid_x,gen_grid_y,99)
+
+        gen_grid_x += 1
+        if dev_mode >= 4:
+            print("grid gen x: " + str(gen_grid_x))
+        if gen_grid_x > x_max:
+            gen_grid_x = x_min
+            gen_grid_y += 1
+            if dev_mode >= 4:
+                print("grid gen y: " + str(gen_grid_y))
+
+def func_dungeon_gen():
+    if steps_z <= -1000:
+        func_gen_chunk(-5,-5,0)
+
+        chunk_chance = 1
+
+
+        if chunk_chance == 1:
+            func_gen_chunk(6,-5,1)
+
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(6,-16,8)
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(6,6,6)
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(17,-5,9)
+
+
+        chunk_chance = random.randint(1,2)
+        if chunk_chance == 1:
+            func_gen_chunk(-5,6,2)
+
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(-5,17,11)
+
+
+        chunk_chance = 1
+        if chunk_chance == 1:
+            func_gen_chunk(-16,-5,3)
+
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(-27,-5,10)
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(-16,6,7)
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(-16,-16,5)
+
+
+        chunk_chance = random.randint(1,2)
+        if chunk_chance == 1:
+            func_gen_chunk(-5,-16,4)
+
+            chunk_chance = random.randint(1,2)
+            if chunk_chance == 1:
+                func_gen_chunk(-5,-27,12)
+
+
+#######################---PLAYER LOCATION---#######################
+
 
 def player_position_check():
-
-    #los
-    func_check_tile_exists(0,0)
-    func_check_tile_exists(1,-1)
-    func_check_tile_exists(-1,1)
-
-    func_check_tile_exists(0,1)
-    func_check_tile_exists(0,-1)
-    func_check_tile_exists(1,1)
-
-    func_check_tile_exists(1,0)
-    func_check_tile_exists(-1,0)
-    func_check_tile_exists(-1,-1)
-
-    func_check_tile_exists(2,0)
-    func_check_tile_exists(2,1)
-    func_check_tile_exists(2,-1)
-
-    func_check_tile_exists(0,2)
-    func_check_tile_exists(1,2)
-    func_check_tile_exists(-1,2)
-
-
-    func_check_tile_exists(-2,0)
-    func_check_tile_exists(-2,1)
-    func_check_tile_exists(-2,-1)
-
-    func_check_tile_exists(0,-2)
-    func_check_tile_exists(1,-2)
-    func_check_tile_exists(-1,-2)
-
-
-
-
 
     location_found = False
     for scene_type in all_scene_types:
@@ -5058,13 +5292,13 @@ def player_north_check():
             location_north.append(ocean)
         if steps_z <= -1 and steps_z >= -3:
             del location_north[:]
-            location_north.append(solid_cave_wall)
+            location_north.append(solid_house_wall)
         if steps_z <= -4 and steps_z >= -6:
             del location_north[:]
-            location_north.append(solid_dungeon_wall)
+            location_north.append(solid_cave_wall)
         if steps_z <= -7 and steps_z >= -9:
             del location_north[:]
-            location_north.append(solid_dungeon_wall)
+            location_north.append(solid_cave_wall)
         if steps_z <= -10:
             del location_north[:]
             location_north.append(solid_dungeon_wall)
@@ -5087,13 +5321,13 @@ def player_south_check():
             location_south.append(ocean)
         if steps_z <= -1 and steps_z >= -3:
             del location_south[:]
-            location_south.append(solid_cave_wall)
+            location_south.append(solid_house_wall)
         if steps_z <= -4 and steps_z >= -6:
             del location_south[:]
-            location_south.append(solid_dungeon_wall)
+            location_south.append(solid_cave_wall)
         if steps_z <= -7 and steps_z >= -9:
             del location_south[:]
-            location_south.append(solid_dungeon_wall)
+            location_south.append(solid_cave_wall)
         if steps_z <= -10:
             del location_south[:]
             location_south.append(solid_dungeon_wall)
@@ -5117,13 +5351,13 @@ def player_east_check():
             location_east.append(ocean)
         if steps_z <= -1 and steps_z >= -3:
             del location_east[:]
-            location_east.append(solid_cave_wall)
+            location_east.append(solid_house_wall)
         if steps_z <= -4 and steps_z >= -6:
             del location_east[:]
-            location_east.append(solid_dungeon_wall)
+            location_east.append(solid_cave_wall)
         if steps_z <= -7 and steps_z >= -9:
             del location_east[:]
-            location_east.append(solid_dungeon_wall)
+            location_east.append(solid_cave_wall)
         if steps_z <= -10:
             del location_east[:]
             location_east.append(solid_dungeon_wall)
@@ -5146,13 +5380,13 @@ def player_west_check():
             location_west.append(ocean)
         if steps_z <= -1 and steps_z >= -3:
             del location_west[:]
-            location_west.append(solid_cave_wall)
+            location_west.append(solid_house_wall)
         if steps_z <= -4 and steps_z >= -6:
             del location_west[:]
-            location_west.append(solid_dungeon_wall)
+            location_west.append(solid_cave_wall)
         if steps_z <= -7 and steps_z >= -9:
             del location_west[:]
-            location_west.append(solid_dungeon_wall)
+            location_west.append(solid_cave_wall)
         if steps_z <= -10:
             del location_west[:]
             location_west.append(solid_dungeon_wall)
@@ -5174,13 +5408,13 @@ def player_down_check():
             location_down.append(ground)
         if steps_z <= -1 and steps_z >= -3:
             del location_down[:]
-            location_down.append(solid_cave_ground)
+            location_down.append(solid_house_ground)
         if steps_z <= -4 and steps_z >= -6:
             del location_down[:]
-            location_down.append(solid_dungeon_ground)
+            location_down.append(solid_cave_ground)
         if steps_z <= -7 and steps_z >= -9:
             del location_down[:]
-            location_down.append(solid_dungeon_ground)
+            location_down.append(solid_cave_ground)
         if steps_z <= -10:
             del location_down[:]
             location_down.append(solid_dungeon_ground)
@@ -5199,13 +5433,13 @@ def player_up_check():
     if location_found == False:
         if steps_z <= -1 and steps_z >= -3:
             del location_up[:]
-            location_up.append(solid_cave_ground)
+            location_up.append(solid_house_ground)
         if steps_z <= -4 and steps_z >= -6:
             del location_up[:]
-            location_up.append(solid_dungeon_ground)
+            location_up.append(solid_cave_ground)
         if steps_z <= -7 and steps_z >= -9:
             del location_up[:]
-            location_up.append(solid_dungeon_ground)
+            location_up.append(solid_cave_ground)
         if steps_z <= -10:
             del location_up[:]
             location_up.append(solid_dungeon_ground)
@@ -5249,7 +5483,7 @@ def location_desc():
                 print(shield.print_name)
             print("")
 
-            print("restock_ticks " + str(restock_ticks))
+            # print("restock_ticks " + str(restock_ticks))
 
             if dev_mode >= 3:
                 for scene_type in location:
@@ -5259,6 +5493,7 @@ def location_desc():
                     print("scene_encounter_difficulty: ", scene_type.difficulty)
                     print("can_fish: ", scene_type.can_fish)
                     print("scene_treasure: ", scene_type.treasure)
+                    print("scene_has_tp: ", scene_type.has_tp)
                 print("in_fight: ", in_fight)
                 print("x: ", steps_x)
                 print("y: ", steps_y)
@@ -5271,9 +5506,7 @@ def location_desc():
                 print("rain status", raining)
                 print("date: ", days, months, years)
 
-                if dev_mode >= 4:
-                    for scene_type in all_scene_types:
-                        print(scene_type.name, scene_type.xpos, scene_type.ypos, scene_type.zpos)
+
 
     for scene_type in location:
         scene_npc_count = 0
@@ -5364,25 +5597,25 @@ def location_desc():
             print("\nit is dangerous here... \n")
 
     func_rain()
-
-    for scene_type in location_north:
-        print("\nto your north is " + scene_type.name + "")
-        sleep(sleep_time_fast)
-    for scene_type in location_south:
-        print("to your south is " + scene_type.name + "")
-        sleep(sleep_time_fast)
-    for scene_type in location_east:
-        print("to your east is " + scene_type.name + "")
-        sleep(sleep_time_fast)
-    for scene_type in location_west:
-        print("to your west is " + scene_type.name + "")
-        sleep(sleep_time_fast)
-    for scene_type in location_down:
-        print("below you is " + scene_type.name + "")
-        sleep(sleep_time_fast)
-    for scene_type in location_up:
-        print("above you is " + scene_type.name + "")
-        sleep(sleep_time_fast)
+    if dev_mode >= 3:
+        for scene_type in location_north:
+            print("\nto your north is " + scene_type.name + "")
+            sleep(sleep_time_fast)
+        for scene_type in location_south:
+            print("to your south is " + scene_type.name + "")
+            sleep(sleep_time_fast)
+        for scene_type in location_east:
+            print("to your east is " + scene_type.name + "")
+            sleep(sleep_time_fast)
+        for scene_type in location_west:
+            print("to your west is " + scene_type.name + "")
+            sleep(sleep_time_fast)
+        for scene_type in location_down:
+            print("below you is " + scene_type.name + "")
+            sleep(sleep_time_fast)
+        for scene_type in location_up:
+            print("above you is " + scene_type.name + "")
+            sleep(sleep_time_fast)
 
 #######################--- QUESTS ---#######################
 
@@ -5421,6 +5654,8 @@ player1.mp = player1.maxmp
 if dev_mode >= 1:
     player1.gp = 10000
 
+if gen_sea == 1:
+    func_gen_ow(-18,-11)
 
 for scene_type in all_scene_types:
     scene_type.func_generate_sprite_positions()
@@ -5493,9 +5728,16 @@ while game_start == 1:
             for enemy_stats in current_enemies: #build drop tables
                 if dev_mode >= 1:
                     print("building drop tables")
+                    del enemy_stats.drop_table_items[:]
+                    del enemy_stats.drop_table_weapons[:]
+                    del enemy_stats.drop_table_armor[:]
+                    del enemy_stats.drop_table_helmets[:]
+                    del enemy_stats.drop_table_shields[:]
 
-                for item in enemy_stats.drop_table_items:
-                    enemy_stats.drop_table_items_always.append(item)
+                for item in enemy_stats.drop_table_items_always:
+                    item.amount = 1
+                    enemy_stats.drop_table_items.append(item)
+
                 for item in all_game_items:
                     add_to_table = random.randint(0,20)
                     if add_to_table == 20 and item not in enemy_stats.drop_table_items and item.value >= (enemy_stats.level * 2) and item.value <= (enemy_stats.level * 100):
@@ -5504,8 +5746,9 @@ while game_start == 1:
                     for item in enemy_stats.drop_table_items:
                         print(item.print_name)
 
-                for weapon in enemy_stats.drop_table_weapons:
-                    enemy_stats.drop_table_weapons_always.append(weapon)
+                for weapon in enemy_stats.drop_table_weapons_always:
+                    weapon.amount = 1
+                    enemy_stats.drop_table_weapons.append(weapon)
                 for weapon in all_game_weapons:
                     if weapon not in enemy_stats.drop_table_weapons:
                         if weapon.level <= (enemy_stats.level + 10) and weapon.level >= (enemy_stats.level - 30) and enemy_stats.attribute == weapon.attribute:
@@ -5514,8 +5757,9 @@ while game_start == 1:
                     for weapon in enemy_stats.drop_table_weapons:
                         print(weapon.print_name)
 
-                for armor in enemy_stats.drop_table_armor:
-                    enemy_stats.drop_table_armor_always.append(armor)
+                for armor in enemy_stats.drop_table_armor_always:
+                    armor.amount = 1
+                    enemy_stats.drop_table_armor.append(armor)
                 for armor in all_game_armor:
                     if armor not in enemy_stats.drop_table_armor:
                         if armor.level <= (enemy_stats.level + 10) and armor.level >= (enemy_stats.level - 30) and enemy_stats.attribute == armor.attribute:
@@ -5524,8 +5768,9 @@ while game_start == 1:
                     for armor in enemy_stats.drop_table_armor:
                         print(armor.print_name)
 
-                for helmet in enemy_stats.drop_table_helmets:
-                    enemy_stats.drop_table_helmets_always.append(helmet)
+                for helmet in enemy_stats.drop_table_helmets_always:
+                    helmet.amount = 1
+                    enemy_stats.drop_table_helmets.append(helmet)
                 for helmet in all_game_helmets:
                     if helmet not in enemy_stats.drop_table_helmets:
                         if helmet.level <= (enemy_stats.level + 10)and helmet.level >= (enemy_stats.level - 30) and enemy_stats.attribute == helmet.attribute:
@@ -5534,8 +5779,9 @@ while game_start == 1:
                     for helmet in enemy_stats.drop_table_helmets:
                         print(helmet.print_name)
 
-                for shield in enemy_stats.drop_table_shields:
-                    enemy_stats.drop_table_shields_always.append(shield)
+                for shield in enemy_stats.drop_table_shields_always:
+                    shield.amount = 1
+                    enemy_stats.drop_table_shields.append(shield)
                 for shield in all_game_shields:
                     if shield not in enemy_stats.drop_table_shields:
                         if shield.level <= (enemy_stats.level + 10) and shield.level >= (enemy_stats.level - 30) and enemy_stats.attribute == shield.attribute:
@@ -5546,10 +5792,10 @@ while game_start == 1:
 
                 if dev_mode >= 1:
                     print("modifying enemy stats")
-                enemy_stats.maxhp += (random.randint(0,50) * enemy_stats.level)
+                enemy_stats.maxhp += (random.randint(0,10) * enemy_stats.level)
                 enemy_stats.hp = (0 + enemy_stats.maxhp)
                 enemy_stats.gp += ((random.randint(0,10) * enemy_stats.maxhp) // 1000) * enemy_stats.level
-                enemy_stats.xp += ((random.randint(0,10) * enemy_stats.xp) // 10) * enemy_stats.level
+                enemy_stats.xp += random.randint(0,enemy_stats.level)
                 if dev_mode >= 1:
                     print("enemy stats have been calculated")
 
@@ -5607,11 +5853,18 @@ while game_start == 1:
                         if event.key == pygame.K_e:
                             sfx_cursor_select.play()
                             if combat_cursor_pos == 4: #run option
-                                in_fight = False
-                                pygame.mixer.music.stop()
-                                print("you ran away! \n")
-                                del current_enemies[:]
-                                location_desc()
+                                run_chance = random.randint(1,len(current_enemies)+1)
+                                if run_chance == 1:
+                                    in_fight = False
+                                    pygame.mixer.music.stop()
+                                    print("you ran away! \n")
+                                    del current_enemies[:]
+                                    location_desc()
+                                else:
+                                    print("You couldn't escape!")
+                                    func_player_status_check(False,True)
+                                    player_turns -= 1
+
                             elif combat_cursor_pos == 1: #hit option
                                 func_player_status_check(True,False)
                                 func_check_enemy_dead()
@@ -5635,8 +5888,6 @@ while game_start == 1:
 
                                     func_check_level()
                                     func_refresh_pygame(False,0)
-
-
 
 
                                     for event in pygame.event.get():
@@ -6158,15 +6409,68 @@ while game_start == 1:
                     else:
                         print(scene_type.impass_msg + ", you have not moved")
 
-            if event.key == pygame.K_r:
+            if event.key == pygame.K_e:
                 for scene_type in location:
-                    if scene_type.zpos <= -1000 and scene_type.xpos != 0 and scene_type.ypos != 0:
+                    is_entrance = False
+                    if scene_type.xpos == 0 and scene_type.ypos == 0:
+                        is_entrance = True
+                    if scene_type.has_tp == True and scene_type.zpos <= -1000 and is_entrance == False:
                         new_floor_zpos = scene_type.zpos - 1
                         func_tp(0,0,new_floor_zpos)
 
-
+                    #dungeon area tp
                     if scene_type.xpos == 6 and scene_type.ypos == 0 and scene_type.zpos == 0:
-                        func_tp(0,0,-1000)#dev area tp
+                        func_tp(0,0,-1000)
+
+                    #tavern
+                    if scene_type.xpos == 5 and scene_type.ypos == 1 and scene_type.zpos == 0:
+                        func_tp(3,3,-1)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -1:
+                        func_tp(5,1,0)
+
+                    #smith
+                    if scene_type.xpos == 7 and scene_type.ypos == 2 and scene_type.zpos == 0:
+                        func_tp(3,3,-3)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -3:
+                        func_tp(7,2,0)
+
+                    #tower
+                    if scene_type.xpos == 7 and scene_type.ypos == 1 and scene_type.zpos == 0:
+                        func_tp(3,3,-2)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -2:
+                        func_tp(7,1,0)
+
+                    #cabin
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == 0:
+                        func_tp(3,3,-5)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -5:
+                        func_tp(3,3,0)
+
+                    #barracks
+                    if scene_type.xpos == 5 and scene_type.ypos == 2 and scene_type.zpos == 0:
+                        func_tp(3,3,-6)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -6:
+                        func_tp(5,2,0)
+
+                    #farm
+                    if scene_type.xpos == 7 and scene_type.ypos == 3 and scene_type.zpos == 0:
+                        func_tp(3,3,-7)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -7:
+                        func_tp(7,3,0)
+
+                    #fisherman's house
+                    if scene_type.xpos == 8 and scene_type.ypos == 2 and scene_type.zpos == 0:
+                        func_tp(3,3,-8)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -8:
+                        func_tp(8,2,0)
+
+                    #fortress
+                    if scene_type.xpos == 9 and scene_type.ypos == 5 and scene_type.zpos == 0:
+                        func_tp(3,3,-9)
+                    if scene_type.xpos == 3 and scene_type.ypos == 3 and scene_type.zpos == -9:
+                        func_tp(9,5,0)
+
+
 
                     #northern cave entrance
                     if scene_type.xpos == 3 and scene_type.ypos == 1 and scene_type.zpos == 0:
@@ -6182,8 +6486,8 @@ while game_start == 1:
 
                     #large tree cave entrance
                     if scene_type.xpos == 2 and scene_type.ypos == 5 and scene_type.zpos == 0:
-                        func_tp(2,5,-3)
-                    if scene_type.xpos == 2 and scene_type.ypos == 5 and scene_type.zpos == -3:
+                        func_tp(2,5,-10)
+                    if scene_type.xpos == 2 and scene_type.ypos == 5 and scene_type.zpos == -10:
                         func_tp(2,5,0)
 
             if event.key == pygame.K_SPACE:
@@ -6594,11 +6898,6 @@ while game_start == 1:
                                         func_check_level()
                                         func_refresh_pygame(False,0)
 
-
-
-
-
-
                                         for event in pygame.event.get():
                                             if event.type == pygame.QUIT:
                                                 game_start = 0
@@ -6650,17 +6949,25 @@ while game_start == 1:
 
                                                     if menu_cursor_pos == 2:
                                                         fish_caught = "0"
+                                                        has_rod = False
                                                         for scene_type in location:
                                                             if scene_type.can_fish == True:
-                                                                for item in all_game_items:
-                                                                    if item.is_fish == True:
-                                                                        fish_chance = random.randint(0,10)
-                                                                        if fish_chance == 10:
-                                                                            print("you catch a " + item.name)
-                                                                            player1_skills.fishing_xp += item.value
-                                                                            func_check_level()
-                                                                            fish_caught = item.name
-                                                                            break
+                                                                for item in inventory:
+                                                                    if item.name == "fishing rod":
+                                                                        has_rod = True
+
+                                                                if has_rod == True:
+                                                                    for item in all_game_items:
+                                                                        if item.is_fish == True:
+                                                                            fish_chance = random.randint(0,10)
+                                                                            if fish_chance == 10:
+                                                                                print("you catch a " + item.name)
+                                                                                player1_skills.fishing_xp += item.value
+                                                                                func_check_level()
+                                                                                fish_caught = item.name
+                                                                                break
+                                                                else:
+                                                                    print("you do not have a fishing rod!")
 
                                                                 has_item_multiple = False
 
@@ -6712,14 +7019,36 @@ while game_start == 1:
 
                                 #talk
                                 elif menu_cursor_pos == 2:
+                                    del nearby_npc_list [:]
+
                                     for scene_type in location:
                                         if len(scene_type.npc_list) >= 1:
+                                            nearby_npc_list.extend(scene_type.npc_list)
+
+                                    for scene_type in location_north:
+                                        if len(scene_type.npc_list) >= 1:
+                                            nearby_npc_list.extend(scene_type.npc_list)
+
+                                    for scene_type in location_south:
+                                        if len(scene_type.npc_list) >= 1:
+                                            nearby_npc_list.extend(scene_type.npc_list)
+
+                                    for scene_type in location_east:
+                                        if len(scene_type.npc_list) >= 1:
+                                            nearby_npc_list.extend(scene_type.npc_list)
+
+                                    for scene_type in location_west:
+                                        if len(scene_type.npc_list) >= 1:
+                                            nearby_npc_list.extend(scene_type.npc_list)
+
+                                    for scene_type in location:
+                                        if len(nearby_npc_list) >= 1:
                                             for scene_type in location:
-                                                if len(scene_type.npc_list) >= 1:
+                                                if len(nearby_npc_list) >= 1:
                                                     print("")
                                                     target_npc = "0"
-                                                    for npc in scene_type.npc_list:
-                                                        print("|| " + str((scene_type.npc_list.index(npc)+1)) + " || " + npc.first_name + " " + npc.last_name + ", " + npc.title + " || " + npc.npc_desc)
+                                                    for npc in nearby_npc_list:
+                                                        print("|| " + str((nearby_npc_list.index(npc)+1)) + " || " + npc.first_name + " " + npc.last_name + ", " + npc.title + " || " + npc.npc_desc)
 
                                                     print("\nWho will you talk too? \n")
 
@@ -6756,12 +7085,12 @@ while game_start == 1:
                                                                     sfx_cursor_select.play()
                                                                     val_dropped_item = menu_cursor_pos
                                                                     val_drop = val_dropped_item - 1
-                                                                    for npc in scene_type.npc_list:
-                                                                        if val_drop == scene_type.npc_list.index(npc):
+                                                                    for npc in nearby_npc_list:
+                                                                        if val_drop == nearby_npc_list.index(npc):
                                                                             target_npc = npc.first_name
                                                                             npc_found = True
 
-                                                                            for npc in scene_type.npc_list:
+                                                                            for npc in nearby_npc_list:
                                                                                 if npc.first_name == target_npc:
                                                                                     current_npc.append(npc)
                                                                                     if npc.is_animal == True:
@@ -6853,7 +7182,7 @@ while game_start == 1:
                                                                                                                             func_shop(item,npc.npc_inventory)
                                                                                                                             # in_submenu2 = False
                                                                                                                             # in_submenu_talk2 = False
-                                                                                                                            break
+                                                                                                                            # break
                                                                                                                         if dialouge_option.is_buy_spell == True:
                                                                                                                             func_shop(spell,npc.npc_spell_inventory)
                                                                                                                             # in_submenu2 = False
