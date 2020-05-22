@@ -152,7 +152,7 @@ elf_warrior = enemy_stats(False,"elf warrior",32,100,15000,15000,2000,2000,10,20
 elf_mage = enemy_stats(False,"elf mage",35,500,18400,18400,10000,10000,65,5,6,100,3245,"earth","fire",[],[bones],[],[],[],[],0,"")
 elf_thief = enemy_stats(False,"elf thief",38,500,18800,18800,1000,1000,5,50,60,100,3245,"earth","fire",[],[bones],[],[],[],[],0,"")
 
-mossy_giant = enemy_stats(False,"mossy giant",40,5000,22400,22400,10000,10000,65,80,10,200,3245,"earth","fire",[],[bones],[],[],[],[],0,"")
+mossy_giant = enemy_stats(False,"mossy giant",40,1000,22400,22400,10000,10000,65,80,10,200,3245,"earth","fire",[],[bones],[],[],[],[],0,"")
 
 giant_wasp = enemy_stats(False,"giant wasp",42,500,12800,12800,1000,1000,5,50,60,200,3245,"earth","fire",[],[bones],[],[],[],[],0,"")
 fire_demon = enemy_stats(False,"fire demon",45,500,14800,14800,1000,1000,50,50,60,120,3245,"fire","water",[],[bones],[],[],[],[],0,"")

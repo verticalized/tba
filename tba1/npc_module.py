@@ -117,14 +117,22 @@ npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of
 npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof","","m1")
 
 npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof","","m1")
-npc_wizard_tilly = npc("Tilly","the dog","wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","","m1")
+npc_wizard_tilly = npc("Tilly","the dog","Wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","","m1")
+
+
 
 npc_merchant_ollie = npc("Oliver","Zeddecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","","m1")
 npc_merchant_dech = npc("Dechen","Kneepa","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","","m1")
 
+npc_wizard_will = npc("William","the wanderer","Traveller","Travels to far away lands","hello",False,"human","man","0","travellers robes","oof","","m2")
+npc_wizard_laika = npc("Laika","the dog","Traveller","a travelling hound","woof!",True,"dog","female","0","cloth clothes","oof","","m1")
+
+npc_wizard_pete = npc("Peter","Quicktounge","Poet","a rhyming genius","G'day",False,"human","man","0","cloth clothes","oof","","m1")
+
 npc_lib = npc("Lord","Quas","The mad","a man of many names","G'day",False,"human","man","0","fine clothes","oof","","m1")
 npc_king = npc("Daniel","Geedorah","King","known as the crown ruler...","G'day",False,"human","man","0","royal clothes","oof","","m1")
 npc_chris_cornwell = npc("Chris","Cornwell","Farmer","has a beautiful garden...","G'day",False,"human","man","0","farmer's clothes","oof","","m1")
+npc_dante = npc("Dante","","From the Devil May Cry series","","G'day",False,"human","man","0","Red Jacket","oof","","m1")
 
 
 npc_cow = npc("cow","","","","moo",True,"cow","large","0","0","Moo!","","cow")

@@ -209,14 +209,25 @@ class armor:
 
         all_game_armor.append(self)
 
-birdshirt = armor(301,"bird t shirt",100,"light",99,"air",10,24,22,40,1100)
-leather_armor = armor(302,"leather armor",10,"light",1,"water",10,4,4,5,10)
-hard_leather_armor = armor(303,"hard leather armor",10,"light",10,"water",18,4,4,8,50)
+birdshirt = armor(301,"bird t shirt",100,"light",99,"air",100,240,220,400,11000)
+
+cloth_armor = armor(302,"cloth armor",10,"light",4,"water",0,0,0,4,20)
+bronze_armor = armor(302,"bronze plate armor",50,"heavy",5,"earth",0,8,8,12,100)
+dusty_robes = armor(302,"dusty robes",50,"mage",8,"water",10,0,0,5,50)
+cloth_robes = armor(309,"cloth robes",100,"mage",12,"water",24,0,0,8,50)
+heavy_robes = armor(309,"heavy robes",100,"mage",13,"earth",20,0,0,15,100)
+
+leather_armor = armor(302,"leather armor",50,"light",9,"water",2,4,4,5,40)
+hard_leather_armor = armor(303,"hard leather armor",90,"light",10,"water",2,5,20,10,50)
+
 iron_chain_mail = armor(304,"iron chain mail",40,"heavy",12,"earth",0,7,14,17,50)
 iron_plate_armor = armor(305,"iron plate armor",100,"heavy",15,"earth",0,11,9,22,500)
+
 steel_chain_mail = armor(306,"steel chain mail",400,"heavy",14,"earth",0,13,18,25,100)
 steel_plate_armor = armor(307,"steel plate armor",1000,"heavy",22,"earth",0,16,15,28,1000)
+
 rags = armor(308,"rags",1,"light",1,"fire",0,1,1,1,1)
+
 mage_robes = armor(309,"mage robes",1000,"mage",20,"air",50,0,0,20,1000)
 necro_robes = armor(309,"necromancer robes",1000,"mage",44,"air",55,0,0,50,2000)
 
@@ -228,6 +239,13 @@ class ground_armor:
         all_ground_game_armor.append(self)
 
 ground_birdshirt = ground_armor("bird t shirt")
+
+ground_cloth_armor = armor("cloth armor")
+ground_bronze_armor = armor("bronze plate armor")
+ground_dusty_robes = armor("dusty robes")
+ground_cloth_robes = armor("cloth robes")
+ground_heavy_robes = armor("heavy robes")
+
 ground_leather_armor = ground_armor("leather armor")
 ground_hard_leather_armor = ground_armor("hard leather armor")
 ground_iron_chain_mail = ground_armor("iron chain mail")
@@ -286,9 +304,16 @@ class helmet:
         all_game_helmets.append(self)
 
 bird_hat = helmet(301,"bird hat",100,"light",99,"air",10,24,22,40,1100)
+
+wizard_hat = helmet(301,"wizard hat",60,"mage",6,"air",10,0,0,1,0)
+leather_cap = helmet(301,"leather cap",100,"light",6,"earth",0,0,0,5,20)
+bronze_helmet = helmet(301,"bronze helmet",60,"heavy",8,"earth",0,0,0,8,50)
+
 iron_helmet = helmet(301,"iron helmet",100,"heavy",9,"air",1,2,2,10,100)
 steel_helmet = helmet(301,"steel helmet",100,"heavy",18,"air",1,4,2,20,500)
-mage_hood = helmet(301,"mage hood",100,"light",70,"air",100,0,0,40,1000)
+mage_hood = helmet(301,"mage hood",100,"mage",70,"air",100,0,0,40,1000)
+
+
 
 class ground_helmet:
     def __init__(self, name):
@@ -298,6 +323,9 @@ class ground_helmet:
         all_ground_game_helmets.append(self)
 
 ground_bird_hat = ground_helmet("bird hat")
+
+
+
 ground_iron_helmet = ground_helmet("iron helmet")
 ground_steel_helmet = ground_helmet("steel helmet")
 ground_mage_hood  = ground_helmet("mage hood")

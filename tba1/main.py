@@ -39,8 +39,8 @@ from party_member_module import *
 
 version = "1.9"
 
-dev_mode = 1
-gen_sea = 0
+dev_mode = 0
+gen_sea = 1
 grid_mode = 0
 
 toggle_music = 0
@@ -57,6 +57,8 @@ restock_ticks = 0
 steps_x = 6
 steps_y = 0
 steps_z = 0
+
+player_direction = 2
 
 ###########################################
 
@@ -157,6 +159,10 @@ quest_list = []
 
 menu_cursor_pos = 1
 combat_cursor_pos = 1
+
+def func_reset_cursor_pos():
+    menu_cursor_pos = 1
+    combat_cursor_pos = 1
 
 blit_player_damage_amount = 0
 
@@ -513,7 +519,6 @@ npc_john_doe.npc_shield_inventory.append(iron_square_shield)
 npc_john_doe.npc_shield_inventory.append(wooden_round_shield)
 npc_john_doe.npc_shield_inventory.append(magic_orb)
 
-
 ########################################################
 
 npc_wizard_traenus.npc_spell_inventory.append(fire_arrow)
@@ -578,7 +583,6 @@ ice_wolf.spellbook.append(str_up_aoe)
 ice_wolf.spellbook.append(str_up_heal_aoe)
 ice_wolf.spellbook.append(str_up_heal_aoe)
 
-
 goblin.spellbook.append(prayer)
 goblin.spellbook.append(burn)
 
@@ -589,7 +593,6 @@ giant_spider.spellbook.append(poison)
 giant_spider.spellbook.append(poison)
 
 giant_snail.spellbook.append(slime)
-
 
 bandit.spellbook.append(prayer)
 
@@ -684,7 +687,6 @@ big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
 big_slug.spellbook.append(slime)
-
 
 #################################------PLACE GROUND_ITEMS IN WORLD------#######################################
 
@@ -844,7 +846,7 @@ txt_shields = myfont.render('shields', False, (0, 0, 0))
 txt_spells = myfont.render('spells', False, (0, 0, 0))
 
 txt_steal = myfont.render('steal', False, (0, 0, 0))
-txt_craft = myfont.render('craft', False, (0, 0, 0))
+txt_craft = myfont.render('alchemy', False, (0, 0, 0))
 txt_cook = myfont.render('cook', False, (0, 0, 0))
 txt_fish = myfont.render('fish', False, (0, 0, 0))
 txt_search = myfont.render('search', False, (0, 0, 0))
@@ -855,7 +857,12 @@ txt_search = myfont.render('search', False, (0, 0, 0))
 spr_house = pygame.image.load("house1.png")
 spr_house2 = pygame.image.load("house2.png")
 
-spr_player = pygame.image.load("player1.png")
+spr_player_n = pygame.image.load("player_n1.png")
+spr_player_e = pygame.image.load("player_r1.png")
+spr_player_s = pygame.image.load("player_s1.png")
+spr_player_w = pygame.image.load("player_l1.png")
+
+spr_player = spr_player_s
 
 spr_chest = pygame.image.load("chest1.png")
 spr_cave = pygame.image.load("cave1.png")
@@ -997,7 +1004,6 @@ def func_blit_HUD(hud_val):
     win_map.blit(blit_HUD_status,(32+((hud_val-1)*200),(38*16)))
     win_map.blit(blit_HUD_xp,(32+((hud_val-1)*200),(39*16)))
     win_map.blit(blit_HUD_gp,(32+((hud_val-1)*200),(40*16)))
-
 
 def func_blit_player_stats(hud_val):
 
@@ -1214,8 +1220,6 @@ def func_blit_enemy_HUD(hud_val):
         if enemy_stats.is_active == False:
             win_map.blit(blit_HUD_inactive,(32+((hud_val+enemy_number-1)*200),(32*16)))
             pygame.draw.rect(win_map, (100,100,100), ( ((cx-256) + ((enemy_number+1)*128)),((cy-100) + ((1)*32)), 16, 16 ) )
-
-
 
 def func_blit_title(title_string,gui_val):
     blit_title = myfont.render(title_string, False, (0, 0, 0))
@@ -2300,6 +2304,7 @@ def func_get_target():
                     if event.key == pygame.K_s:
                         func_move_combat_cursor(False)
                     if event.key == pygame.K_q:
+                        func_reset_cursor_pos()
                         in_submenu2 = False
                         in_submenu_target_combat2 = False
 
@@ -3562,6 +3567,7 @@ def func_use_combat(gear,player_gear_inv):
                 if event.key == pygame.K_s:
                     func_move_combat_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_submenu = False
                     in_submenu_use_combat = False
                 if event.key == pygame.K_e:
@@ -3576,6 +3582,7 @@ def func_use_combat(gear,player_gear_inv):
                     for item in inventory:
                         has_item = False
                         can_use = False
+                        has_item_multiple = False
                         for item in inventory:
                             if eaten_item == item.name:
                                 has_item = True
@@ -3678,6 +3685,7 @@ def func_shop(gear,npc_gear_inv):
                         if event.key == pygame.K_s:
                             func_move_cursor(False)
                         if event.key == pygame.K_q:
+                            func_reset_cursor_pos()
                             in_submenu3 = False
                             in_submenu_buy3 = False
                             in_menu_weapon = False
@@ -3863,6 +3871,7 @@ def func_sell(gear,player_gear_inv):
                 if event.key == pygame.K_s:
                     func_move_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_submenu4 = False
                     in_submenu_sell4 = False
                     in_menu_item = False
@@ -3930,6 +3939,7 @@ def func_use(gear,player_gear_inv):
                 if event.key == pygame.K_s:
                     func_move_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_submenu = False
                     in_submenu_use = False
 
@@ -4072,6 +4082,7 @@ def func_cast(gear,player_gear_inv):
                 if event.key == pygame.K_s:
                     func_move_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_submenu = False
                     in_submenu_cast = False
 
@@ -4095,8 +4106,6 @@ def func_cast(gear,player_gear_inv):
                                 print("you have no use for that spell right now")
                     if has_spell == 0:
                         print("Invalid spell!")
-
-
 
 #############################----SCENE_FUNCTIONS----#########################
 
@@ -4127,7 +4136,6 @@ def func_tp(x,y,z):
     gen_done = True
 
     location_desc()
-
 
 def func_drop(gear,player_gear_inv):
     global in_menu_item
@@ -4190,6 +4198,7 @@ def func_drop(gear,player_gear_inv):
                 if event.key == pygame.K_s:
                     func_move_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_submenu2 = False
                     in_submenu_drop2 = False
                     in_menu_item = False
@@ -4535,6 +4544,7 @@ def func_cook(gear,player_gear_inv):
                 if event.key == pygame.K_s:
                     func_move_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_submenu2 = False
                     in_submenu_cook2 = False
 
@@ -4691,6 +4701,7 @@ def func_equip(gear,player_gear_inv,current_gear):
                 if event.key == pygame.K_s:
                     func_move_cursor(False)
                 if event.key == pygame.K_q:
+                    func_reset_cursor_pos()
                     in_menu_item = False
                     in_menu_weapon = False
                     in_menu_armor = False
@@ -5138,7 +5149,6 @@ def func_scene_gen_args(gen_scene_type,relative_xpos,relative_ypos,chunk_number)
                 gen_scene_type.safe = True
                 gen_scene_type.treasure = True
 
-
 def func_place_tile(relative_xpos,relative_ypos,chunk_number):
     for scene_type in all_scene_types:
         if scene_type.use_gen == True and scene_type.zpos == steps_z:
@@ -5259,6 +5269,22 @@ def func_dungeon_gen():
 
 #######################---PLAYER LOCATION---#######################
 
+def check_player_direction():
+    global spr_player
+    global player_direction
+    global spr_player_n
+    global spr_player_e
+    global spr_player_s
+    global spr_player_w
+
+    if player_direction == 0:
+        spr_player = spr_player_n
+    if player_direction == 1:
+        spr_player = spr_player_e
+    if player_direction == 2:
+        spr_player = spr_player_s
+    if player_direction == 3:
+        spr_player = spr_player_w
 
 def player_position_check():
 
@@ -5653,6 +5679,7 @@ player1.mp = player1.maxmp
 
 if dev_mode >= 1:
     player1.gp = 10000
+    player1.xp = 10000
 
 if gen_sea == 1:
     func_gen_ow(-18,-11)
@@ -5903,6 +5930,7 @@ while game_start == 1:
                                             if event.key == pygame.K_s:
                                                 func_move_combat_cursor(False)
                                             if event.key == pygame.K_q:
+                                                func_reset_cursor_pos()
                                                 in_submenu = False
                                                 in_submenu_cast_combat = False
                                             if event.key == pygame.K_e:
@@ -6370,46 +6398,75 @@ while game_start == 1:
                 print("grid mode " + str(grid_mode))
 
             if event.key == pygame.K_w:
-                has_moved = True
-                for scene_type in location_north:
-                    if scene_type.passable == True:
-                        steps_y -= 1
-                        prev_y = steps_y
-                        prev_y += 1
-                    else:
-                        print(scene_type.impass_msg + ", you have not moved.")
+
+                if player_direction == 0:
+                    has_moved = True
+                    for scene_type in location_north:
+                        if scene_type.passable == True:
+                            steps_y -= 1
+                            prev_y = steps_y
+                            prev_y += 1
+                        else:
+                            print(scene_type.impass_msg + ", you have not moved.")
+
+
+                player_direction = 0
+                check_player_direction()
+
 
             if event.key == pygame.K_s:
-                has_moved = True
-                for scene_type in location_south:
-                    if scene_type.passable == True:
-                        steps_y += 1
-                        prev_y = steps_y
-                        prev_y -= 1
-                    else:
-                        print(scene_type.impass_msg + ", you have not moved")
+
+                if player_direction == 2:
+                    has_moved = True
+                    for scene_type in location_south:
+                        if scene_type.passable == True:
+                            steps_y += 1
+                            prev_y = steps_y
+                            prev_y -= 1
+                        else:
+                            print(scene_type.impass_msg + ", you have not moved")
+
+
+                player_direction = 2
+                check_player_direction()
 
             if event.key == pygame.K_d:
-                has_moved = True
-                for scene_type in location_east:
-                    if scene_type.passable == True:
-                        steps_x += 1
-                        prev_x = steps_x
-                        prev_x -= 1
-                    else:
-                        print(scene_type.impass_msg + ", you have not moved")
+
+
+                if player_direction == 1:
+                    has_moved = True
+                    for scene_type in location_east:
+                        if scene_type.passable == True:
+                            steps_x += 1
+                            prev_x = steps_x
+                            prev_x -= 1
+                        else:
+                            print(scene_type.impass_msg + ", you have not moved")
+
+
+                player_direction = 1
+                check_player_direction()
 
             if event.key == pygame.K_a:
-                has_moved = True
-                for scene_type in location_west:
-                    if scene_type.passable == True:
-                        steps_x -= 1
-                        prev_x = steps_x
-                        prev_x += 1
-                    else:
-                        print(scene_type.impass_msg + ", you have not moved")
+
+                if player_direction == 3:
+                    has_moved = True
+                    for scene_type in location_west:
+                        if scene_type.passable == True:
+                            steps_x -= 1
+                            prev_x = steps_x
+                            prev_x += 1
+                        else:
+                            print(scene_type.impass_msg + ", you have not moved")
+
+
+                player_direction = 3
+                check_player_direction()
+
 
             if event.key == pygame.K_e:
+                player_direction = 0
+                check_player_direction()
                 for scene_type in location:
                     is_entrance = False
                     if scene_type.xpos == 0 and scene_type.ypos == 0:
@@ -6491,6 +6548,7 @@ while game_start == 1:
                         func_tp(2,5,0)
 
             if event.key == pygame.K_SPACE:
+                func_reset_cursor_pos()
                 in_menu = True
 
                 while in_menu == True:
@@ -6515,6 +6573,7 @@ while game_start == 1:
                                 func_move_cursor(False)
 
                             if event.key == pygame.K_q:
+                                func_reset_cursor_pos()
                                 in_menu = False
                                 print("menu quit")
                                 break
@@ -6576,6 +6635,7 @@ while game_start == 1:
                                                     func_move_cursor(False)
 
                                                 if event.key == pygame.K_q:
+                                                    func_reset_cursor_pos()
                                                     in_submenu_equip = False
                                                     in_submenu = False
                                                     print("equip menu quit")
@@ -6655,6 +6715,7 @@ while game_start == 1:
                                                     func_move_cursor(False)
 
                                                 if event.key == pygame.K_q:
+                                                    func_reset_cursor_pos()
                                                     in_submenu = False
                                                     in_submenu_questlog = False
 
@@ -6708,6 +6769,7 @@ while game_start == 1:
                                                 if event.key == pygame.K_s:
                                                     func_move_cursor(False)
                                                 if event.key == pygame.K_q:
+                                                    func_reset_cursor_pos()
                                                     in_submenu = False
                                                     in_submenu_drop = False
 
@@ -6912,6 +6974,7 @@ while game_start == 1:
                                                     func_move_cursor(False)
 
                                                 if event.key == pygame.K_q:
+                                                    func_reset_cursor_pos()
                                                     in_submenu = False
                                                     in_submenu_action = False
 
@@ -7025,21 +7088,25 @@ while game_start == 1:
                                         if len(scene_type.npc_list) >= 1:
                                             nearby_npc_list.extend(scene_type.npc_list)
 
-                                    for scene_type in location_north:
-                                        if len(scene_type.npc_list) >= 1:
-                                            nearby_npc_list.extend(scene_type.npc_list)
+                                    if player_direction == 0:
+                                        for scene_type in location_north:
+                                            if len(scene_type.npc_list) >= 1:
+                                                nearby_npc_list.extend(scene_type.npc_list)
 
-                                    for scene_type in location_south:
-                                        if len(scene_type.npc_list) >= 1:
-                                            nearby_npc_list.extend(scene_type.npc_list)
+                                    if player_direction == 2:
+                                        for scene_type in location_south:
+                                            if len(scene_type.npc_list) >= 1:
+                                                nearby_npc_list.extend(scene_type.npc_list)
 
-                                    for scene_type in location_east:
-                                        if len(scene_type.npc_list) >= 1:
-                                            nearby_npc_list.extend(scene_type.npc_list)
+                                    if player_direction == 1:
+                                        for scene_type in location_east:
+                                            if len(scene_type.npc_list) >= 1:
+                                                nearby_npc_list.extend(scene_type.npc_list)
 
-                                    for scene_type in location_west:
-                                        if len(scene_type.npc_list) >= 1:
-                                            nearby_npc_list.extend(scene_type.npc_list)
+                                    if player_direction == 3:
+                                        for scene_type in location_west:
+                                            if len(scene_type.npc_list) >= 1:
+                                                nearby_npc_list.extend(scene_type.npc_list)
 
                                     for scene_type in location:
                                         if len(nearby_npc_list) >= 1:
@@ -7077,6 +7144,7 @@ while game_start == 1:
                                                                 if event.key == pygame.K_s:
                                                                     func_move_cursor(False)
                                                                 if event.key == pygame.K_q:
+                                                                    func_reset_cursor_pos()
                                                                     in_submenu = False
                                                                     in_submenu_talk = False
                                                                     in_menu = False
@@ -7136,6 +7204,7 @@ while game_start == 1:
                                                                                                 if event.key == pygame.K_s:
                                                                                                     func_move_cursor(False)
                                                                                                 if event.key == pygame.K_q:
+                                                                                                    func_reset_cursor_pos()
                                                                                                     in_submenu2 = False
                                                                                                     in_submenu_talk2 = False
 
@@ -7234,6 +7303,7 @@ while game_start == 1:
                                                                                                                                         if event.key == pygame.K_s:
                                                                                                                                             func_move_cursor(False)
                                                                                                                                         if event.key == pygame.K_q:
+                                                                                                                                            func_reset_cursor_pos()
                                                                                                                                             in_submenu3 = False
                                                                                                                                             in_submenu_sell3 = False
                                                                                                                                         if event.key == pygame.K_e:
