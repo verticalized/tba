@@ -101,6 +101,7 @@ class scene_type:
         self.use_gen = use_gen
         self.tile_sprite = spr_grass
         self.npc_list = []
+        self.rare_item_chance = random.randint(1,10)
 
 
         if self.zpos <= -1000:

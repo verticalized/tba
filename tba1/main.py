@@ -39,8 +39,8 @@ from party_member_module import *
 
 version = "1.9"
 
-dev_mode = 0
-gen_sea = 1
+dev_mode = 1
+gen_sea = 0
 grid_mode = 0
 
 toggle_music = 0
@@ -236,50 +236,19 @@ items_shop_table.extend(healing_drop_table)
 #####################################################
 
 def func_basic_droptables():
-    weapons_drop_table.append(iron_sword)
-    weapons_drop_table.append(iron_axe)
-    weapons_drop_table.append(steel_sword)
-    weapons_drop_table.append(steel_axe)
-    weapons_drop_table.append(mithril_sword)
-    weapons_drop_table.append(mithril_axe)
-    weapons_drop_table.append(adamantite_sword)
-    weapons_drop_table.append(adamantite_axe)
-    weapons_drop_table.append(rune_sword)
-    weapons_drop_table.append(rune_axe)
+    for weapon in all_game_weapons:
+        weapons_drop_table.append(weapon)
 
-    large_weapons_drop_table.append(war_spear)
-    large_weapons_drop_table.append(greatsword)
-    large_weapons_drop_table.append(lance)
-    large_weapons_drop_table.append(ultra_greatsword)
+    for armor in all_game_armor:
+        armor_drop_table.append(armor)
 
-    magic_weapons_drop_table.append(gladius)
-    magic_weapons_drop_table.append(gladius)
-    magic_weapons_drop_table.append(bone_scimitar)
+    for helmet in all_game_helmets:
+        helmets_drop_table.append(helmet)
 
-    #####################################################
+    for shield in all_game_shields:
+        shields_drop_table.append(shield)
 
-    armor_drop_table.append(leather_armor)
-    armor_drop_table.append(hard_leather_armor)
-    armor_drop_table.append(iron_chain_mail)
-    armor_drop_table.append(iron_plate_armor)
-    armor_drop_table.append(steel_chain_mail)
-    armor_drop_table.append(steel_plate_armor)
 
-    magic_armor_drop_table.append(mage_robes)
-    magic_armor_drop_table.append(mage_robes)
-    magic_armor_drop_table.append(necro_robes)
-
-    #######################################################
-
-    helmets_drop_table.append(iron_helmet)
-    helmets_drop_table.append(steel_helmet)
-    helmets_drop_table.append(mage_hood)
-
-    #####################################################
-
-    shields_drop_table.append(mage_book)
-    shields_drop_table.append(iron_square_shield)
-    shields_drop_table.append(steel_square_shield)
 
     #####################################################
 
@@ -865,6 +834,10 @@ spr_player_w = pygame.image.load("player_l1.png")
 spr_player = spr_player_s
 
 spr_chest = pygame.image.load("chest1.png")
+spr_ground_item1 = pygame.image.load("ground_item1.png")
+spr_ground_item2 = pygame.image.load("ground_item2.png")
+
+
 spr_cave = pygame.image.load("cave1.png")
 spr_boulder = pygame.image.load("boulder1.png")
 spr_brick_wall = pygame.image.load("brickwall1.png")
@@ -1273,10 +1246,17 @@ def func_refresh_pygame(battle_intro,animation):
 
 
 
-
+            #treasure and items
             if scene_type.treasure == True and scene_type.indoors == False:
                 win_map.blit(spr_chest, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
 
+            if len(scene_type.scene_inventory) != 0:
+                if len(scene_type.scene_inventory) == 1:
+                    win_map.blit(spr_ground_item1, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+                if len(scene_type.scene_inventory) > 1:
+                    win_map.blit(spr_ground_item2, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
+
+            #walls/rocks
             if scene_type.passable == False and scene_type.biome == "grassy":
                 win_map.blit(spr_boulder, ( ((cx-18) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
 
@@ -1284,6 +1264,7 @@ def func_refresh_pygame(battle_intro,animation):
                 if scene_type.biome == "dungeon" or scene_type.biome == "cave" or scene_type.biome == "house":
                     win_map.blit(spr_brick_wall, ( ((cx-16) + ((scene_type.xpos - steps_x)*32)), ((cy-16) + ((scene_type.ypos - steps_y)*32)) )  )
 
+            #npcs sprites
             if len(scene_type.npc_list) >= 1:
                 for npc in scene_type.npc_list:
                     win_map.blit(npc.npc_sprite, ( ((cx-18) + ((scene_type.xpos - steps_x)*32)), ((cy-14) + ((scene_type.ypos - steps_y)*32)) )  )
@@ -1342,7 +1323,7 @@ def func_refresh_pygame(battle_intro,animation):
                 total_distance = 0
 
 
-
+            #lighting
             if player_underground == True:
                 pygame.gfxdraw.box(win_map, pygame.Rect(((cx-16) + ((scene_type.xpos - steps_x)*32)),((cy-16) + ((scene_type.ypos - steps_y)*32)),32,32), (10,10,10,total_distance))
             else:
@@ -1384,7 +1365,6 @@ def func_refresh_pygame(battle_intro,animation):
                 grid_y +=1
                 if grid_y >= 30:
                     break
-
 
 
     if battle_intro == True:
@@ -5700,7 +5680,7 @@ print("\n  Controls:\n  W,A,S,D: Move \n  SPACE: Menu\n  E: Select \n  Q: Back")
 
 print("\npress the D key to start! \n")
 # if dev_mode == 0:
-#     name = input("Please enter your name: \n")
+#     name = raw_input("Please enter your name: \n")
 #     for player_stats in players:
 #         player_stats.name = name
 
@@ -5997,8 +5977,6 @@ while game_start == 1:
     func_check_stat_bonus()
     func_check_level()
     func_refresh_pygame(False,0)
-
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -7451,9 +7429,13 @@ while game_start == 1:
         print("\nthe sun has risen...\n")
         sleep(sleep_time_fast)
         days += 1
+        print("\nIt is the " + str(days) +" of the " + str(months))
+        print(days)
         if days >= 30:
             days = 1
             months += 1
+            print("\nThe month is now:")
+            print(months)
             if months >= 13:
                 months = 1
                 years += 1

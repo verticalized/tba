@@ -240,11 +240,11 @@ class ground_armor:
 
 ground_birdshirt = ground_armor("bird t shirt")
 
-ground_cloth_armor = armor("cloth armor")
-ground_bronze_armor = armor("bronze plate armor")
-ground_dusty_robes = armor("dusty robes")
-ground_cloth_robes = armor("cloth robes")
-ground_heavy_robes = armor("heavy robes")
+ground_cloth_armor = ground_armor("cloth armor")
+ground_bronze_armor = ground_armor("bronze plate armor")
+ground_dusty_robes = ground_armor("dusty robes")
+ground_cloth_robes = ground_armor("cloth robes")
+ground_heavy_robes = ground_armor("heavy robes")
 
 ground_leather_armor = ground_armor("leather armor")
 ground_hard_leather_armor = ground_armor("hard leather armor")
@@ -324,7 +324,9 @@ class ground_helmet:
 
 ground_bird_hat = ground_helmet("bird hat")
 
-
+ground_wizard_hat = ground_helmet("wizard hat")
+ground_leather_cap = ground_helmet("leather cap")
+ground_bronze_helmet = ground_helmet("bronze helmet")
 
 ground_iron_helmet = ground_helmet("iron helmet")
 ground_steel_helmet = ground_helmet("steel helmet")
