@@ -37,7 +37,7 @@ from party_member_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "1.9"
+version = "a2.1"
 
 dev_mode = 1
 gen_sea = 1
