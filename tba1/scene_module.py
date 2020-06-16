@@ -117,6 +117,13 @@ class scene_type:
         self.tile_b = 229
 
     def func_generate_sprite_positions(self):
+        if len(self.npc_list) != 0:
+            self.passable = False
+        if self.treasure == True:
+            self.passable = False
+
+        if self.zpos >= -10:
+            self.safe = True
 
         if self.biome == "seaside":
             self.name = (Fore.CYAN + Style.NORMAL + self.name + Style.RESET_ALL)
@@ -270,6 +277,44 @@ class scene_type:
 
     def func_generate_biome():
         print("func_generate_biome")
+
+
+dev_1area31 = scene_type(1,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area32 = scene_type(1,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area33 = scene_type(1,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+
+
+dev_1area1 = scene_type(0,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area2 = scene_type(2,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area3 = scene_type(3,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area4 = scene_type(4,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area5 = scene_type(5,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area6 = scene_type(6,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area7 = scene_type(7,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area8 = scene_type(8,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area9 = scene_type(9,-1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+
+dev_1area11 = scene_type(0,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area12 = scene_type(2,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area13 = scene_type(3,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area14 = scene_type(4,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area15 = scene_type(5,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area16 = scene_type(6,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area17 = scene_type(7,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area18 = scene_type(8,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_1area19 = scene_type(9,1,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+
+
+dev_2area21 = scene_type(0,0,1000,"the dev zone","","",True,True,True,True,True,True,False,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area22 = scene_type(2,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area23 = scene_type(3,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area24 = scene_type(4,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area25 = scene_type(5,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area26 = scene_type(6,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area27 = scene_type(7,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area28 = scene_type(8,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+dev_2area29 = scene_type(9,0,1000,"the dev zone","","",True,True,True,True,True,True,True,0,"grassy","",False,False,"","the dev zone, very green hills",[],[],[],[],[],use_gen=False)
+
 
 # dungeon
 dungeon_floor_1_entrance_3 = scene_type(0,-1,-1000,"the dungeon","","",True,False,False,False,False,True,False,0,"dungeon","",False,False,"","rolling green hills",[],[],[],[],[],use_gen=False)
@@ -631,7 +676,7 @@ highlands_a = scene_type(7,4,0,"highlands","","",False,False,False,False,False,T
 highlands_b = scene_type(8,4,0,"highlands","","",False,False,False,False,False,True,True,1,"grassy","",False,False,"","",[],[],[],[],[],use_gen=False)
 
 fortress_gate = scene_type(8,5,0,"bandit lands","","",False,False,False,False,False,True,False,100,"grassy","",False,False,"","",[],[],[],[],[],use_gen=False)
-fortress = scene_type(9,5,0,"the bandit fortress","","",False,False,False,False,False,True,True,100,"grassy","",True,True,"","the bandit fortress",[],[],[],[],[],use_gen=False)
+fortress = scene_type(9,5,0,"the bandit fortress","","",False,False,False,False,False,True,False,100,"grassy","",True,True,"","the bandit fortress",[],[],[],[],[],use_gen=False)
 fort_wall_a = scene_type(9,4,0,"bandit lands","","",False,False,False,False,False,True,False,0,"grassy","",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[],use_gen=False)
 fort_wall_b = scene_type(10,5,0,"bandit lands","","",False,False,False,False,False,True,False,0,"grassy","",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[],use_gen=False)
 fort_wall_c = scene_type(9,6,0,"bandit lands","","",False,False,False,False,False,True,False,0,"grassy","",False,False,"the large, wooden wall blocks your path","",[],[],[],[],[],use_gen=False)
@@ -916,41 +961,41 @@ south_road_13 = scene_type(16,17,0,"the south road","","cloudy",True,False,False
 # south east cave
 cave_entrance = scene_type(6,9,0,"a cave entrance","","cloudy",True,False,False,False,False,True,False,0,"grassy","",True,False,"", "there is a cave enterance in the ground here, looks like it goes straight down",[],[],[],[],[],use_gen=False)
 
-cavern_a = scene_type(6,9,-9,"the center of a cavern","","cloudy",True,False,False,False,False,True,False,0,"cave","",False,False,"", "there is light coming from above...",[],[],[],[],[],use_gen=False)
-cavern_b = scene_type(6,8,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_c = scene_type(6,10,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_d = scene_type(5,8,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_e = scene_type(5,9,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_f = scene_type(5,10,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_g = scene_type(7,8,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_h = scene_type(7,9,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_i = scene_type(7,10,-9,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_a = scene_type(6,9,-12,"the center of a cavern","","cloudy",True,False,False,False,False,True,False,0,"cave","",False,False,"", "there is light coming from above...",[],[],[],[],[],use_gen=False)
+cavern_b = scene_type(6,8,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_c = scene_type(6,10,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_d = scene_type(5,8,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_e = scene_type(5,9,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_f = scene_type(5,10,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_g = scene_type(7,8,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_h = scene_type(7,9,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_i = scene_type(7,10,-12,"a cavern","","cloudy",False,False,False,False,False,True,False,100,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
 
 ### north cave
 north_cave_entrance = scene_type(3,1,0,"a cave entrance","","cloudy",True,False,False,False,False,True,False,0,"grassy","",True,False,"", "there is a cave enterance in the ground here, looks like it goes straight down",[],[],[],[],[],use_gen=False)
 
 # underground tunnel
-tunnel_a = scene_type(3,1,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "there is a very faint light coming from above...",[],[],[],[],[],use_gen=False)
-tunnel_b = scene_type(4,1,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, i wonder why it's here",[],[],[],[],[],use_gen=False)
-tunnel_c = scene_type(5,1,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "there are carvings on the wall, they depict goblins fighting some kind of demonic creature.",[],[],[],[],[],use_gen=False)
-tunnel_d = scene_type(6,1,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "there are carvings of goblins and humans massed in a large army, 2",[],[],[],[],[],use_gen=False)
+tunnel_a = scene_type(3,1,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "there is a very faint light coming from above...",[],[],[],[],[],use_gen=False)
+tunnel_b = scene_type(4,1,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, i wonder why it's here",[],[],[],[],[],use_gen=False)
+tunnel_c = scene_type(5,1,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "there are carvings on the wall, they depict goblins fighting some kind of demonic creature.",[],[],[],[],[],use_gen=False)
+tunnel_d = scene_type(6,1,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "there are carvings of goblins and humans massed in a large army, 2",[],[],[],[],[],use_gen=False)
 
-tunnel_e = scene_type(6,2,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, i wonder why it's here",[],[],[],[],[],use_gen=False)
-tunnel_f = scene_type(6,3,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, carvings depict a three headed dragon fighting a large demon",[],[],[],[],[],use_gen=False)
-tunnel_g = scene_type(6,4,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, skeletons of ancient warriors line the walls here",[],[],[],[],[],use_gen=False)
-tunnel_h = scene_type(6,5,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel",[],[],[],[],[],use_gen=False)
-tunnel_i = scene_type(6,6,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it smells of decay",[],[],[],[],[],use_gen=False)
-tunnel_j = scene_type(6,7,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, the air is still",[],[],[],[],[],use_gen=False)
+tunnel_e = scene_type(6,2,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, i wonder why it's here",[],[],[],[],[],use_gen=False)
+tunnel_f = scene_type(6,3,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, carvings depict a three headed dragon fighting a large demon",[],[],[],[],[],use_gen=False)
+tunnel_g = scene_type(6,4,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, skeletons of ancient warriors line the walls here",[],[],[],[],[],use_gen=False)
+tunnel_h = scene_type(6,5,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel",[],[],[],[],[],use_gen=False)
+tunnel_i = scene_type(6,6,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it smells of decay",[],[],[],[],[],use_gen=False)
+tunnel_j = scene_type(6,7,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, the air is still",[],[],[],[],[],use_gen=False)
 tunnel_k = scene_type(6,8,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
 
-tunnel_l = scene_type(3,5,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
-tunnel_m = scene_type(4,5,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
-tunnel_n = scene_type(5,5,-9,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
+tunnel_l = scene_type(3,5,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
+tunnel_m = scene_type(4,5,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
+tunnel_n = scene_type(5,5,-12,"an underground tunnel","","cloudy",False,False,False,False,False,True,False,62,"cave","",False,False,"", "this is an ancient tunnel, it's carved from solid rock",[],[],[],[],[],use_gen=False)
 
-cavern_j = scene_type(2,5,-9,"a misty cavern","","cloudy",False,False,False,False,False,True,False,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_k = scene_type(2,4,-9,"a misty cavern","","cloudy",False,False,False,False,False,True,True,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_l = scene_type(1,5,-9,"a misty cavern","","cloudy",False,False,False,False,False,True,True,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
-cavern_m = scene_type(2,6,-9,"a misty cavern","","cloudy",False,False,False,False,False,True,True,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_j = scene_type(2,5,-12,"a misty cavern","","cloudy",False,False,False,False,False,True,False,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_k = scene_type(2,4,-12,"a misty cavern","","cloudy",False,False,False,False,False,True,True,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_l = scene_type(1,5,-12,"a misty cavern","","cloudy",False,False,False,False,False,True,True,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
+cavern_m = scene_type(2,6,-12,"a misty cavern","","cloudy",False,False,False,False,False,True,True,61,"cave","",False,False,"", "",[],[],[],[],[],use_gen=False)
 
 
 ###--  UNIQUE IMPASSABLE TERRAIN  --###
