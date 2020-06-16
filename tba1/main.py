@@ -39,7 +39,7 @@ from party_member_module import *
 
 version = "1.9"
 
-dev_mode = 0
+dev_mode = 1
 gen_sea = 1
 grid_mode = 0
 
@@ -400,7 +400,7 @@ quest_1 = quest("Cow Elite Killer","Prove your combat ability.", xp = 50, gp = 8
 quest_2 = quest("The Bandit Menace","Eliminate the local bandit population.", xp = 200, gp = 200, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = True, quest_enemy_name = "bandit", quest_kill_amount = 3, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
 quest_3 = quest("Talk to Shmurlitz","Talk to Shmurlitz Durlitz, the town doctor.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Shmurlitz", quest_npc_lname = "Durlitz")
 quest_4 = quest("Travel to Sorrlund","Travel down the high road to Sorrlund.", xp = 50, gp = 10, reward_list = [], quest_collect_item = False, quest_item_name = "0", quest_item_amount = 0, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = True, quest_npc_fname = "Jim", quest_npc_lname = "Greenmichs")
-quest_5 = quest("Chop Wood","Cut down some trees for Jim.", xp = 50, gp = 120, reward_list = [certificate_of_passage], quest_collect_item = True, quest_item_name = "wood", quest_item_amount = 10, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
+quest_5 = quest("Chop Wood","Cutsome trees for Jim.", xp = 50, gp = 120, reward_list = [certificate_of_passage], quest_collect_item = True, quest_item_name = "wood", quest_item_amount = 10, quest_kill_enemy = False, quest_enemy_name = "", quest_kill_amount = 0, quest_talk_npc = False, quest_npc_fname = "0", quest_npc_lname = "0")
 
 
 # place npcs in the world
