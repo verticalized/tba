@@ -107,21 +107,22 @@ class npc:
 
 #########   TWO NPCS CANNOT HAVE THE SAME FIRST NAME !!!!   #############
 
-npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","Hello, I am a Dr. Durlitz, I can tend to your wounds if you get injured in battle.",False,"human","man","0","cloth clothes","0","The wizard Greenmichs lives in the forest south-west of here.\nIf he deems you worthy, he will teach you powerful spells!","m1")
+npc_doctor = npc("Shmurlitz","Durlitz","Doctor","Healing professional","hello",False,"human","man","0","cloth clothes","0","I am a doctor","m1")
 
-npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","If you can identify an enemy's weakness, you should use magic to exploit it!","m2")
-npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","I wonder if Haney solved her bandit problem?","g1")
-npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","If you recover items from monsters, sell them to old man jenkins","m1")
-npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof","I can train you in magic, but you must serve the arts well...","m1")
-npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of magic...","woof!",True,"dog","cute","0","0","WOOF!","Woof!","m1")
-npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof","My steel will aid you well my friend!","m1")
+npc_jenkins = npc("old man","jenkins","Seer","Good for a chat!","hello",False,"human","man","0","cloth clothes","*the old man transforms into a goblin*","owwwweeeeeeee","m2")
+npc_john_doe = npc("John","Dough","Merchant","weapons merchant...","hello",False,"human","man","0","cloth clothes","oof","","g1")
+npc_jane_doe = npc("Haney","Dunorf","Peasant","runs an item shop...","'ello",False,"human","woman","0","cloth clothes","oof","","m1")
+npc_wizard_traenus = npc("Neil","Traenus","Head Wizard","a man of magic...","hello",False,"human","man","0","blue wizard robes","oof","","m1")
+npc_wizard_marbles = npc("Marbles","the dog","canine magic specialist","a dog of magic...","woof!",True,"dog","cute","0","0","WOOF!","","m1")
+npc_dismurth_smith = npc("George","Smith","Blacksmith","good at making horseshoes...","G'day",False,"dwarf","man","dwavern guild","cloth clothes","oof","","m1")
 
-npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew...","yo",False,"human","man","0","blue wizard robes","oof","Would you like a brew?","m1")
-npc_wizard_tilly = npc("Tilly","the dog","Wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","Woof!","m1")
+npc_wizard_jim = npc("Jim","Greenmichs","Wizard","appreciates a fine brew and a mix...","yo",False,"human","man","0","blue wizard robes","oof","","m1")
+npc_wizard_tilly = npc("Tilly","the dog","Wizard","an apprentice wizard puppy...","woof!",True,"dog","puppy","0","cloth clothes","oof","","m1")
 
 
-npc_merchant_ollie = npc("Lyo","Zeddecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","","m1")
-npc_merchant_dech = npc("Dechyn","Kneepa","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","","m1")
+
+npc_merchant_ollie = npc("Oliver","Zeddecks","Travelling Merchant","an exotic trader...","G'day",False,"human","man","0","fine clothes","oof","","m1")
+npc_merchant_dech = npc("Dechen","Kneepa","Extractor","creative concoctions are his specialty...","G'day",False,"human","man","0","fine clothes","oof","","m1")
 
 npc_wizard_will = npc("William","the wanderer","Traveller","Travels to far away lands","hello",False,"human","man","0","travellers robes","oof","","m2")
 npc_wizard_laika = npc("Laika","the dog","Traveller","a travelling hound","woof!",True,"dog","female","0","cloth clothes","oof","","m1")

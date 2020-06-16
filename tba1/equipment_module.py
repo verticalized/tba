@@ -226,7 +226,7 @@ iron_plate_armor = armor(305,"iron plate armor",100,"heavy",15,"earth",0,11,9,22
 steel_chain_mail = armor(306,"steel chain mail",400,"heavy",14,"earth",0,13,18,25,100)
 steel_plate_armor = armor(307,"steel plate armor",1000,"heavy",22,"earth",0,16,15,28,1000)
 
-rags = armor(308,"rags",1,"light",1,"fire",15,1,1,1,1)
+rags = armor(308,"rags",1,"light",1,"fire",0,1,1,1,1)
 
 mage_robes = armor(309,"mage robes",1000,"mage",20,"air",50,0,0,20,1000)
 necro_robes = armor(309,"necromancer robes",1000,"mage",44,"air",55,0,0,50,2000)
