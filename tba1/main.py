@@ -39,7 +39,7 @@ from party_member_module import *
 
 ###########################----GLOBAL_VARIABLES-----####################
 
-version = "a2.0"
+version = "a2.1"
 
 dev_mode = 1
 
